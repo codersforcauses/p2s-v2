@@ -129,7 +129,7 @@ module.exports = async function(app) {
   console.time('Time taken');
   logger.info('Starting harvest cycle');
   logger.info('Plowing fields');
-  logger.info('Sowing schools');
+  logger.info('Growing schools');
 
   const schoolPromises = [];
 
@@ -146,7 +146,7 @@ module.exports = async function(app) {
   }
   const schoolsResult = Promise.all(schoolPromises);
 
-  logger.info('Sowing users');
+  logger.info('Growing users');
 
   // Create super admin
   app
@@ -211,7 +211,7 @@ module.exports = async function(app) {
 
   const allSchoolPromises = schoolsResult
     .then(async schools => {
-      logger.info('Sowing students');
+      logger.info('Growing students');
 
       const studentPromises = [];
 
