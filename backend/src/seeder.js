@@ -1,7 +1,6 @@
 const logger = require('./logger.js');
-const faker = require('faker');
+const faker = require('faker/locale/en_AU');
 
-faker.locale = 'en_AU';
 faker.seed(1337);
 
 const superTestAdmin = {
