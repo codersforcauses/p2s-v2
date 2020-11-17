@@ -9,8 +9,6 @@ const {
   isProvider,
   preventChanges,
 } = require('feathers-hooks-common');
-const verifyHooks = require('feathers-authentication-management').hooks;
-const accountService = require('../authmanagement/notifier');
 
 module.exports = {
   before: {
