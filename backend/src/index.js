@@ -11,12 +11,12 @@ process.on('unhandledRejection', (reason, p) =>
 
 if (process.env.NODE_ENV !== 'production') {
   app.configure(seeder);
-} else {
-  server.on('listening', () =>
-    logger.info(
-      'Feathers application started on http://%s:%d',
-      app.get('host'),
-      port
-    )
-  );
 }
+
+server.on('listening', () =>
+  logger.info(
+    'Feathers application started on http://%s:%d',
+    app.get('host'),
+    port
+  )
+);
