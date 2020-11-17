@@ -4,7 +4,7 @@
 // for more of what you can do here.
 const mongoose = require('mongoose');
 
-module.exports = function (app) {
+module.exports = function(app) {
   const modelName = 'students';
   const mongooseClient = app.get('mongooseClient');
   const { Schema } = mongooseClient;
@@ -29,10 +29,12 @@ module.exports = function (app) {
         enum: ['Male', 'Female', 'Other'],
         required: true,
       },
-      culture: {
-        type: String,
-        required: true, // TODO add ethnicity options
-      },
+      culture: [
+        {
+          type: String,
+          required: true, // TODO add ethnicity options
+        },
+      ],
       birthCountry: {
         type: String,
         required: true, // TODO add country list

@@ -2,14 +2,27 @@ const logger = require('./logger.js');
 const faker = require('faker');
 
 faker.locale = 'en_AU';
+faker.seed(1337);
 
+const superTestAdmin = {
+  email: 'testadmin@p2srugbyworks.com',
+  password: 'Qwerty123',
+};
+
+const adminCount = 3;
+const totalCoaches = 20;
+const totalSchools = 10;
+const studentsPerSchool = 10;
+
+const testPass = 'a';
+
+const ethnicityList = ['Other'];
+const genderList = ['Male', 'Female', 'Other'];
 const schoolSuffixes = [
   'School',
   'High School',
   'Primary School',
   'College',
-  'Penitentiary',
-  'University',
   'School for Boys',
   'School for Girls',
   'High School for Boys',
@@ -17,10 +30,6 @@ const schoolSuffixes = [
   'College for Boys',
   'College for Girls',
 ];
-
-const ethnicityList = ['Other'];
-const genderList = ['Male', 'Female', 'Other'];
-
 const schoolFormats = [
   '{{name.lastName}} ',
   '{{address.county}} ',
@@ -31,21 +40,12 @@ const schoolFormats = [
   '{{name.lastName}} {{address.city}} ',
 ];
 
-const regionCount = 10;
-const adminCount = 3;
-// const managersPerRegion = 2;
-const coachsPerRegion = 2;
-const schoolsPerRegion = 3;
-const studentsPerSchool = 10;
-
-const testPass = 'a';
-
-function createUserObject(role, regionId) {
+function createUserObject(role) {
   const name = {
     first: faker.name.firstName(),
     last: faker.name.lastName(),
   };
-  const ethnicity = faker.random.arrayElement(ethnicityList);
+  const ethnicity = ethnicityList;
   const gender = faker.random.arrayElement(genderList);
 
   return {
@@ -56,25 +56,23 @@ function createUserObject(role, regionId) {
       role.concat('.fake.net')
     ),
     password: testPass,
-    region: regionId,
     isVerified: true,
     ethnicity,
     gender,
   };
 }
 
-function createSchoolObject(region) {
+function createSchoolObject() {
   const suffix = faker.random.arrayElement(schoolSuffixes);
   const format = faker.random.arrayElement(schoolFormats);
 
   return {
-    region: region._id,
-    name: faker.fake(format.concat(' ', suffix)),
+    name: faker.fake(format.concat(suffix)),
     phoneNumber: faker.phone.phoneNumber(),
     address: {
       street: faker.address.streetName(),
-      suburb: region.name,
-      postcode: faker.address.zipCode(),
+      suburb: faker.address.city(),
+      postcode: faker.address.zipCode('####'),
     },
   };
 }
@@ -87,7 +85,7 @@ function createStudentObject(schoolId) {
     },
     DOB: faker.date.past(),
     gender: faker.random.arrayElement(genderList),
-    culture: faker.random.arrayElement(ethnicityList),
+    culture: ethnicityList,
     birthCountry: faker.address.country(),
     DOA: faker.date.past(),
     schoolYear: faker.random.number({ min: 7, max: 12 }),
@@ -132,39 +130,24 @@ module.exports = async function(app) {
   console.time('Time taken');
   logger.info('Starting harvest cycle');
   logger.info('Plowing fields');
-  logger.info('Sowing region seeds');
+  logger.info('Sowing schools');
 
-  // Create base regions
-  const regionPromises = [];
+  const schoolPromises = [];
 
-  for (let i = 0; i < regionCount; i += 1) {
-    const name = faker.address.city();
-    const region = { name };
-    regionPromises.push(
-      findAndCreate(app, 'regions', region, {
-        query: { name },
-      })
-    );
-  }
-
-  // Create admins
-  const adminPromises = [];
-
-  for (let i = 0; i < adminCount; i += 1) {
-    const admin = createUserObject('admin');
-    adminPromises.push(
-      findAndCreate(app, 'admin', admin, {
+  for (let i = 0; i < totalSchools; i += 1) {
+    const school = createSchoolObject();
+    schoolPromises.push(
+      findAndCreate(app, 'schools', school, {
         query: {
-          email: admin.email,
-          $select: ['region'],
+          name: school.name,
+          $select: ['_id'],
         },
       })
     );
   }
-  Promise.all(adminPromises);
+  const schoolsResult = Promise.all(schoolPromises);
 
-  logger.info('Growing regions');
-  const regions = await Promise.all(regionPromises);
+  logger.info('Sowing users');
 
   // Create super admin
   app
@@ -177,88 +160,61 @@ module.exports = async function(app) {
     .then(result => {
       if (result.data.length === 0) {
         return app.service('admin').create({
-          email: 'testadmin@p2srugbyworks.com',
-          password: 'Qwerty123',
+          ...superTestAdmin,
           name: {
             first: 'Test',
             last: 'Admin',
           },
           gender: 'Other',
-          ethnicity: 'Other',
+          ethnicity: ethnicityList,
           darktheme: true,
-          region: regions[0]._id,
           'coach.is': true,
-          'manager.is': true,
+          // 'manager.is': true,
           isVerified: true,
         });
       }
       return app.service('users').patch(result.data[0]._id, {
         'admin.is': true,
         'coach.is': true,
-        'manager.is': true,
+        // 'manager.is': true,
       });
     })
     .catch(err => console.log(err));
 
-  logger.info('Sowing manager and coach seeds');
+  // Create admins
+  const adminPromises = [];
 
-  const staffPromises = [];
-  const schoolPromises = [];
+  for (let i = 0; i < adminCount; i += 1) {
+    const admin = createUserObject('admin');
+    adminPromises.push(
+      findAndCreate(app, 'admin', admin, {
+        query: {
+          email: admin.email,
+        },
+      })
+    );
+  }
 
-  regions.forEach(region => {
-    // managers
-    // for (let i = 0; i < managersPerRegion; i += 1) {
-    //   const manager = createUserObject('manager', region._id);
+  // Create coaches
+  const coachPromises = [];
 
-    //   staffPromises.push(
-    //     findAndCreate('manager', manager, {
-    //       query: {
-    //         email: manager.email,
-    //         $select: ['_id', 'region'],
-    //       },
-    //     })
-    //   );
-    // }
+  for (let i = 0; i < totalCoaches; i += 1) {
+    const coach = createUserObject('coach');
 
-    for (let i = 0; i < coachsPerRegion; i += 1) {
-      const coach = createUserObject('coach', region._id);
-
-      staffPromises.push(
-        findAndCreate(app, 'coach', coach, {
-          query: {
-            email: coach.email,
-            $select: ['region'],
-          },
-        })
-      );
-    }
-
-    for (let i = 0; i < schoolsPerRegion; i += 1) {
-      const school = createSchoolObject(region);
-      schoolPromises.push(
-        findAndCreate(app, 'schools', school, {
-          query: {
-            name: school.name,
-            $select: ['_id'],
-          },
-        })
-      );
-    }
-  });
-
-  logger.info('Growing staff');
-  const allStaffPromises = Promise.all(staffPromises)
-    .then(() => {
-      logger.info('Staff/Region plants grown');
-    })
-    .catch(err => console.log(err));
+    coachPromises.push(
+      findAndCreate(app, 'coach', coach, {
+        query: {
+          email: coach.email,
+        },
+      })
+    );
+  }
 
   logger.info('Growing schools');
-  const allSchoolPromises = Promise.all(schoolPromises)
+  const allSchoolPromises = schoolsResult
     .then(async schools => {
-      logger.info('School plants grown');
+      logger.info('Sowing students');
 
-      logger.info('Sowing student seeds');
       const studentPromises = [];
 
       schools.forEach(school => {
@@ -278,15 +234,11 @@ module.exports = async function(app) {
         }
       });
 
-      logger.info('Growing students');
       return Promise.all(studentPromises);
-    })
-    .then(() => {
-      logger.info('Student plants grown');
     })
     .catch(err => console.log(err));
 
-  await Promise.all([allStaffPromises, allSchoolPromises]);
+  await Promise.all([adminPromises, coachPromises, allSchoolPromises]);
 
   logger.info('Harvest complete!');
   console.timeEnd('Time taken');

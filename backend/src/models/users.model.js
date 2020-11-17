@@ -43,9 +43,11 @@ module.exports = function (app) {
         type: String,
         enum: ['Male', 'Female', 'Other'],
       },
-      culture: {
-        type: String, // TODO add ethnicity options
-      },
+      culture: [
+        {
+          type: String, // TODO add ethnicity options
+        },
+      ],
       DOB: {
         type: Date, // YYYY-MM-DDTHH:MM:SS.MMMZ
       },

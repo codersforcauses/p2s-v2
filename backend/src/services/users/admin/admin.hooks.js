@@ -8,6 +8,7 @@ const {
   iff,
   isProvider,
   preventChanges,
+  some,
 } = require('feathers-hooks-common');
 const verifyHooks = require('feathers-authentication-management').hooks;
 const accountService = require('../../authmanagement/notifier');
@@ -50,13 +51,19 @@ module.exports = {
     find: [],
     get: [],
     create: [
-      context => {
-        accountService(context.app).notifier(
-          'resendVerifySignup',
-          context.result
-        );
-      },
-      verifyHooks.removeVerification(),
+      iff(
+        some(
+          isProvider('external'),
+          () => process.env.NODE_ENV === 'production'
+        ),
+        context => {
+          accountService(context.app).notifier(
+            'resendVerifySignup',
+            context.result
+          );
+        },
+        verifyHooks.removeVerification()
+      ),
     ],
     update: [],
     patch: [],

@@ -17,11 +17,12 @@ module.exports = {
     all: [],
     find: [authenticate('jwt')],
     get: [authenticate('jwt')],
-    create: [hashPassword('password'), verifyHooks.addVerification()],
+    create: [hashPassword('password'), disallow('external')],
     update: [disallow('external')],
     patch: [
       iff(
         isProvider('external'),
+        hashPassword('password'),
         preventChanges(
           true,
           'email',
@@ -34,7 +35,6 @@ module.exports = {
           'resetShortToken',
           'resetExpires'
         ),
-        hashPassword('password'),
         authenticate('jwt')
       ),
     ],
@@ -49,15 +49,7 @@ module.exports = {
     ],
     find: [],
     get: [],
-    create: [
-      context => {
-        accountService(context.app).notifier(
-          'resendVerifySignup',
-          context.result
-        );
-      },
-      verifyHooks.removeVerification(),
-    ],
+    create: [],
     update: [],
     patch: [],
     remove: [],
