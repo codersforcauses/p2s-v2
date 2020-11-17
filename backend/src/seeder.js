@@ -209,7 +209,6 @@ module.exports = async function(app) {
     );
   }
 
-  logger.info('Growing schools');
   const allSchoolPromises = schoolsResult
     .then(async schools => {
       logger.info('Sowing students');
