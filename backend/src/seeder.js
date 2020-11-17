@@ -39,7 +39,7 @@ const schoolFormats = [
   '{{name.lastName}} {{address.city}} ',
 ];
 
-function createUserObject(role) {
+function createUserObject(type) {
   const name = {
     first: faker.name.firstName(),
     last: faker.name.lastName(),
@@ -47,17 +47,20 @@ function createUserObject(role) {
   const ethnicity = ethnicityList;
   const gender = faker.random.arrayElement(genderList);
 
+  const role = type === 'admin' ? 'admin.is' : 'coach.is';
+
   return {
     name,
     email: faker.internet.email(
       name.first,
       name.last,
-      role.concat('.fake.net')
+      type.concat('.fake.net')
     ),
     password: testPass,
     isVerified: true,
-    ethnicity,
+    culture: ethnicity,
     gender,
+    [role]: true,
   };
 }
 
@@ -165,7 +168,7 @@ module.exports = async function(app) {
             last: 'Admin',
           },
           gender: 'Other',
-          ethnicity: ethnicityList,
+          culture: ethnicityList,
           darktheme: true,
           'coach.is': true,
           // 'manager.is': true,
