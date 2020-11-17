@@ -54,7 +54,7 @@
     "feathers-mongoose": "8.3.1",
     "helmet": "3.23.3",
     "mongodb-core": "3.2.7",
-    "mongoose": "5.10.14",
+    "mongoose": "5.10.15",
     "nodemailer-smtp-transport": "2.7.4",
     "serve-favicon": "2.5.0",
     "winston": "3.3.3"
@@ -62,7 +62,7 @@
   "devDependencies": {
     "axios": "0.21.0",
     "eslint": "7.13.0",
-    "faker": "^5.1.0",
+    "faker": "5.1.0",
     "jest": "26.6.3",
     "nodemon": "2.0.6"
   },
