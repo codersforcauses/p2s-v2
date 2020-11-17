@@ -1,0 +1,34 @@
+$heading-font-family: 'Martel';
+$body-font-family: 'Lato';
+$font-size-root: 12pt;
+
+$material-light: (
+  'app-bar': #e0e0e0,
+  'background': #e0e0e0,
+  'cards': #fafafa,
+  'inputs': (
+    'solo-inverted': #e0e0e0,
+    'solo-inverted-focused': #eee,
+    // 'solo-inverted-focused-label': rgba(map-get($shades, 'black'), .6),
+      'solo-inverted-focused-placeholder': rgba(#2f2f2f, 0.38),
+    'solo-inverted-focused-text': #2f2f2f,
+  ),
+  'text': (
+    'primary': #2f2f2f,
+    'secondary': rgba(#2f2f2f, 0.65),
+  ),
+  'toolbar': #e0e0e0,
+);
+
+$material-dark: (
+  'app-bar': #464646,
+  'background': #464646,
+  'cards': #383838,
+  'text': (
+    'primary': #e3e3e3,
+    'secondary': rgba(#e3e3e3, 0.65),
+  ),
+  'toolbar': #464646,
+);
+
+$color-pack: false;
