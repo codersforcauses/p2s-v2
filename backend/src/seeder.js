@@ -170,8 +170,6 @@ module.exports = async function(app) {
           gender: 'Other',
           culture: ethnicityList,
           darktheme: true,
-          'coach.is': true,
-          // 'manager.is': true,
           isVerified: true,
         });
       }
