@@ -9,7 +9,7 @@ const { Forbidden, Unprocessable } = require('@feathersjs/errors');
  * @param {[String]} options.roles Define which roles can access this route.
  * Should be in the form ['admin', 'manager', 'coach']
  */
-module.exports = (options = {}) => async context => {
+module.exports = (options = {}) => context => {
   if (context.type !== 'before') {
     throw new Unprocessable(
       // eslint-disable-next-line quotes
@@ -28,29 +28,13 @@ module.exports = (options = {}) => async context => {
     return context;
   }
 
+  const roles = ['admin', 'manager', 'coach'];
   const permissions = [];
 
-  if (user.admin.is) {
-    permissions.push('admin:*');
-  }
-  if (user.coach.is) {
-    permissions.push('coach:*');
-  }
-
-  const { method } = context;
-
-  const requiredPermissions = ['*', `*:${method}`];
-
-  if (!Array.isArray(options.roles)) {
-    options.roles = [options.roles];
-  }
-
-  options.roles.forEach(role => {
-    requiredPermissions.push(`${role}`, `${role}:*`, `${role}:${method}`);
-  });
+  roles.forEach(role => user[role].is && permissions.push(role));
 
   const permitted = permissions.some(permission =>
-    requiredPermissions.includes(permission)
+    options.roles.includes(permission)
   );
 
   context.params.permitted = context.params.permitted || permitted;
