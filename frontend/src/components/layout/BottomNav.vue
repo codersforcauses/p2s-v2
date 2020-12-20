@@ -13,11 +13,6 @@
       <v-icon>mdi-football</v-icon>
     </v-btn>
 
-    <v-btn v-show="manager" value="manager" :to="{path: '/manager'}">
-      <span>Regional Manager</span>
-      <v-icon>mdi-account-tie</v-icon>
-    </v-btn>
-
     <v-btn v-show="admin" value="admin" :to="{path: '/admin'}">
       <span>Administrator</span>
       <v-icon>mdi-shield-account</v-icon>
@@ -39,15 +34,12 @@ export default {
     coach() {
       return this.user?.coach?.is || true;
     },
-    manager() {
-      return this.user?.manager?.is || true;
-    },
     admin() {
       return this.user?.admin?.is || true;
     },
     checkMultiplePermissions() {
       return (
-        [this.coach, this.manager, this.admin].filter(value => value).length > 1
+        [this.coach, this.admin].filter(value => value).length > 1
       );
     },
   },
