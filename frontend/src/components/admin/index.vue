@@ -1,5 +1,7 @@
 <template>
-  <router-view />
+  <v-container fluid class="py-0">
+    <router-view />
+  </v-container>
 </template>
 
 <script>
