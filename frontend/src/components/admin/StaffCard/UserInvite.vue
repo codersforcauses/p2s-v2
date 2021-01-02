@@ -67,51 +67,6 @@
               />
             </v-col>
 
-            <v-col cols="12" tag="label" class="v-label pl-6">ASSIGN REGION</v-col>
-            <v-col cols="12">
-              <v-autocomplete
-                solo-inverted
-                flat
-                persistent-hint
-                cache-items
-                hide-selected
-                rounded
-                placeholder="Start typing..."
-                type="text"
-                color="primary"
-                hint="Important for coaches"
-                class="mb-2 mt-1 select__flat"
-                v-model.trim="user.region"
-                item-text="name"
-                item-value="_id"
-                :items="listRegions"
-                :search-input.sync="search"
-                :loading="loadRegions"
-                :disabled="loading"
-                :rules="[validation.required]"
-                :menu-props="{ offsetY: true, transition: 'slide-y-transition', rounded: 'b-xl', elevation: '0'}"
-              >
-                <template #no-data>
-                  <div class="list">
-                    Can't find the region you wanted? Create a new
-                    <a
-                      slot="activator"
-                      href="/region"
-                      target="_blank"
-                      class="primary--text text-decoration-none"
-                      @click.stop
-                    >
-                      region
-                      <v-icon size="1rem" color="primary">mdi-open-in-new</v-icon>
-                    </a>
-                    <p
-                      class="caption ma-0"
-                    >Please refresh the page if you do not see a created region.</p>
-                  </div>
-                </template>
-              </v-autocomplete>
-            </v-col>
-
             <v-col cols="12" tag="label" class="v-label pl-6 pb-3">ROLES</v-col>
             <v-col cols="12" class="ml-3">
               <v-checkbox
@@ -152,7 +107,7 @@
                 class="ma-0"
                 style="float: right"
                 color="primary"
-                :disabled="!valid || loading || checkPerm || checkPerm === undefined"
+                :disabled="!valid || loading || permError || permError === undefined"
                 :loading="loading"
                 @click.stop.prevent="createUser"
               >Send Invite</v-btn>
@@ -228,9 +183,9 @@ export default {
         this.$emit('input', value);
       },
     },
-    // loading() {
-    //   return this.createAdmin || this.createCoach;
-    // },
+    loading() {
+      return this.createAdmin || this.createCoach;
+    },
   },
   methods: {
     // ...mapActions('regions', { findRegionsInStore: 'find' }),

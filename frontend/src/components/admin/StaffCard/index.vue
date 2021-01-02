@@ -1,16 +1,16 @@
 <template>
   <v-card flat rounded="xl">
-    
-    <div class="d-flex pl-4 pt-5">
+    <v-card-subtitle>Current Staff</v-card-subtitle>
+    <div class="d-flex pl-4">
       <div>
         <div class="text-h2 primary--text text-center">{{ numCoaches }}</div>
         <div class="text-body-1 text-center">Coaches</div>
       </div>
       <v-divider
         inset vertical
-        class="pl-5"
+        class="pl-7"
       ></v-divider>
-      <div class="d-flex-row pl-5">
+      <div class="d-flex-row pl-7">
         <div class="text-h2 primary--text text-center">{{ numAdmins }}</div>
         <div class="text-body-1 text-center">Admins</div>
       </div>
@@ -33,7 +33,9 @@
 
 <script>
 // import { mapGetters, mapActions, mapState } from 'vuex';
-import users from '../../../seeds'
+import seeds from '../../../seeds'
+
+const { users } = seeds
 
 export default {
   components: {
@@ -71,16 +73,22 @@ export default {
   },
   computed: {
     numCoaches() {
-      return this.users.reduce((numUsers, user) => {
-        if(user?.coach?.is) return numUsers + 1
+      if (this.users) {
+        return this.users.reduce((numUsers, user) => {
+          if(user?.coach?.is) return numUsers + 1
         return numUsers
       }, 0)
+        }
+        return 0
     },
     numAdmins() {
-      return this.users.reduce((numUsers, user) => {
-        if(user?.admin?.is) return numUsers + 1
-        return numUsers
-      }, 0)
+      if (this.users) {
+        return this.users.reduce((numUsers, user) => {
+          if(user?.admin?.is) return numUsers + 1
+          return numUsers
+        }, 0)
+      }
+      return 0
     }
     // ...mapState('users', { isFindPendingUsers: 'isFindPending' }),
     // ...mapState('regions', { isGetPendingRegions: 'isGetPending' }),
@@ -88,30 +96,6 @@ export default {
     // ...mapGetters('regions', { getRegionInStore: 'get' }),
     //   isPending() {
     //     return this.isFindPendingUsers || this.isGetPendingRegions;
-    //   },
-    //   users() {
-    //     if (this.finished) {
-    //       const users = this.findUsersInStore({
-    //         query: {
-    //           $limit: 5,
-    //           $sort: {
-    //             updatedAt: -1,
-    //           },
-    //           _id: {
-    //             $ne: this.$store.state.auth.payload.userId,
-    //           },
-    //         },
-    //       }).data;
-    //       const usersWithRegion = users.map(user => {
-    //         const region = this.getRegionInStore(user.region);
-    //         return {
-    //           ...user,
-    //           region: region === undefined ? 'Region Unassigned' : region.name,
-    //         };
-    //       });
-    //       return usersWithRegion;
-    //     }
-    //     return false;
     //   },
   },
   // methods: {
