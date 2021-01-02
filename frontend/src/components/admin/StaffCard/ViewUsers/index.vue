@@ -12,7 +12,6 @@
           <!-- <v-list-tile-action>
             <div>
               <v-icon :color="user.coach.is ? primary : 'grey'">mdi-football-australian</v-icon>
-              <v-icon :color="user.manager.is ? primary : 'grey'">mdi-account-tie</v-icon>
               <v-icon :color="user.admin.is ? primary : 'grey'">mdi-shield-account</v-icon>
             </div>
           </v-list-tile-action>-->

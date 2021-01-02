@@ -1,26 +1,20 @@
 <template>
   <v-card flat rounded="xl">
-    <v-skeleton-loader type="list-item, list-item-three-line@5" :loading="!isPending">
-      <v-list three-line subheader class="pb-0">
-        <v-subheader>Active Users</v-subheader>
-        <v-list-tile v-for="user in users" :key="user._id">
-          <v-list-tile-content>
-            <v-list-tile-title>{{ `${user.name.first} ${user.name.last}` }}</v-list-tile-title>
-            <v-list-tile-sub-title class="text--primary">{{ user.region }}</v-list-tile-sub-title>
-            <v-list-tile-sub-title>{{ user.email }}</v-list-tile-sub-title>
-          </v-list-tile-content>
-
-          <v-list-tile-action>
-            <div>
-              <v-icon :color="user.coach.is ? primary : 'grey'">mdi-football-australian</v-icon>
-              <v-icon :color="user.manager.is ? primary : 'grey'">mdi-account-tie</v-icon>
-              <v-icon :color="user.admin.is ? primary : 'grey'">mdi-shield-account</v-icon>
-            </div>
-          </v-list-tile-action>
-        </v-list-tile>
-      </v-list>
-    </v-skeleton-loader>
-
+    
+    <div class="d-flex pl-4 pt-5">
+      <div>
+        <div class="text-h2 primary--text text-center">{{ numCoaches }}</div>
+        <div class="text-body-1 text-center">Coaches</div>
+      </div>
+      <v-divider
+        inset vertical
+        class="pl-5"
+      ></v-divider>
+      <div class="d-flex-row pl-5">
+        <div class="text-h2 primary--text text-center">{{ numAdmins }}</div>
+        <div class="text-body-1 text-center">Admins</div>
+      </div>
+    </div>
     <v-card-title primary-title class="primary--text text-h6 pb-0">Manage Staff</v-card-title>
 
     <v-card-text>
@@ -39,6 +33,7 @@
 
 <script>
 // import { mapGetters, mapActions, mapState } from 'vuex';
+import users from '../../../seeds'
 
 export default {
   components: {
@@ -49,7 +44,8 @@ export default {
   data() {
     return {
       inviteDialog: false,
-      finished: false,
+      isPending: true,
+      users
     };
   },
   mounted() {
@@ -59,7 +55,7 @@ export default {
     //     $sort: {
     //       updatedAt: -1,
     //     },
-    //     $select: ['name', 'region', 'email', 'coach', 'admin', 'manager'],
+    //     $select: ['name', 'region', 'email', 'coach', 'admin'],
     //   },
     // }).then(response => {
     //   const regionIds = response.data.map(regionId => regionId.region);
@@ -74,6 +70,18 @@ export default {
     // });
   },
   computed: {
+    numCoaches() {
+      return this.users.reduce((numUsers, user) => {
+        if(user?.coach?.is) return numUsers + 1
+        return numUsers
+      }, 0)
+    },
+    numAdmins() {
+      return this.users.reduce((numUsers, user) => {
+        if(user?.admin?.is) return numUsers + 1
+        return numUsers
+      }, 0)
+    }
     // ...mapState('users', { isFindPendingUsers: 'isFindPending' }),
     // ...mapState('regions', { isGetPendingRegions: 'isGetPending' }),
     // ...mapGetters('users', { findUsersInStore: 'find' }),

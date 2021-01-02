@@ -13,11 +13,6 @@
       <v-icon>mdi-football</v-icon>
     </v-btn>
 
-    <v-btn v-show="manager" value="manager" :to="{path: '/manager'}">
-      <span>Regional Manager</span>
-      <v-icon>mdi-account-tie</v-icon>
-    </v-btn>
-
     <v-btn v-show="admin" value="admin" :to="{path: '/admin'}">
       <span>Administrator</span>
       <v-icon>mdi-shield-account</v-icon>
@@ -26,28 +21,33 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+// import { mapState } from 'vuex';
 
 export default {
   data() {
     return {
       bottomNav: 'admin',
+      user: {
+        admin: {
+          is: true
+        },
+        coach: {
+          is: true
+        }
+      }
     };
   },
   computed: {
-    ...mapState('auth', { user: 'user' }),
+    // ...mapState('auth', { user: 'user' }),
     coach() {
-      return this.user?.coach?.is || true;
-    },
-    manager() {
-      return this.user?.manager?.is || true;
+      return this.user?.coach?.is;
     },
     admin() {
-      return this.user?.admin?.is || true;
+      return this.user?.admin?.is;
     },
     checkMultiplePermissions() {
       return (
-        [this.coach, this.manager, this.admin].filter(value => value).length > 1
+        [this.coach, this.admin].filter(value => value).length > 1
       );
     },
   },

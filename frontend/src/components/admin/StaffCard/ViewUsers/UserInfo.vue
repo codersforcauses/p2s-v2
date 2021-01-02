@@ -18,7 +18,6 @@
             <v-list-item-subtitle>+61 410987654</v-list-item-subtitle>
             <div>
               <v-icon title="Coach" color="primary">mdi-football-australian</v-icon>
-              <v-icon title="Regional Manager" color="primary">mdi-account-tie</v-icon>
               <v-icon title="Administrator" color="primary">mdi-shield-account</v-icon>
             </div>
           </v-list-item-content>
@@ -29,7 +28,7 @@
         <v-card-text class="pb-0">Emergency Contact</v-card-text>
         <v-list-item two-line>
           <v-list-item-content>
-            <v-list-item-title>Name: Biggus Dickus</v-list-item-title>
+            <v-list-item-title>Name: Michael Moore</v-list-item-title>
             <v-list-item-subtitle>Num: +61 410987654</v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>

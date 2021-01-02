@@ -3,7 +3,6 @@ import VueRouter from 'vue-router';
 import Store from '../store/index';
 
 import AdminRoutes from './admin';
-import ManagerRoutes from './manager';
 import CoachRoutes from './coach';
 
 Vue.use(VueRouter);
@@ -34,8 +33,6 @@ const routes = [
     //   const user = Store.getters['users/get'];
     //   if (user.admin.is) {
     //     next({ name: 'admin' });
-    //   } else if (user.manager.is) {
-    //     next({ name: 'manager' });
     //   } else if (user.coach.is) {
     //     next({ name: 'coach' });
     //   } else {
@@ -51,13 +48,6 @@ const routes = [
         component: () => import(/* webpackChunkName: "admin" */ '../components/admin/index.vue'),
         // meta: { permission: 'admin' },
         children: AdminRoutes,
-      },
-      {
-        path: 'manager',
-        component: () =>
-          import(/* webpackChunkName: "manager" */ '../components/manager/index.vue'),
-        // meta: { permission: 'manager' },
-        children: ManagerRoutes,
       },
       {
         path: 'coach',

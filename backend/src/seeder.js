@@ -171,14 +171,12 @@ module.exports = async function(app) {
           culture: ethnicityList,
           darktheme: true,
           'coach.is': true,
-          // 'manager.is': true,
           isVerified: true,
         });
       }
       return app.service('users').patch(result.data[0]._id, {
         'admin.is': true,
         'coach.is': true,
-        // 'manager.is': true,
       });
     })
     .catch(err => console.log(err));

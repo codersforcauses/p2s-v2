@@ -79,7 +79,7 @@
                 placeholder="Start typing..."
                 type="text"
                 color="primary"
-                hint="Important for coaches and regional managers"
+                hint="Important for coaches"
                 class="mb-2 mt-1 select__flat"
                 v-model.trim="user.region"
                 item-text="name"
@@ -121,16 +121,6 @@
                 color="primary"
                 class="ma-0 pa-0"
                 :error="!!permError"
-                :disabled="permissions.includes('manager')"
-              />
-              <v-checkbox
-                v-model="permissions"
-                label="Regional Manager"
-                value="manager"
-                class="ma-0 pa-0"
-                :error="!!permError"
-                color="primary"
-                :disabled="permissions.includes('admin')"
               />
               <v-checkbox
                 v-model="permissions"
@@ -227,7 +217,6 @@ export default {
   },
   computed: {
     // ...mapState('admin', { createAdmin: 'isCreatePending' }),
-    // ...mapState('manager', { createManager: 'isCreatePending' }),
     // ...mapState('coach', { createCoach: 'isCreatePending' }),
     // ...mapState('regions', { loadRegions: 'isFindPending' }),
     // ...mapGetters('regions', { listRegions: 'list' }),
@@ -240,7 +229,7 @@ export default {
       },
     },
     // loading() {
-    //   return this.createAdmin || this.createManager || this.createCoach;
+    //   return this.createAdmin || this.createCoach;
     // },
   },
   methods: {
@@ -255,9 +244,6 @@ export default {
     //     if (tempUser.admin.is) {
     //       const { Admin } = this.$FeathersVuex;
     //       user = new Admin(tempUser);
-    //     } else if (tempUser.manager.is) {
-    //       const { Manager } = this.$FeathersVuex;
-    //       user = new Manager(tempUser);
     //     } else {
     //       const { Coach } = this.$FeathersVuex;
     //       user = new Coach(tempUser);
