@@ -1,4 +1,4 @@
-export default [
+const users = [
   {
     "_id": "5f05598b14de50b2f43e16f7",
     "coach": {
@@ -216,7 +216,6 @@ export default [
     },
     "email": "zara2@coach.fake.net",
     "password": "$2a$14$7VAxMdHaoAnouwkZc5GVbuXt68BnZ4fVtLR0Bpe.hLanGLWQuW5v.",
-    "region": "5f05596514de50b2f43e164f",
     "gender": "Female",
     "createdAt": "2020-07-08T05:28:57.673Z",
     "updatedAt": "2020-07-08T05:28:57.673Z",
@@ -254,7 +253,6 @@ export default [
     },
     "email": "scarlett.koelpin84@coach.fake.net",
     "password": "$2a$14$H9wqOiwwq4sIupqbnVwEu.ByIRlOprg.f0abU6W.uI0BoKtSbt8ge",
-    "region": "5f05596514de50b2f43e164d",
     "gender": "Male",
     "createdAt": "2020-07-08T05:28:57.673Z",
     "updatedAt": "2020-07-08T05:28:57.673Z",
@@ -292,7 +290,6 @@ export default [
     },
     "email": "eva.cormier@coach.fake.net",
     "password": "$2a$14$.jBRmxLBpk1Cp7Iyi56TV.72n8djChXb0jsIa44bJ.cu3MMa4JF3K",
-    "region": "5f05596614de50b2f43e1651",
     "gender": "Female",
     "createdAt": "2020-07-08T05:28:57.675Z",
     "updatedAt": "2020-07-08T05:28:57.675Z",
@@ -330,7 +327,6 @@ export default [
     },
     "email": "harrison42@coach.fake.net",
     "password": "$2a$14$TTvLOAtBjXKjAjkyc7mfUewvk5Qvqra2InhoFXkytW50ect0cGrFG",
-    "region": "5f05596514de50b2f43e164e",
     "gender": "Male",
     "createdAt": "2020-07-08T05:28:57.676Z",
     "updatedAt": "2020-07-08T05:28:57.676Z",
@@ -368,7 +364,6 @@ export default [
     },
     "email": "samuel90@manager.fake.net",
     "password": "$2a$14$j94BpagGNXVflmAiYwfoN.ckGbGQcLrNqPp9YwZ5KZpt2VDnHEjIS",
-    "region": "5f05596514de50b2f43e164e",
     "gender": "Female",
     "createdAt": "2020-07-08T05:28:57.676Z",
     "updatedAt": "2020-07-08T05:28:57.676Z",
@@ -406,7 +401,6 @@ export default [
     },
     "email": "charles.hansen@coach.fake.net",
     "password": "$2a$14$yaEHEwItlMbiXcFRa8Bs3.AWFpu0FIR8SAsFjLz3sZ5eyMImm.EnO",
-    "region": "5f05596614de50b2f43e1650",
     "gender": "Other",
     "createdAt": "2020-07-08T05:28:57.676Z",
     "updatedAt": "2020-07-08T05:28:57.676Z",
@@ -444,7 +438,6 @@ export default [
     },
     "email": "mikayla_lowe56@coach.fake.net",
     "password": "$2a$14$o/VXlBfIVzFTh3CWzbbW3Ou7JKDdL/1jIuJ/tOhwhS.oXLheAd0TG",
-    "region": "5f05596514de50b2f43e164f",
     "gender": "Female",
     "createdAt": "2020-07-08T05:28:57.991Z",
     "updatedAt": "2020-07-08T05:28:57.991Z",
@@ -482,7 +475,6 @@ export default [
     },
     "email": "eva.greenholt83@coach.fake.net",
     "password": "$2a$14$tfOJiwRHv66YlXDIaaVjVOSVVcB83GYzctGZngnbmnH.J2DytlL.S",
-    "region": "5f05596614de50b2f43e1651",
     "gender": "Other",
     "createdAt": "2020-07-08T05:28:57.991Z",
     "updatedAt": "2020-07-08T05:28:57.991Z",
@@ -520,10 +512,31 @@ export default [
     },
     "email": "ali0@manager.fake.net",
     "password": "$2a$14$xP4jB6uPxoDSkkLh4A8Jae.fheySZyW62F8KNobBJjSDJ7JBIulN6",
-    "region": "5f05596514de50b2f43e164f",
     "gender": "Female",
     "createdAt": "2020-07-08T05:28:57.991Z",
     "updatedAt": "2020-07-08T05:28:57.991Z",
     "__v": 0
   }
 ]
+
+const sessions = [
+  {
+    date: "2021-03-23T08:00:00.000Z",
+    coaches: [
+      "5f05599914de50b2f43e170f"
+    ],
+    type: "Rugby",
+    location: "Mount Lawley"
+  },
+  {
+    date: "2020-09-02T01:00:00.000Z",
+    coaches: [
+      "5f05599714de50b2f43e16fc",
+      "5f05598b14de50b2f43e16f7"
+    ],
+    type: "Induction",
+    location: "Carine"
+  }
+]
+
+export default { users, sessions }
