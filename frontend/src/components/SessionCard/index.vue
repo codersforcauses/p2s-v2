@@ -15,12 +15,15 @@
         </div>
         <v-divider
         inset vertical
-        class="pl-5"
+        class="pl-7"
         />
-        <div class="d-flex flex-column justify-space-between pl-5">
+        <div class="d-flex flex-column justify-space-between pl-7">
           <div class="text-subtitle-1">{{ formatTime }} - {{ selectedSession.location }}</div>
           <div>{{ selectedSession.type }}</div>
           <div>{{ coachText }}</div>
+        </div>
+        <div class="d-flex align-items-center">
+          <v-btn text rounded color="primary">View Session</v-btn>
         </div>
       </div>
       <div v-else class="text-h6 pl-4">
@@ -44,7 +47,7 @@
 <script>
 
 import dayjs from 'dayjs'
-import seeds from '../../../seeds'
+import seeds from '../../seeds'
 
 const { sessions, users } = seeds
 
@@ -116,7 +119,6 @@ export default {
       return monthNames[date.month()]
     },
     sessionCoaches() {
-      // eslint-disable-next-line no-underscore-dangle
       return this.users.filter((user) => this.selectedSession.coaches.some(seshCoach => user._id === seshCoach))
     },
     coachText() {

@@ -17,9 +17,9 @@ export default {
     };
   },
   components: {
+    'session-card': () => import('../SessionCard'),
     'staff-card': () => import('./StaffCard'),
-    'session-card': () => import('./SessionCard'),
-    'student-card': () => import('./StudentCard'),
+    'student-card': () => import('../StudentCard'),
     'school-card': () => import('./SchoolCard'),
   },
 };
