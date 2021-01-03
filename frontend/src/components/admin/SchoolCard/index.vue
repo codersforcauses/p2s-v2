@@ -1,7 +1,8 @@
 <template>
   <v-card flat rounded="xl">
-    <v-card-title primary-title class="primary--text text-h6 pb-0">Manage Schools</v-card-title>
+    <region-image />
 
+    <v-card-title primary-title class="primary--text text-h6 pb-0">Manage Schools</v-card-title>
     <v-card-text>
       View all the schools on file
       <br />Create a new school to be used in lessons or programs
@@ -16,11 +17,17 @@
 </template>
 
 <script>
+import RegionImage from './RegionImage'
+
 export default {
+  components: {
+    RegionImage
+  },
   data() {
     return {
       schoolDialog: false,
     };
   },
+
 };
 </script>
