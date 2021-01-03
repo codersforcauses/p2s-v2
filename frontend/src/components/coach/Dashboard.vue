@@ -9,23 +9,23 @@ export default {
   data() {
     return {
       cards: [
+        'session-card',
+        'student-card',
         // 'staff-card',
         // 'region-card',
         // 'program-card',
         // 'activity-card',
-        // 'session-card',
-        // 'student-card',
         // 'school-card',
       ],
     };
   },
   components: {
+    'session-card': () => import('../SessionCard'),
+    'student-card': () => import('../StudentCard'),
     // 'staff-card': () => import('./StaffCard'),
     // 'region-card': () => import('./RegionCard'),
     // 'program-card': () => import('./ProgramCard'),
     // 'activity-card': () => import('./ActivityCard'),
-    // 'session-card': () => import('./SessionCard'),
-    // 'student-card': () => import('./StudentCard'),
     // 'school-card': () => import('./SchoolCard'),
   },
 };
