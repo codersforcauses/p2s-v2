@@ -27,39 +27,39 @@ const routes = [
     path: '/',
     name: 'dashboard',
     component: () => import(/* webpackChunkName: "dashboard" */ '../views/Dashboard.vue'),
-    // meta: { requiresAuth: true },
-    // beforeEnter(to, from, next) {
-    // if (to.fullPath === '/') {
-    //   const user = Store.getters['users/get'];
-    //   if (user.admin.is) {
-    //     next({ name: 'admin' });
-    //   } else if (user.coach.is) {
-    //     next({ name: 'coach' });
-    //   } else {
-    //     next({ name: 'error' });
-    //   }
-    // } else {
-    //   next();
-    // }
-    // },
+    meta: { requiresAuth: true },
+    beforeEnter(to, _, next) {
+      if (to.fullPath === '/') {
+        const user = Store.getters['auth/user'];
+        if (user.admin.is) {
+          next({ path: '/admin' });
+        } else if (user.coach.is) {
+          next({ path: '/coach' });
+        } else {
+          next({ name: 'error' });
+        }
+      } else {
+        next();
+      }
+    },
     children: [
       {
         path: 'admin',
         component: () => import(/* webpackChunkName: "admin" */ '../components/admin/index.vue'),
-        // meta: { permission: 'admin' },
+        meta: { permission: 'admin' },
         children: AdminRoutes,
       },
       {
         path: 'coach',
         component: () => import(/* webpackChunkName: "coach" */ '../components/coach/index.vue'),
-        // meta: { permission: 'coach' },
+        meta: { permission: 'coach' },
         children: CoachRoutes,
       },
       {
         path: 'settings',
         component: () =>
           import(/* webpackChunkName: "user_settings" */ '../components/user/Settings.vue'),
-        // meta: { requiresAuth: true },
+        meta: { requiresAuth: true },
       },
     ],
   },
@@ -74,28 +74,24 @@ const router = new VueRouter({
   routes,
 });
 
-router.beforeEach(async (to, from, next) => {
+router.beforeEach(async (to, _, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {
-    // this route requires auth, check if logged in
-    // if not, redirect to login page.
     try {
-      await Store.dispatch('auth/authenticate');
+      const { user } = await Store.dispatch('auth/authenticate');
+      const requiredPerm = to.matched.find(record => record.meta.permission)?.meta?.permission;
+      if (requiredPerm) {
+        if (user[requiredPerm].is) {
+          next();
+        } else {
+          next({ name: 'error' });
+        }
+      } else {
+        next();
+      }
     } catch {
       next({ name: 'login' });
     }
-    const requiredPerm = to.matched.find(record => record.meta.permission);
-    if (requiredPerm !== undefined) {
-      if (Store.getters['auth/user'][requiredPerm.meta.permission].is) {
-        next();
-      } else {
-        next({ name: 'error' });
-      }
-    } else {
-      next();
-    }
-  } else {
-    next(); // make sure to always call next()!
-  }
+  } else next();
 });
 
 export default router;
