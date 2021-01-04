@@ -11,8 +11,9 @@
           :tile="$vuetify.breakpoint.smAndDown"
           :class="alertClass"
           :transition="transitionClass"
-          >Error: {{ error }}</v-alert
-        >
+          >
+            Error: {{ error }}
+          </v-alert>
 
         <v-form
           v-model="valid"
@@ -64,8 +65,9 @@
               :disabled="!valid || loading"
               :loading="loading"
               @click.stop.prevent="login"
-              >Login</v-btn
-            >
+              >
+                Login
+              </v-btn>
             <v-spacer />
             <v-btn text small rounded name="forgotPass" color="#888">Forgot Password?</v-btn>
           </v-col>
