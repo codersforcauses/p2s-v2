@@ -68,26 +68,30 @@
             </v-col>
 
             <v-col cols="12" tag="label" class="v-label pl-6 pb-3">ROLES</v-col>
-            <v-col cols="12" class="ml-3">
+            <v-row cols="12" class="ml-3">
+            <v-col cols="6">
               <v-checkbox
                 v-model="permissions"
                 value="admin"
                 label="Administrator"
                 color="primary"
                 class="ma-0 pa-0"
-                :error="!!permError"
+                hide-details
               />
+            </v-col>
+            <v-col cols="6">
               <v-checkbox
                 v-model="permissions"
                 value="coach"
-                persistent-hint
                 label="Coach"
                 class="ma-0 pa-0"
-                hint="These can be changed later by any Administrator"
-                :error-messages="permError"
                 color="primary"
+                hide-details
               />
             </v-col>
+            <p v-if="permError" class="error--text text-caption pl-3">User must be either Admin or Coach</p>
+            <p v-else class="grey--text text-caption pl-3">This can be changed later by an administrator.</p>
+            </v-row>
             <v-col cols="12" class="my-4" v-show="alert">
               <v-alert
                 dismissible
@@ -104,10 +108,10 @@
               <v-btn
                 depressed
                 rounded
-                class="ma-0"
+                class="black--text ma-0"
                 style="float: right"
                 color="primary"
-                :disabled="!valid || loading || permError || permError === undefined"
+                :disabled="!valid || loading || permError"
                 :loading="loading"
                 @click.stop.prevent="createUser"
               >Send Invite</v-btn>
@@ -135,7 +139,6 @@ export default {
         },
       },
       permissions: [],
-      search: undefined,
       permError: undefined,
       alert: false,
       error: '',
@@ -154,18 +157,6 @@ export default {
     };
   },
   watch: {
-    search(val = '') {
-      if (!this.listRegions.includes(val)) {
-        this.findRegionsInStore({
-          query: {
-            name: {
-              $gte: val,
-            },
-            $select: ['id', 'name'],
-          },
-        });
-      }
-    },
     permissions(val) {
       this.permError = val.length === 0 ? 'This field is required' : undefined;
     },
@@ -218,14 +209,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-/*
-.list {
-  padding: calc(0.5 * var(--thiccness)) var(--thiccness);
-}
-.v-input--v-checkbox >>> .v-input__slot {
-  margin: 0 !important;
-}
-*/
-</style>
