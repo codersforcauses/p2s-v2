@@ -46,14 +46,6 @@ module.exports = function (app) {
           required: true,
         },
       ],
-      // ? May implement later
-      // programs: [
-      //   {
-      //     type: mongoose.ObjectId,
-      //     ref: 'programs',
-      //     required: true,
-      //   },
-      // ],
     },
     {
       timestamps: true,

@@ -55,11 +55,6 @@ module.exports = function (app) {
         type: Boolean,
         default: false,
       },
-      // ! Not in use
-      // region: {
-      //   type: mongoose.ObjectId,
-      //   ref: 'regions',
-      // },
       coach: {
         is: {
           type: Boolean,

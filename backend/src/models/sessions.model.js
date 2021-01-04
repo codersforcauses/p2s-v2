@@ -40,20 +40,6 @@ module.exports = function (app) {
           required: true,
         },
       ],
-      // ! Not in use
-      // activities: [
-      //   {
-      //     activity: {
-      //       type: mongoose.ObjectId,
-      //       ref: 'activities',
-      //       required: true,
-      //     },
-      //     planned: {
-      //       type: Boolean,
-      //       required: true,
-      //     },
-      //   },
-      // ],
       type: {
         type: String,
         enum: [
