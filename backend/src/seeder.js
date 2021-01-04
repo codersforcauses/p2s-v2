@@ -161,7 +161,7 @@ module.exports = async function(app) {
     })
     .then(result => {
       if (result.data.length === 0) {
-        return app.service('admin').create({
+        return app.service('users').create({
           ...superTestAdmin,
           name: {
             first: 'Test',
@@ -170,6 +170,7 @@ module.exports = async function(app) {
           gender: 'Other',
           culture: ethnicityList,
           darktheme: true,
+          'admin.is': true,
           'coach.is': true,
           isVerified: true,
         });
@@ -187,9 +188,10 @@ module.exports = async function(app) {
   for (let i = 0; i < adminCount; i += 1) {
     const admin = createUserObject('admin');
     adminPromises.push(
-      findAndCreate(app, 'admin', admin, {
+      findAndCreate(app, 'users', admin, {
         query: {
           email: admin.email,
+          'admin.is': true,
         },
       })
     );
@@ -202,9 +204,10 @@ module.exports = async function(app) {
     const coach = createUserObject('coach');
 
     coachPromises.push(
-      findAndCreate(app, 'coach', coach, {
+      findAndCreate(app, 'users', coach, {
         query: {
           email: coach.email,
+          'coach.is': true,
         },
       })
     );
