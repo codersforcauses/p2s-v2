@@ -1,35 +1,34 @@
 <template>
   <v-card flat rounded="xl">
-    <v-card flat class="rounded-tl-xl" style="overflow: hidden;">
-      <v-tabs v-model="selectedTab" class="mb-2">
-        <v-tab class="text-capitalize text-body-2">Next Session</v-tab>
-        <v-tab class="text-capitalize text-body-2">Last Session</v-tab>
-      </v-tabs>
-      <div v-if="selectedSession" class="d-flex">
-        <div class="d-flex-row pl-5">
-          <div class="d-flex">
-            <div class="text-h2 primary--text">{{ dayNum }}</div>
-            <div class="text-h5 primary--text">{{ dayOrdinal }}</div>
+    <FeathersVuexFind v-slot="{ items: [session] }" service="sessions" :params="{ query: searchQuery }" watch="params">
+      <v-card flat class="rounded-tl-xl" style="overflow: hidden;">
+        <v-tabs v-model="selectedTab" class="mb-2">
+          <v-tab class="text-capitalize text-body-2">Next Session</v-tab>
+          <v-tab class="text-capitalize text-body-2">Last Session</v-tab>
+        </v-tabs>
+        <div v-if="session" class="d-flex">
+          <div class="d-flex-row pl-5">
+            <div class="d-flex">
+              <div class="text-h2 primary--text">{{ dayNum(session) }}</div>
+              <div class="text-h5 primary--text">{{ dayOrdinal(session) }}</div>
+            </div>
+            <div class="text-body-1">{{ monthName(session) }}</div>
           </div>
-          <div class="text-body-1">{{ monthName }}</div>
+          <v-divider
+          inset vertical
+          class="pl-7"
+          />
+          <div class="d-flex flex-column justify-space-between pl-7" @mouseover="viewOverlay = true" @mouseout="viewOverlay = false">
+            <div class="text-subtitle-1">{{ formatTime(session) }} - {{ session.location }}</div>
+            <div>{{ session.type }}</div>
+            <div>{{ coachText(session) }}</div>
+          </div>
         </div>
-        <v-divider
-        inset vertical
-        class="pl-7"
-        />
-        <div class="d-flex flex-column justify-space-between pl-7">
-          <div class="text-subtitle-1">{{ formatTime }} - {{ selectedSession.location }}</div>
-          <div>{{ selectedSession.type }}</div>
-          <div>{{ coachText }}</div>
+        <div v-else class="text-h6 pl-4">
+          No Session Found
         </div>
-        <div class="d-flex align-items-center">
-          <v-btn text rounded color="primary">View Session</v-btn>
-        </div>
-      </div>
-      <div v-else class="text-h6 pl-4">
-        No Session Found
-      </div>
-    </v-card>
+      </v-card>
+    </FeathersVuexFind>
     <v-card-title primary-title class="primary--text text-h6 pb-0">Manage Sessions</v-card-title>
     <v-card-text>
       View all the sessions on file
@@ -60,47 +59,53 @@ export default {
   data() {
     return {
       selectedTab: 0,
+      viewOverlay: false,
       sessionDialog: false,
       sessions,
       users
     };
   },
   computed: {
-    nextSession() {
-      return sessions.filter(
-        (session) => dayjs(session.date).isAfter(dayjs())
-      ).reduce((acc, curr) => {
-        if(dayjs(curr.date).isBefore(dayjs(acc.date))) return curr
-        return acc
-      })
+    searchQuery() {
+      const query = this.selectedTab === 0 ? 
+      {
+        $limit: 1,
+        date: {
+          $gte: dayjs().format('YYYY-MM-DDTHH:mm:ss[Z]')
+        },
+        $sort: {
+          date: 1
+        }
+      } :
+       {
+        $limit: 1,
+        date: {
+          $lt: dayjs().format('YYYY-MM-DDTHH:mm:ss[Z]')
+        },
+        $sort: {
+          date: -1
+        }
+      }
+      return query
     },
-    lastSession() {
-      return sessions.filter(
-        (session) => dayjs(session.date).isBefore(dayjs())
-      ).reduce((acc, curr) => {
-        if(dayjs(curr.date).isAfter(dayjs(acc.date))) return curr
-        return acc
-      })
+  },
+  methods: {
+    formatTime(session) {
+      return dayjs(session.date).format('h:mma')
     },
-    selectedSession() {
-      return this.selectedTab === 0 ? this.nextSession : this.lastSession
+    dayNum(session) {
+      return dayjs(session.date).date()
     },
-    formatTime() {
-      return dayjs(this.selectedSession.date).format('h:mma')
-    },
-    dayNum() {
-      return dayjs(this.selectedSession.date).date()
-    },
-    dayOrdinal() {
-      if (this.dayNum > 3 && this.dayNum < 21) return 'th';
-      switch (this.dayNum % 10) {
+    dayOrdinal(session) {
+      if (this.dayNum(session) > 3 && this.dayNum(session) < 21) return 'th';
+      switch (this.dayNum(session) % 10) {
         case 1:  return "st";
         case 2:  return "nd";
         case 3:  return "rd";
         default: return "th";
       }
     },
-    monthName() {
+    monthName(session) {
       const monthNames = [
         "January",
         "February",
@@ -115,16 +120,13 @@ export default {
         "November",
         "December"
       ];
-      const date = dayjs(this.selectedSession.date)
+      const date = dayjs(session.date)
       return monthNames[date.month()]
     },
-    sessionCoaches() {
-      return this.users.filter((user) => this.selectedSession.coaches.some(seshCoach => user._id === seshCoach))
+    coachText(session) {
+      return session.coaches.length < 1 ? 'No Coaches Assigned' : `${session.coaches.length} Coach${session.coaches.length > 1 ? 'es' : ''} Assigned`
     },
-    coachText() {
-      return this.sessionCoaches.length < 1 ? 'No Coaches Assigned' : `${this.sessionCoaches.length} Coach${this.sessionCoaches.length > 1 ? 'es' : ''} Assigned`
-    }
-  },
+  }
 };
 </script>
 

@@ -23,6 +23,7 @@
             <v-col cols="6" tag="label" class="v-label pl-6">LOCATION</v-col>
             <v-col cols="6" class="pr-3 pt-1">
               <v-select
+                v-model="type"
                 :items="types"
                 label="Session Type/Activity"
                 solo-inverted
@@ -113,6 +114,7 @@
                   v-model="time"
                   full-width
                   @click:minute="$refs.menu.save(time)"
+                  color="primary"
                 ></v-time-picker>
               </v-menu>
             </v-col>
@@ -148,6 +150,7 @@
 
 <script>
 import dayjs from 'dayjs'
+import { mapActions } from 'vuex'
 
 export default {
   props: ['value'],
@@ -155,7 +158,8 @@ export default {
     return {
       date: null,
       time: null,
-      location: null,
+      location: '',
+      type: '',
       types: [
         'Rugby',
         'Classroom',
@@ -186,6 +190,21 @@ export default {
       },
     },
   },
+  methods: {
+    ...mapActions('sessions', { create: 'create'}),
+    async createSession() {
+      const { time, date, location, type } = this
+      const timeArr = time.split(':')
+      const dateTime = dayjs(date).set('hour', timeArr[0]).set('minute', timeArr[1]).toDate()
+      const res = await this.create({
+        date: dateTime,
+        location,
+        type
+      })
+      console.log(res)
+      // Navigate to session
+    }
+  }
 };
 </script>
 
