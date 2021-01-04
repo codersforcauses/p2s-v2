@@ -1,5 +1,14 @@
 <template>
   <v-card flat rounded="xl">
+    <v-card-subtitle>Current students</v-card-subtitle>
+    <div class="d-flex pl-4">
+      <FeathersVuexCount v-slot="{ total: numStudents }" service="students" :params="{ query: {} }">
+        <div>
+          <div class="text-h2 primary--text text-center">{{ numStudents }}</div>
+          <div class="text-body-1 text-center">{{ studentText(numStudents) }}</div>
+        </div>
+      </FeathersVuexCount>
+    </div>
     <v-card-title primary-title class="primary--text text-h6 pb-0">Manage Students</v-card-title>
 
     <v-card-text>View all the students on record</v-card-text>
@@ -19,5 +28,10 @@ export default {
       studentDialog: false,
     };
   },
+  methods: {
+    studentText(num) {
+      return num < 1 ? 'No Students Found' : `Student${num > 1 ? 's' : ''}`
+    },
+  }
 };
 </script>
