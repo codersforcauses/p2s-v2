@@ -31,9 +31,9 @@ const routes = [
     beforeEnter(to, _, next) {
       if (to.fullPath === '/') {
         const user = Store.getters['auth/user'];
-        if (user.admin.is) {
+        if (user?.admin?.is) {
           next({ path: '/admin' });
-        } else if (user.coach.is) {
+        } else if (user?.coach?.is) {
           next({ path: '/coach' });
         } else {
           next({ name: 'error' });
