@@ -3,7 +3,11 @@
     <v-card-subtitle>Current Staff</v-card-subtitle>
     <div class="d-flex pl-4">
       <div>
-        <div class="text-h2 primary--text text-center">{{ numCoaches }}</div>
+        <FeathersVuexCount v-slot="{ total: numCoaches }" service="users" :params="{ query: {
+          'coach.is': true
+        } }">
+          <div class="text-h2 primary--text text-center">{{ numCoaches }}</div>
+        </FeathersVuexCount>
         <div class="text-body-1 text-center">Coaches</div>
       </div>
       <v-divider
@@ -11,7 +15,11 @@
         class="pl-7"
       ></v-divider>
       <div class="d-flex-row pl-7">
-        <div class="text-h2 primary--text text-center">{{ numAdmins }}</div>
+        <FeathersVuexCount v-slot="{ total: numAdmins }" service="users" :params="{ query: {
+          'admin.is': true
+        } }">
+          <div class="text-h2 primary--text text-center">{{ numAdmins }}</div>
+        </FeathersVuexCount>
         <div class="text-body-1 text-center">Admins</div>
       </div>
     </div>
@@ -32,11 +40,6 @@
 </template>
 
 <script>
-// import { mapGetters, mapActions, mapState } from 'vuex';
-import seeds from '../../../seeds'
-
-const { users } = seeds
-
 export default {
   components: {
     invite: () => ({
@@ -47,60 +50,7 @@ export default {
     return {
       inviteDialog: false,
       isPending: true,
-      users
     };
   },
-  mounted() {
-    // console.log('hello');
-    // this.findUsers({
-    //   query: {
-    //     $sort: {
-    //       updatedAt: -1,
-    //     },
-    //     $select: ['name', 'region', 'email', 'coach', 'admin'],
-    //   },
-    // }).then(response => {
-    //   const regionIds = response.data.map(regionId => regionId.region);
-    //   this.findRegions({
-    //     query: {
-    //       _id: {
-    //         $in: regionIds,
-    //       },
-    //     },
-    //   });
-    //   this.finished = true;
-    // });
-  },
-  computed: {
-    numCoaches() {
-      if (this.users) {
-        return this.users.reduce((numUsers, user) => {
-          if(user?.coach?.is) return numUsers + 1
-        return numUsers
-      }, 0)
-        }
-        return 0
-    },
-    numAdmins() {
-      if (this.users) {
-        return this.users.reduce((numUsers, user) => {
-          if(user?.admin?.is) return numUsers + 1
-          return numUsers
-        }, 0)
-      }
-      return 0
-    }
-    // ...mapState('users', { isFindPendingUsers: 'isFindPending' }),
-    // ...mapState('regions', { isGetPendingRegions: 'isGetPending' }),
-    // ...mapGetters('users', { findUsersInStore: 'find' }),
-    // ...mapGetters('regions', { getRegionInStore: 'get' }),
-    //   isPending() {
-    //     return this.isFindPendingUsers || this.isGetPendingRegions;
-    //   },
-  },
-  // methods: {
-  //   ...mapActions('users', { findUsers: 'find' }),
-  //   ...mapActions('regions', { findRegions: 'find' }),
-  // },
 };
 </script>
