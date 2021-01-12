@@ -2,7 +2,14 @@
   <v-card flat tile height="100%" class="py-sm-12">
     <v-card-text height="100%" class="pa-0">
       <div class="ml-4 mt-sm-4 d-flex">
-        <v-sheet outlined elevation="0" rounded class="d-flex align-center grey--text text--lighten-2 text-h3 px-2">
+        <v-sheet
+          v-if="$vuetify.breakpoint.smAndUp"
+          outlined
+          rounded
+          elevation="0"
+          class="d-flex align-center grey--text text-h3 px-2"
+          :class="$vuetify.theme.dark ? 'text--lighten-1' : 'text--darken-1'"
+        >
           {{getInitials}}
         </v-sheet>
         <v-list-item three-line class="px-2 px-sm-4">
