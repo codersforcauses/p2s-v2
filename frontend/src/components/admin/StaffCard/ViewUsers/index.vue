@@ -1,5 +1,4 @@
 <template>
-<!-- TODO fix double click unselecting current selected user -->
   <v-sheet rounded="xl" class="py-3">
     <FeathersVuexFind
       v-slot="{ items: users, isFindPending: isPending, queryInfo: info }"
@@ -21,11 +20,11 @@
         </div>
         <v-skeleton-loader type="list-item-two-line@10" :loading="isPending">
           <v-list two-line subheader>
-            <v-list-item-group v-model="selected" active-class="text--primary">
+            <v-list-item-group v-model="selected" mandatory color="primary">
               <template v-for="user in users">
                 <v-list-item :key="user._id" @click="drawer = true">
                   <v-list-item-content>
-                    <v-list-item-title>{{ `${user.name.first} ${user.name.last}` }}</v-list-item-title>
+                    <v-list-item-title class="text--primary">{{ `${user.name.first} ${user.name.last}` }}</v-list-item-title>
                     <v-list-item-subtitle>{{ user.email }}</v-list-item-subtitle>
                     <v-list-item-subtitle>
                       {{ user.admin.is ? 'admin' : null }}
