@@ -1,8 +1,8 @@
 <template>
   <v-sheet rounded="xl" class="py-3">
     <FeathersVuexFind
-      v-slot="{ items: users, isFindPending: isPending, queryInfo: info }"
-      service="users"
+      v-slot="{ items: schools, isFindPending: isPending, queryInfo: info }"
+      service="schools"
       :params="{ query }"
       watch="params"
     >
@@ -18,19 +18,14 @@
             </v-btn>
           </div>
         </div>
-        <v-skeleton-loader type="list-item-three-line@10" :loading="isPending">
-          <v-list three-line subheader>
+        <v-skeleton-loader type="list-item-two-line@10" :loading="isPending">
+          <v-list two-line subheader>
             <v-list-item-group v-model="selected" mandatory color="primary">
-              <template v-for="user in users">
-                <v-list-item :key="user._id" @click="drawer = true">
+              <template v-for="school in schools">
+                <v-list-item :key="school._id" @click="drawer = true">
                   <v-list-item-content>
-                    <v-list-item-title class="text--primary">{{ `${user.name.first} ${user.name.last}` }}</v-list-item-title>
-                    <v-list-item-subtitle>{{ user.email }}</v-list-item-subtitle>
-                    <v-list-item-subtitle>
-                      {{ user.admin.is ? 'admin' : null }}
-                      <span v-show="user.admin.is && user.coach.is">&bull;</span>
-                      {{ user.coach.is ? 'coach' : null }}
-                    </v-list-item-subtitle>
+                    <v-list-item-title class="text--primary">{{school.name}}</v-list-item-title>
+                    <v-list-item-subtitle>{{`${school.address.suburb}, ${school.address.state}`}}</v-list-item-subtitle>
                   </v-list-item-content>
                 </v-list-item>
               </template>
@@ -49,13 +44,13 @@
           class="py-3 px-0"
         >
           <template #default>
-            <user-info :user="users[selected]" />
+            <school-info :school="schools[selected]" />
           </template>
         </v-navigation-drawer>
         <v-bottom-sheet v-else v-model="drawer" scrollable>
           <v-sheet class="rounded-t-xl pt-6">
             <template #default>
-              <user-info :user="users[selected]" />
+              <school-info :school="schools[selected]" />
             </template>
           </v-sheet>
         </v-bottom-sheet>
@@ -65,13 +60,13 @@
 </template>
 
 <script>
-import UserInfo from './UserInfo';
+import SchoolInfo from './SchoolInfo';
 
 export default {
   name: 'view staff',
   title: 'View Staff',
   components: {
-    UserInfo,
+    SchoolInfo,
   },
   data() {
     return {
@@ -87,8 +82,7 @@ export default {
         $limit: this.limit,
         $skip: this.skip,
         $sort: {
-          'name.first': 1,
-          'name.last': 1,
+          name: 1,
         }
       }
     }

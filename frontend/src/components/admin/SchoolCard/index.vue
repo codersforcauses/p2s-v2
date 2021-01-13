@@ -9,7 +9,7 @@
     </v-card-text>
 
     <v-card-actions class="py-1">
-      <v-btn text rounded color="primary">View All</v-btn>
+      <v-btn text rounded color="primary" :to="{ name: 'view schools' }">View All</v-btn>
       <v-btn text rounded color="primary" @click="schoolDialog = true">Create New</v-btn>
       <!-- <new-school v-model="schoolDialog" /> -->
     </v-card-actions>

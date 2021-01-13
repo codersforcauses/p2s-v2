@@ -1,4 +1,4 @@
-import feathersClient, { makeServicePlugin, BaseModel } from '../../feathers-client'
+import feathersClient, { makeServicePlugin, BaseModel } from '../feathers-client';
 
 class School extends BaseModel {
   // constructor(data, options) {
@@ -6,14 +6,16 @@ class School extends BaseModel {
   // }
 
   // Required for $FeathersVuex plugin to work after production transpile.
-  static modelName = 'School'
+  static modelName = 'School';
+
+  // Define default properties here
 }
-const servicePath = 'schools'
+const servicePath = 'schools';
 const servicePlugin = makeServicePlugin({
   Model: School,
   service: feathersClient.service(servicePath),
-  servicePath
-})
+  servicePath,
+});
 
 // Setup the client-side Feathers hooks.
 feathersClient.service(servicePath).hooks({
@@ -24,7 +26,7 @@ feathersClient.service(servicePath).hooks({
     create: [],
     update: [],
     patch: [],
-    remove: []
+    remove: [],
   },
   after: {
     all: [],
@@ -33,7 +35,7 @@ feathersClient.service(servicePath).hooks({
     create: [],
     update: [],
     patch: [],
-    remove: []
+    remove: [],
   },
   error: {
     all: [],
@@ -42,8 +44,8 @@ feathersClient.service(servicePath).hooks({
     create: [],
     update: [],
     patch: [],
-    remove: []
-  }
-})
+    remove: [],
+  },
+});
 
-export default servicePlugin
+export default servicePlugin;
