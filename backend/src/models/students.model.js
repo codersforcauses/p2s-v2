@@ -36,8 +36,7 @@ module.exports = function(app) {
         },
       ],
       birthCountry: {
-        type: String,
-        required: true, // TODO add country list
+        type: String, // TODO add country list
       },
       DOA: {
         type: Date,
@@ -61,16 +60,8 @@ module.exports = function(app) {
         condition: {
           type: String,
         },
-        medication: {
-          name: {
-            type: String,
-          },
-          dosage: {
-            type: String,
-          },
-          number: {
-            type: Number,
-          },
+        extraInfo: {
+          type: String,
         },
       },
       schoolYear: {
@@ -118,11 +109,6 @@ module.exports = function(app) {
         type: mongoose.ObjectId,
         ref: 'schools',
         required: true,
-      },
-      trial: {
-        type: Boolean,
-        required: true,
-        default: false,
       },
       reports: [
         {
