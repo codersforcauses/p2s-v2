@@ -19,6 +19,10 @@ module.exports = function (app) {
         type: String,
         required: true,
       },
+      email: {
+        type: String,
+        required: true,
+      },
       address: {
         street: {
           type: String,
