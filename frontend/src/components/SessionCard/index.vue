@@ -36,7 +36,7 @@
     </v-card-text>
 
     <v-card-actions class="py-1">
-      <v-btn text rounded color="primary">View All</v-btn>
+      <v-btn text rounded color="primary" :to="{ name: 'view sessions' }">View All</v-btn>
       <v-btn text rounded color="primary" @click="sessionDialog = true">Create New</v-btn>
       <new-session v-model="sessionDialog" />
     </v-card-actions>
@@ -44,11 +44,7 @@
 </template>
 
 <script>
-
 import dayjs from 'dayjs'
-import seeds from '../../seeds'
-
-const { sessions, users } = seeds
 
 export default {
   components: {
@@ -61,8 +57,6 @@ export default {
       selectedTab: 0,
       viewOverlay: false,
       sessionDialog: false,
-      sessions,
-      users
     };
   },
   computed: {

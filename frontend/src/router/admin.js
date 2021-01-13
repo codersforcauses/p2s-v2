@@ -20,6 +20,14 @@ const adminRoutes = [
         /* webpackChunkName: "admin-view-schools" */ '../components/admin/SchoolCard/ViewSchools/index.vue'
       ),
   },
+  {
+    path: '/sessions',
+    name: 'view sessions',
+    component: () =>
+      import(
+        /* webpackChunkName: "admin-view-schools" */ '../components/SessionCard/ViewSessions/index.vue'
+      ),
+  },
 ];
 
 export default adminRoutes;

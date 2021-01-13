@@ -18,30 +18,6 @@
           </v-list-item-content>
         </v-list-item>
       </v-list>
-
-      <div class="coach">
-        <div class="coach-docs text-caption text--secondary">
-          <div class="wwc">
-            WWC
-            <v-skeleton-loader tile type="image" height="128" class="rounded-lg">
-              <!-- <img src="src" alt="alt"> -->
-            </v-skeleton-loader>
-          </div>
-          <div>
-            Police Clearance
-            <v-skeleton-loader tile type="image" height="128" class="rounded-lg">
-              <!-- <img src="src" alt="alt"> -->
-            </v-skeleton-loader>
-          </div>
-          <div>
-            Medical Clearance
-            <v-skeleton-loader tile type="image" height="128" class="rounded-lg">
-              <!-- <img src="src" alt="alt"> -->
-            </v-skeleton-loader>
-          </div>
-        </div>
-        <pre>{{JSON.stringify(school, null, 2)}}</pre>
-      </div>
     </v-card-text>
   </v-card>
 </template>

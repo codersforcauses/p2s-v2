@@ -202,6 +202,7 @@ export default {
         type
       })
       console.log(res)
+      this.$router.push({ path: `/session/${res._id}/` })
       // Navigate to session
     }
   }
