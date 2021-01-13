@@ -1,4 +1,4 @@
-import feathersClient, { makeServicePlugin, BaseModel } from '../../feathers-client'
+import feathersClient, { makeServicePlugin, BaseModel } from '../feathers-client'
 
 class Student extends BaseModel {
   // constructor(data, options) {
