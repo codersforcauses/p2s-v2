@@ -38,7 +38,9 @@
     <v-card-actions class="py-1">
       <v-btn text rounded color="primary" :to="{ name: 'view sessions' }">View All</v-btn>
       <v-btn text rounded color="primary" @click="sessionDialog = true">Create New</v-btn>
+      <v-btn text rounded color="primary" @click="matrix = true">matrix</v-btn>
       <new-session v-model="sessionDialog" />
+      <matrix v-model="matrix" />
     </v-card-actions>
   </v-card>
 </template>
@@ -51,17 +53,21 @@ export default {
     newSession: () => ({
       component: import('./CreateSession.vue'),
     }),
+    matrix: () => ({
+      component: import('./Matrix.vue'),
+    }),
   },
   data() {
     return {
       selectedTab: 0,
       viewOverlay: false,
       sessionDialog: false,
+      matrix: false,
     };
   },
   computed: {
     searchQuery() {
-      const query = this.selectedTab === 0 ? 
+      const query = this.selectedTab === 0 ?
       {
         $limit: 1,
         date: {
