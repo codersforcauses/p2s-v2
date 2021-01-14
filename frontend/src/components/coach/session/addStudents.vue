@@ -22,6 +22,9 @@
             <v-col cols="12" tag="label" class="v-label pl-6 mb-1">STUDENTS</v-col>
             <v-col cols="12">
               <FeathersVuexFind v-slot="{ items: students, isFindPending: isPending }" service="students" :params="{ query }" watch="params">
+                <div>
+                  {{ log(students.map(student => student.name)) }}
+                  
                 <v-autocomplete
                   v-model.trim="studentList"
                   :items="students"
@@ -65,21 +68,22 @@
                       @click="data.select"
                       @click:close="remove(data.item)"
                     >
-                      {{ `${data.item.name.first} ${data.item.name.last}` }}
+                      {{ data.item.name }}
                     </v-chip>
                   </template>
                   <template v-slot:item="data">
                     <template v-if="typeof data.item !== 'object'">
-                      <v-list-item-content >{{ data.item.name.firstName }}</v-list-item-content>
+                      <v-list-item-content >{{ data.item.name }}</v-list-item-content>
                     </template>
                     <template v-else>
                       <v-list-item-content>
-                        <v-list-item-title>{{ `${data.item.name.first} ${data.item.name.last}` }}</v-list-item-title>
+                        <v-list-item-title>{{ data.item.name }}</v-list-item-title>
                         <v-list-item-subtitle>Year {{ data.item.schoolYear }}</v-list-item-subtitle>
                       </v-list-item-content>
                     </template>
                   </template>
                 </v-autocomplete>
+                </div>
               </FeathersVuexFind>
             </v-col>
             
@@ -153,9 +157,10 @@ export default {
         //   }}},
         // ]
         
-        // 'first.first': {
+        // name: {
         //   $gte: this.search
         // }
+        $skip: 10
       }
     },
     dark(){
@@ -175,12 +180,13 @@ export default {
         this.$emit('input', false);
       }
     },
+    log(stuff) {
+      console.log(stuff)
+    },
     searchFilter (item, queryText) {
-      const textOne = item.name.first.toLowerCase()
-      const textTwo = item.name.last.toLowerCase()
-      const textThree = item.schoolYear.toString()
+      const text = item.name.toLowerCase()
       const searchText = queryText.toLowerCase()
-      return textOne.indexOf(searchText) > -1 || textTwo.indexOf(searchText) > -1 || textThree.indexOf(searchText) > -1
+      return text.indexOf(searchText) > -1
     },
     remove (item) {
       console.log(item)

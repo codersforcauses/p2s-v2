@@ -24,7 +24,7 @@
               <template v-for="user in users">
                 <v-list-item :key="user._id" @click="drawer = true">
                   <v-list-item-content>
-                    <v-list-item-title class="text--primary">{{ `${user.name.first} ${user.name.last}` }}</v-list-item-title>
+                    <v-list-item-title class="text--primary">{{ user.name }}</v-list-item-title>
                     <v-list-item-subtitle>{{ user.email }}</v-list-item-subtitle>
                     <v-list-item-subtitle>
                       {{ user.admin.is ? 'admin' : null }}
@@ -87,8 +87,7 @@ export default {
         $limit: this.limit,
         $skip: this.skip,
         $sort: {
-          'name.first': 1,
-          'name.last': 1,
+          name: 1,
         }
       }
     }

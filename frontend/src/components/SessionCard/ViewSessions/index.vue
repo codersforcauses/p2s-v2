@@ -8,7 +8,10 @@
     >
       <div>
         <div :style="{ width: $vuetify.breakpoint.smAndUp ? '50vw' : '100vw'}">
-          <div class="mb-2 mr-1 ml-auto d-flex align-center justify-space-between" style="width: 10rem;">
+          <div class="mb-2 mr-1 ml-auto d-flex align-center justify-space-between" :style="{ width: $vuetify.breakpoint.smAndUp ? '50vw' : '100vw'}">
+            <v-btn color="primary" text dense rounded @click="sessionDialog = true">Add Session</v-btn>
+              <add-session v-model="sessionDialog" />
+              <v-spacer></v-spacer>
             <v-btn icon color="primary" :disabled="skip === 0" @click="skip -= limit">
               <v-icon>mdi-chevron-left</v-icon>
             </v-btn>
@@ -24,8 +27,8 @@
               <template v-for="session in sessions">
                 <v-list-item :key="session._id" @click="drawer = true">
                   <v-list-item-content>
-                    <v-list-item-title class="text--primary">{{session.date}}</v-list-item-title>
-                    <v-list-item-subtitle>{{`${session.location}, ${session.type}`}}</v-list-item-subtitle>
+                    <v-list-item-title class="text--primary">{{`${dayNum(session)}${dayOrdinal(session)} ${monthName(session)} - ${session.location}`}}</v-list-item-title>
+                    <v-list-item-subtitle>{{`${formatTime(session)}, ${session.type}`}}</v-list-item-subtitle>
                   </v-list-item-content>
                 </v-list-item>
               </template>
@@ -60,20 +63,25 @@
 </template>
 
 <script>
+import dayjs from 'dayjs'
+
 import SessionInfo from './SessionInfo';
+import AddSession from '../CreateSession';
 
 export default {
   name: 'view staff',
   title: 'View Staff',
   components: {
     SessionInfo,
+    AddSession
   },
   data() {
     return {
       selected: 0,
       drawer: true,
       limit: 10,
-      skip: 0
+      skip: 0,
+      sessionDialog: false,
     };
   },
   computed: {
@@ -82,10 +90,45 @@ export default {
         $limit: this.limit,
         $skip: this.skip,
         $sort: {
-          name: 1,
+          date: 1,
         }
       }
-    }
+    },
+  },
+  methods: {
+    formatTime(session) {
+      return dayjs(session.date).format('h:mma')
+    },
+    dayNum(session) {
+      return dayjs(session.date).date()
+    },
+    dayOrdinal(session) {
+      if (this.dayNum(session) > 3 && this.dayNum(session) < 21) return 'th';
+      switch (this.dayNum(session) % 10) {
+        case 1:  return "st";
+        case 2:  return "nd";
+        case 3:  return "rd";
+        default: return "th";
+      }
+    },
+    monthName(session) {
+      const monthNames = [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec"
+      ];
+      const date = dayjs(session.date)
+      return monthNames[date.month()]
+    },
   }
 };
 </script>

@@ -15,7 +15,6 @@ const studentsPerSchool = 10;
 
 const testPass = 'a';
 
-const ethnicityList = ['Other'];
 const genderList = ['Male', 'Female', 'Other'];
 const schoolSuffixes = [
   'School',
@@ -40,22 +39,26 @@ const schoolFormats = [
 ];
 
 function createUserObject(type) {
-  const name = {
-    first: faker.name.firstName(),
-    last: faker.name.lastName(),
-  };
-  const ethnicity = ethnicityList;
+  const name = faker.fake('{{name.firstName}} {{name.lastName}}');
+  const ethnicity = 'Other';
   const gender = faker.random.arrayElement(genderList);
+  const mobile = faker.phone.phoneNumber();
 
   const role = type === 'admin' ? 'admin.is' : 'coach.is';
 
   return {
     name,
     email: faker.internet.email(
-      name.first,
-      name.last,
+      name.split(' ')[0],
+      name.split(' ')[1],
       type.concat('.fake.net')
     ),
+    address: {
+      street: faker.address.streetName(),
+      suburb: faker.address.city(),
+      postcode: faker.address.zipCode('####'),
+    },
+    mobile,
     password: testPass,
     isVerified: true,
     culture: ethnicity,
@@ -67,10 +70,19 @@ function createUserObject(type) {
 function createSchoolObject() {
   const suffix = faker.random.arrayElement(schoolSuffixes);
   const format = faker.random.arrayElement(schoolFormats);
+  const contactName = faker.fake('{{name.firstName}} {{name.lastName}}');
 
   return {
     name: faker.fake(format.concat(suffix)),
-    phoneNumber: faker.phone.phoneNumber(),
+    contact: {
+      contactName,
+      phoneNumber: faker.phone.phoneNumber(),
+      email: faker.internet.email(
+        contactName.split(' ')[0],
+        contactName.split(' ')[1],
+        'school.com'
+      ),
+    },
     address: {
       street: faker.address.streetName(),
       suburb: faker.address.city(),
@@ -81,13 +93,10 @@ function createSchoolObject() {
 
 function createStudentObject(schoolId) {
   return {
-    name: {
-      first: faker.name.firstName(),
-      last: faker.name.lastName(),
-    },
+    name: faker.fake('{{name.firstName}} {{name.lastName}}'),
     DOB: faker.date.past(),
     gender: faker.random.arrayElement(genderList),
-    culture: ethnicityList,
+    culture: 'Other',
     birthCountry: faker.address.country(),
     DOA: faker.date.past(),
     schoolYear: faker.random.number({ min: 7, max: 12 }),
@@ -163,12 +172,14 @@ module.exports = async function(app) {
       if (result.data.length === 0) {
         return app.service('users').create({
           ...superTestAdmin,
-          name: {
-            first: 'Test',
-            last: 'Admin',
+          name: 'Test Admin',
+          address: {
+            street: '35 Stirling Hwy',
+            suburb: 'Crawley',
+            postcode: '6009',
           },
           gender: 'Other',
-          culture: ethnicityList,
+          culture: 'Other',
           darktheme: true,
           'admin.is': true,
           'coach.is': true,

@@ -39,7 +39,7 @@
       <v-btn text rounded color="primary" :to="{ name: 'view sessions' }">View All</v-btn>
       <v-btn text rounded color="primary" @click="sessionDialog = true">Create New</v-btn>
       <v-btn text rounded color="primary" @click="matrix = true">matrix</v-btn>
-      <new-session v-model="sessionDialog" />
+      <new-session v-model="sessionDialog" @created="this.$router.push({ path: `/session/${res._id}` })" />
       <matrix v-model="matrix" />
     </v-card-actions>
   </v-card>

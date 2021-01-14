@@ -201,9 +201,8 @@ export default {
         location,
         type
       })
-      console.log(res)
-      this.$router.push({ path: `/session/${res._id}/` })
-      // Navigate to session
+      this.$emit('created', res._id)
+      this.$emit('input')
     }
   }
 };

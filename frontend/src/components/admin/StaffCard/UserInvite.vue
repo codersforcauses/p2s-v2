@@ -20,32 +20,20 @@
         <v-container class="pa-4">
           <v-row no-gutters>
             <v-col cols="12" tag="label" class="v-label pl-6">NAME</v-col>
-            <v-col cols="6" style="padding-right: 1px;">
+            <v-col cols="12">
               <v-text-field
                 solo-inverted
                 flat
                 persistent-hint
+                rounded
                 hint="Enter the user's name"
                 type="text"
-                class="mb-2 mt-1 rounded-l-xl rounded-r-0"
-                placeholder="First Name"
+                class="mb-2 mt-1"
+                placeholder="Name"
                 color="primary"
                 :disabled="loading"
                 :rules="[validation.required, validation.name]"
-                v-model.trim="user.name.first"
-              />
-            </v-col>
-            <v-col cols="6" style="padding-left: 1px;">
-              <v-text-field
-                solo-inverted
-                flat
-                type="text"
-                class="mb-2 mt-1 rounded-l-0 rounded-r-xl"
-                placeholder="Last Name"
-                color="primary"
-                :disabled="loading"
-                :rules="[validation.required, validation.name]"
-                v-model.trim="user.name.last"
+                v-model.trim="user.name"
               />
             </v-col>
 
@@ -124,7 +112,6 @@
 </template>
 
 <script>
-// import { mapState, mapGetters, mapActions } from 'vuex';
 
 export default {
   props: ['value'],
@@ -133,10 +120,7 @@ export default {
       user: {
         email: '',
         region: '',
-        name: {
-          first: '',
-          last: '',
-        },
+        name: ''
       },
       permissions: [],
       permError: undefined,
@@ -164,8 +148,6 @@ export default {
   computed: {
     // ...mapState('admin', { createAdmin: 'isCreatePending' }),
     // ...mapState('coach', { createCoach: 'isCreatePending' }),
-    // ...mapState('regions', { loadRegions: 'isFindPending' }),
-    // ...mapGetters('regions', { listRegions: 'list' }),
     showDialog: {
       get() {
         return this.value;
@@ -179,7 +161,6 @@ export default {
     },
   },
   methods: {
-    // ...mapActions('regions', { findRegionsInStore: 'find' }),
     // async createUser() {
     //   if (this.valid && !!this.permError) {
     //     const tempUser = {

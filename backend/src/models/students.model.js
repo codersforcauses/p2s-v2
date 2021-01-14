@@ -11,14 +11,8 @@ module.exports = function(app) {
   const schema = new Schema(
     {
       name: {
-        first: {
-          type: String,
-          required: true,
-        },
-        last: {
-          type: String,
-          required: true,
-        },
+        type: String,
+        required: true,
       },
       DOB: {
         type: Date,
@@ -29,14 +23,12 @@ module.exports = function(app) {
         enum: ['Male', 'Female', 'Other'],
         required: true,
       },
-      culture: [
-        {
-          type: String,
-          required: true, // TODO add ethnicity options
-        },
-      ],
+      culture: {
+        type: String,
+        required: true, 
+      },
       birthCountry: {
-        type: String, // TODO add country list
+        type: String,
       },
       DOA: {
         type: Date,
@@ -71,7 +63,6 @@ module.exports = function(app) {
       consent: {
         type: Boolean,
         required: true,
-        default: false,
       },
       contact: {
         home: {

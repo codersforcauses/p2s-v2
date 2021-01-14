@@ -1,5 +1,4 @@
 const users = require('./users/users.service.js');
-const feedback = require('./feedback/feedback.service.js');
 const reports = require('./reports/reports.service.js');
 const schools = require('./schools/schools.service.js');
 const sessions = require('./sessions/sessions.service.js');
@@ -10,7 +9,6 @@ const authmanagement = require('./authmanagement/authmanagement.service.js');
 // eslint-disable-next-line no-unused-vars
 module.exports = function(app) {
   app.configure(users);
-  app.configure(feedback);
   app.configure(reports);
   app.configure(schools);
   app.configure(sessions);

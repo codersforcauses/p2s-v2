@@ -14,7 +14,7 @@
         </v-sheet>
         <v-list-item three-line class="px-2 px-sm-4">
           <v-list-item-content class="py-0">
-            <v-list-item-title class="text-h6">{{`${user.name.first} ${user.name.last}`}}</v-list-item-title>
+            <v-list-item-title class="text-h6">{{ user.name }}</v-list-item-title>
             <v-list-item-subtitle>{{user.email}}</v-list-item-subtitle>
             <v-list-item-subtitle>{{user.mobile}}</v-list-item-subtitle>
             <div>
@@ -25,7 +25,7 @@
         </v-list-item>
       </div>
 
-      <v-card outlined rounded="lg" flat class="mx-4 my-6">
+      <v-card v-if="user.emergencyContact" outlined rounded="lg" flat class="mx-4 my-6">
         <v-card-text class="pb-0">Emergency Contact</v-card-text>
         <v-list-item two-line>
           <v-list-item-content>
@@ -68,10 +68,7 @@ export default {
     user: {
       type: Object,
       default: () => ({
-        name: {
-          first: '',
-          last: '',
-        },
+        name: '',
         email: '',
         mobile: '',
         emergencyContact: {
@@ -89,8 +86,9 @@ export default {
   },
   computed: {
     getInitials() {
-      const firstNameChar = this.user.name.first.charAt(0)
-      const lastNameChar = this.user.name.last.charAt(0)
+      const nameArr = this.user.name.split(' ')
+      const firstNameChar = nameArr[0].charAt(0)
+      const lastNameChar = nameArr[1].charAt(0)
       return firstNameChar + lastNameChar
     },
     getEmergencyInfo() {

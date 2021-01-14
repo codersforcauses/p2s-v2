@@ -33,13 +33,9 @@ module.exports = function (app) {
           required: true,
         },
       ],
-      feedback: [
-        {
-          type: mongoose.ObjectId,
-          ref: 'feedback',
-          required: true,
-        },
-      ],
+      feedback: {
+        type: String,
+      },
       type: {
         type: String,
         enum: [

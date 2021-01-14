@@ -62,7 +62,7 @@
                 <template v-for="student in students">
                   <v-list-item :key="student._id" @click="drawer = true">
                     <v-list-item-content>
-                      <v-list-item-title class="text--primary">{{ `${student.name.first} ${student.name.last}` }}</v-list-item-title>
+                      <v-list-item-title class="text--primary">{{ student.name }}</v-list-item-title>
                       <v-list-item-subtitle>{{ `Year ${student.schoolYear}` }}</v-list-item-subtitle>
                     </v-list-item-content>
                     <v-list-item-icon>
@@ -142,8 +142,7 @@ export default {
         $limit: this.limit,
         $skip: this.skip,
         $sort: {
-          'name.first': 1,
-          'name.last': 1,
+          name: 1,
         }
       }
     }

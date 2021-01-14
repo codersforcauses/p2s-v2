@@ -2,28 +2,28 @@
   <v-card flat tile height="100%" class="py-sm-12">
     <v-card-text height="100%" class="pa-0 mt-sm-4">
       <div v-if="session" class="d-flex">
-      <div class="d-flex-row pl-5">
-        <div class="d-flex">
-          <div class="text-h2 primary--text">{{ dayNum(session) }}</div>
-          <div class="text-h5 primary--text">{{ dayOrdinal(session) }}</div>
+        <div class="d-flex-row pl-5">
+          <div class="d-flex">
+            <div class="text-h2 primary--text">{{ dayNum(session) }}</div>
+            <div class="text-h5 primary--text">{{ dayOrdinal(session) }}</div>
+          </div>
+          <div class="text-body-1">{{ monthName(session) }}</div>
         </div>
-        <div class="text-body-1">{{ monthName(session) }}</div>
+        <v-divider
+        inset vertical
+        class="pl-7"
+        />
+        <div class="d-flex flex-column justify-space-between pl-7">
+          <div class="text-subtitle-1">{{ formatTime(session) }} - {{ session.location }}</div>
+          <div>{{ session.type }}</div>
+          <div>{{ coachText(session) }}</div>
+        </div>
       </div>
-      <v-divider
-      inset vertical
-      class="pl-7"
-      />
-      <div class="d-flex flex-column justify-space-between pl-7">
-        <div class="text-subtitle-1">{{ formatTime(session) }} - {{ session.location }}</div>
-        <div>{{ session.type }}</div>
-        <div>{{ coachText(session) }}</div>
+      <div v-else class="text-h6 pl-4">
+        No Session Selected
       </div>
-    </div>
-    <div v-else class="text-h6 pl-4">
-      No Session Found
-    </div>
     </v-card-text>
-    <v-card-actions>
+    <v-card-actions v-if="session">
       <v-btn color="primary" text rounded :to="{ path: `/session/${session._id}`}">View Session</v-btn>
     </v-card-actions>
   </v-card>
@@ -36,8 +36,7 @@ export default {
   props: {
     session: {
       type: Object,
-      default: () => ({
-      })
+      default: null
     }
   },
   computed: {

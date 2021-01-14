@@ -15,13 +15,18 @@ module.exports = function (app) {
         required: true,
         unique: true,
       },
-      phoneNumber: {
-        type: String,
-        required: true,
-      },
-      email: {
-        type: String,
-        required: true,
+      contact: {
+        name: {
+          type: String,
+        },
+        phoneNumber: {
+          type: String,
+          required: true,
+        },
+        email: {
+          type: String,
+          required: true,
+        },
       },
       address: {
         street: {

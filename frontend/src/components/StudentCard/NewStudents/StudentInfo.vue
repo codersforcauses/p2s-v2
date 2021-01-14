@@ -14,7 +14,7 @@
         </v-sheet>
         <v-list-item three-line class="px-2 px-sm-4">
           <v-list-item-content class="py-0">
-            <v-list-item-title class="text-h6">{{`${user.name.first} ${user.name.last}`}}</v-list-item-title>
+            <v-list-item-title class="text-h6">{{user.name}}</v-list-item-title>
             <v-list-item-subtitle>{{user.email}}</v-list-item-subtitle>
             <v-list-item-subtitle>{{user.mobile}}</v-list-item-subtitle>
             <div>
@@ -49,8 +49,9 @@ export default {
   },
   computed: {
     getInitials() {
-      const firstNameChar = this.student.name.first.charAt(0)
-      const lastNameChar = this.student.name.last.charAt(0)
+      const nameArr = this.student.split(' ')
+      const firstNameChar = nameArr[0].charAt(0)
+      const lastNameChar = nameArr[1].charAt(0)
       return firstNameChar + lastNameChar
     },
     getEmergencyInfo() {
