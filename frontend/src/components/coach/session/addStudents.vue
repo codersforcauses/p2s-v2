@@ -16,7 +16,7 @@
         </v-btn>
       </v-toolbar>
 
-      <v-form v-model="valid" @keyup.native.enter="createStudents($event)" class="overflow-y-hidden" style="max-height: 100%">
+      <v-form v-model="valid" @keyup.native.enter="addStudents" class="overflow-y-hidden" style="max-height: 100%">
         <v-container class="pa-4 overflow-y-auto" style="max-height: 100%">
           <v-row no-gutters>
             <v-col cols="12" tag="label" class="v-label pl-6 mb-1">STUDENTS</v-col>
@@ -39,7 +39,7 @@
                   item-value="_id"
                   label="Search for a student"
                   solo-inverted
-                  :rules="[validation.required]"
+                  :rules="[validation.moreThanNone]"
                   multiple
                   :menu-props="{
                     offsetY: true,
@@ -65,20 +65,17 @@
                       @click="data.select"
                       @click:close="remove(data.item)"
                     >
-                      {{ data.item.name }}
+                      {{ `${data.item.name.first} ${data.item.name.last}` }}
                     </v-chip>
                   </template>
                   <template v-slot:item="data">
                     <template v-if="typeof data.item !== 'object'">
-                      <v-list-item-content v-text="data.item"></v-list-item-content>
+                      <v-list-item-content >{{ data.item.name.firstName }}</v-list-item-content>
                     </template>
                     <template v-else>
-                      <v-list-item-avatar>
-                        <img :src="data.item.avatar">
-                      </v-list-item-avatar>
                       <v-list-item-content>
-                        <v-list-item-title v-html="data.item.name"></v-list-item-title>
-                        <v-list-item-subtitle v-html="data.item.group"></v-list-item-subtitle>
+                        <v-list-item-title>{{ `${data.item.name.first} ${data.item.name.last}` }}</v-list-item-title>
+                        <v-list-item-subtitle>Year {{ data.item.schoolYear }}</v-list-item-subtitle>
                       </v-list-item-content>
                     </template>
                   </template>
@@ -132,6 +129,7 @@ export default {
       valid: false,
       validation: {
         required: value => !!value || 'This field is required',
+        moreThanNone: value => value.length > 0 || 'Must have one or more entries'
       },
     };
   },
@@ -146,14 +144,18 @@ export default {
     },
     query() {
       return {
-        $or: [
-          {'name.first': {
-            $gte: this.search
-          }},
-          {'name.last': {
-            $gte: this.search
-          }},
-        ]
+        // $or: [
+        //   { name: { first: {
+        //     $gte: this.search
+        //   }}},
+        //   { name: { last: {
+        //     $gte: this.search
+        //   }}},
+        // ]
+        
+        // 'first.first': {
+        //   $gte: this.search
+        // }
       }
     },
     dark(){
@@ -174,11 +176,14 @@ export default {
       }
     },
     searchFilter (item, queryText) {
-      const text = item.name.toLowerCase()
+      const textOne = item.name.first.toLowerCase()
+      const textTwo = item.name.last.toLowerCase()
+      const textThree = item.schoolYear.toString()
       const searchText = queryText.toLowerCase()
-      return text.indexOf(searchText) > -1
+      return textOne.indexOf(searchText) > -1 || textTwo.indexOf(searchText) > -1 || textThree.indexOf(searchText) > -1
     },
     remove (item) {
+      console.log(item)
       const index = this.studentList.findIndex((student) => item._id === student._id)
       if (index >= 0) this.studentList.splice(index, 1)
     },

@@ -34,19 +34,18 @@
         :params="{ 
           query: {
             ...query,
-            
+            _id: {
+              $in: session.students
+            }
           }
         }"
         watch="params"
       >
-      <!-- _id: {
-              $in: session.students
-            } -->
         <div>
           <div :style="{ width: $vuetify.breakpoint.smAndUp ? '50vw' : '100vw'}">
             <div class="mb-2 mr-1 ml-auto d-flex align-center justify-space-between" :style="{ width: $vuetify.breakpoint.smAndUp ? '50vw' : '100vw'}">
               <v-btn color="primary" text dense rounded @click="studentDialog = true">Add Student</v-btn>
-              <add-students v-model="studentDialog" />
+              <add-students v-model="studentDialog" :session="session" />
               <v-spacer></v-spacer>
               <v-btn icon color="primary" :disabled="skip === 0" @click="skip -= limit">
                 <v-icon>mdi-chevron-left</v-icon>
@@ -66,14 +65,14 @@
                       <v-list-item-title class="text--primary">{{ `${student.name.first} ${student.name.last}` }}</v-list-item-title>
                       <v-list-item-subtitle>{{ `Year ${student.schoolYear}` }}</v-list-item-subtitle>
                     </v-list-item-content>
-                    <v-list-item-actions>
+                    <v-list-item-icon>
                       <v-btn color="primary" large icon><v-icon>mdi-text-box-plus</v-icon></v-btn>
-                    </v-list-item-actions>
+                    </v-list-item-icon>
                   </v-list-item>
                 </template>
               </v-list-item-group>
             </v-list>
-            <v-list-item>
+            <v-list-item v-else>
               <v-list-item-content>
                 <v-list-item-title class="text--primary">No Students Found</v-list-item-title>
               </v-list-item-content>
