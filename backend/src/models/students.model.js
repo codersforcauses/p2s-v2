@@ -25,7 +25,6 @@ module.exports = function(app) {
       },
       culture: {
         type: String,
-        required: true, 
       },
       birthCountry: {
         type: String,
