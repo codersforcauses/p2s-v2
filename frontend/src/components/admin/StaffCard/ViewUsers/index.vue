@@ -88,7 +88,7 @@ export default {
         $skip: this.skip,
         $sort: {
           name: 1,
-        }
+        },
       }
     }
   }

@@ -87,9 +87,12 @@ export default {
   computed: {
     getInitials() {
       const nameArr = this.user.name.split(' ')
-      const firstNameChar = nameArr[0].charAt(0)
-      const lastNameChar = nameArr[1].charAt(0)
-      return firstNameChar + lastNameChar
+        const firstNameChar = nameArr[0].charAt(0)
+      if(nameArr > 1) {
+        const lastNameChar = nameArr[1]?.charAt(0)
+        return firstNameChar + lastNameChar
+      }
+      return firstNameChar
     },
     getEmergencyInfo() {
       const name = this.user?.emergencyContact?.name ?? 'Michael Moore'
