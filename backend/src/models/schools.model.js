@@ -2,8 +2,6 @@
 //
 // See http://mongoosejs.com/docs/models.html
 // for more of what you can do here.
-const mongoose = require('mongoose');
-
 module.exports = function (app) {
   const modelName = 'schools';
   const mongooseClient = app.get('mongooseClient');
@@ -48,13 +46,6 @@ module.exports = function (app) {
           required: true,
         },
       },
-      students: [
-        {
-          type: mongoose.ObjectId,
-          ref: 'students',
-          required: true,
-        },
-      ],
     },
     {
       timestamps: true,
