@@ -99,6 +99,7 @@ export default {
   props: ['value'],
   data() {
     return {
+      valid: false,
       matrix: {
         autonomy: {
           cope: 1,
