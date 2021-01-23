@@ -5458,10 +5458,10 @@ fd-slicer@~1.1.0:
   dependencies:
     pend "~1.2.0"
 
-feathers-authentication-management@3.0.1:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/feathers-authentication-management/-/feathers-authentication-management-3.0.1.tgz#6c935c8afc6b4e509f385e6cd73dabcd633d04ee"
-  integrity sha512-6X/3nYLAoGIk4vXgqWlnUvgsYPh6DNourKKeBFWLEoeH/IyZZCvKEG1hVZ7VVMoZA3pqEFg507i1wslte/fOGA==
+feathers-authentication-management@3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/feathers-authentication-management/-/feathers-authentication-management-3.1.0.tgz#e6dc724cebf2fd0702d3aad2c14621b1b3664f73"
+  integrity sha512-XCzdzhOGeX8t6Vjpw/foVtMD9ha5chcXSA5c8UJbeAofPYIJtLa92RbcBo3KnnOZJVhO6FFxYo7HBNjOlhcWVA==
   dependencies:
     "@feathersjs/authentication" "^4.3.0"
     "@feathersjs/authentication-local" "^4.3.0"
