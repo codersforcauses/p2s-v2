@@ -21,11 +21,11 @@ const adminRoutes = [
       ),
   },
   {
-    path: '/sessions',
-    name: 'view sessions',
+    path: '/students',
+    name: 'view students',
     component: () =>
       import(
-        /* webpackChunkName: "admin-view-schools" */ '../components/SessionCard/ViewSessions/index.vue'
+        /* webpackChunkName: "admin-view-schools" */ '../components/StudentCard/ViewStudents/index.vue'
       ),
   },
 ];

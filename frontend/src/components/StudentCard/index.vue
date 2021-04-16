@@ -14,7 +14,7 @@
     <v-card-text>View all the students on record</v-card-text>
 
     <v-card-actions class="py-1">
-      <v-btn text rounded color="primary">View All</v-btn>
+      <v-btn text rounded color="primary" :to="{ name: 'view students' }">View All</v-btn>
       <v-btn text rounded color="primary" @click="studentDialog = true">Create New</v-btn>
       <new-student v-model="studentDialog" />
     </v-card-actions>
