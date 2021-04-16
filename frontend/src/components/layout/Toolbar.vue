@@ -6,6 +6,12 @@
 
     <v-divider inset vertical class="mr-3" v-show="isMobile" />
 
+    <v-btn v-if="$route.name !== 'admin dashboard' && $route.name !== 'coach dashboard'" class="mt-2 mr-2" icon large @click="$router.go(-1)">
+      <v-icon color="primary">
+        mdi-chevron-left
+      </v-icon>
+    </v-btn>
+
     <v-toolbar-title class="mt-2 ml-0 text-capitalize text-h5">{{ $route.name }}</v-toolbar-title>
 
     <v-spacer />
@@ -34,6 +40,9 @@
 
 <script>
 export default {
+  mounted() {
+    console.log(this.$route)
+  },
   computed: {
     theme() {
       return this.$vuetify.theme.dark ? 'Light' : 'Dark';
