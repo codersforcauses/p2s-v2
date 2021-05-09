@@ -52,7 +52,7 @@
     "feathers-authentication-management": "3.0.1",
     "feathers-hooks-common": "5.0.4",
     "feathers-mailer": "3.0.1",
-    "feathers-mongoose": "8.3.1",
+    "feathers-mongoose": "8.3.3",
     "helmet": "3.23.3",
     "mongodb-core": "3.2.7",
     "mongoose": "5.10.15",
