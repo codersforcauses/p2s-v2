@@ -12580,10 +12580,10 @@ vuetify-loader@1.6.0:
     file-loader "^4.0.0"
     loader-utils "^1.2.0"
 
-vuetify@2.3.17:
-  version "2.3.17"
-  resolved "https://registry.yarnpkg.com/vuetify/-/vuetify-2.3.17.tgz#f27eefd52dbe8ba19cae8d62ba8a77b05184fdf6"
-  integrity sha512-XqVDsCKHcWmJDJaSXEYg8Qt1jFdAhgm/L5ppAo19ATyld181lu0BC3V3vjakpU2uScHVwjxZw8Gre0lz+2cGvA==
+vuetify@2.5.4:
+  version "2.5.4"
+  resolved "https://registry.yarnpkg.com/vuetify/-/vuetify-2.5.4.tgz#037cc8d430b61188ab15b9a8cc1ee67e620fa6e7"
+  integrity sha512-0EIXSCuy9LGXHgWbGiOdUUbGI6feodWoB3s+0Kr7rIppQWsq54tjPaQ1NobjAuDYKG7xsqkr+j0rnJUhc+GIag==
 
 vuex@3.5.1:
   version "3.5.1"
