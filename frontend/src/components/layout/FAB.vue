@@ -2,13 +2,16 @@
   <v-speed-dial bottom right fixed v-model="fab" transition="scale-transition">
     <template v-slot:activator>
       <v-btn fab depressed v-model="fab" color="primary" :class="viewportWidth">
-        <v-icon v-if="!fab" title="Forms" :color="iconColor">mdi-file-document</v-icon>
+        <v-icon v-if="!fab" title="Quick Access" :color="iconColor">mdi-menu</v-icon>
         <v-icon v-else :color="iconColor">mdi-close</v-icon>
       </v-btn>
     </template>
-    <v-btn fab depressed small color="green" :class="viewportWidth">RespecT</v-btn>
-    <v-btn fab depressed small color="indigo" :class="viewportWidth">Pay</v-btn>
-    <v-btn fab depressed small color="red" :class="viewportWidth">F to</v-btn>
+    <v-btn fab depressed :class="viewportWidth" to="/settings">
+        <v-icon title="Settings">mdi-cog</v-icon>
+    </v-btn>
+    <v-btn fab depressed :class="viewportWidth">
+      <v-icon title="Next Session">mdi-clock-alert</v-icon>
+    </v-btn>
   </v-speed-dial>
 </template>
 

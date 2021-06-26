@@ -4,7 +4,7 @@
       <v-form v-model="valid" :readonly="!editing" @keyup.native.enter="createUser($event)">
         <v-container class="pa-5">
           <v-row no-gutters>
-            <v-col cols="12" tag="label" class="v-label pl-6">NAME</v-col>
+            <v-col cols="12" tag="label" class="v-label pl-6">Name</v-col>
             <v-col cols="12">
               <v-text-field
                 solo-inverted
@@ -13,7 +13,7 @@
                 class="mb-2 mt-1"
                 placeholder="Name"
                 color="primary"
-                :disabled="loading"
+                :disabled="isPending || !editing"
                 :rules="[validation.required, validation.name]"
                 v-model.trim="user.name"
               />
@@ -60,7 +60,7 @@
                 class="ma-0"
                 style="float: left"
                 color="primary"
-                :loading="loading"
+                :loading="isPending"
                 @click.stop.prevent="editing = false"
               >Cancel</v-btn>
               <v-btn
@@ -71,7 +71,7 @@
                 style="float: right"
                 color="primary"
                 :disabled="!valid || loading"
-                :loading="loading"
+                :loading="isPending"
                 @click.stop.prevent="createUser"
               >Update</v-btn>
               <v-btn
@@ -81,7 +81,7 @@
                 class="ma-0"
                 style="float: right"
                 color="primary"
-                :loading="loading"
+                :loading="isPending"
                 @click.stop.prevent="editing = true"
               >Edit</v-btn>
             </v-col>
@@ -93,18 +93,14 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+
 export default {
   name: 'User Settings',
   title: 'User Settings',
   data() {
     return {
       editing: false,
-      user: {
-        name: {
-          first: '',
-          last: 'sfgsdfgsd',
-        },
-      },
       alert: false,
       error: '',
       valid: false,
@@ -117,8 +113,8 @@ export default {
       },
     };
   },
+  computed: {
+    ...mapGetters('auth', { user: 'user' }),
+  }
 };
 </script>
-
-<style scoped>
-</style>
