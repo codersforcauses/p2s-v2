@@ -51,7 +51,7 @@
             </v-col>
             <v-col cols="6" tag="label" class="v-label pl-6">DATE</v-col>
             <v-col cols="6" tag="label" class="v-label pl-6">TIME</v-col>
-            <v-col cols="6" style="padding-right: 1px;">
+            <v-col cols="6" style="padding-right: 2px;">
               <v-menu
                 v-model="menu"
                 :close-on-content-click="false"
