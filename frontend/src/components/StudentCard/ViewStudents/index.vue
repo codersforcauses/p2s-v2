@@ -43,7 +43,7 @@
           class="py-3 px-0"
         >
           <template #default>
-            <student-info :student="students[selected]" />
+            <student-info v-if="!isPending" :student="students[selected]" />
           </template>
         </v-navigation-drawer>
         <v-bottom-sheet v-else v-model="drawer" scrollable>
@@ -62,7 +62,7 @@
 import StudentInfo from './StudentInfo';
 
 export default {
-  name: 'view students',
+  name: 'view-students',
   title: 'View Students',
   components: {
     StudentInfo,

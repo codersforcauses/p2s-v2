@@ -73,31 +73,20 @@ module.exports = function (app) {
         },
         qualifications: {
           policeClearance: {
-            verified: {
-              type: Boolean,
-              default: false,
-            },
             imageLink: {
-              type: String,
+              image: Buffer,
+              expiry: Date
             },
           },
           WWC: {
-            verified: {
-              type: Boolean,
-              default: false,
-            },
             imageLink: {
-              type: String,
+              image: Buffer,
+              expiry: Date
             },
           },
           medClearance: {
-            verified: {
-              type: Boolean,
-              default: false,
-            },
-            imageLink: {
-              type: String,
-            },
+            image: Buffer,
+            expiry: Date
           },
         },
       },

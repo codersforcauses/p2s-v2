@@ -4,14 +4,13 @@
       <template #form>
         <v-alert
           dismissible
-          prominent
           v-model="alert"
           type="error"
           name="alert"
           :tile="$vuetify.breakpoint.smAndDown"
           :class="alertClass"
           :transition="transitionClass"
-          >Error: {{ error }}</v-alert
+          >{{ error }}</v-alert
         >
 
         <v-form
@@ -77,8 +76,8 @@
 
 <script>
 import { mapState } from 'vuex';
-import mobile from '@/components/login/Mobile.vue';
-import desktop from '@/components/login/Desktop.vue';
+import mobile from '../components/login/Mobile.vue';
+import desktop from '../components/login/Desktop.vue';
 
 export default {
   name: 'login',
@@ -124,8 +123,18 @@ export default {
           });
           await this.$router.push({ name: 'dashboard' });
         } catch (error) {
+          console.log(error)
           this.alert = true;
-          this.error = error.message;
+          switch(error.code) {
+            case 401:
+              this.error = "Failed to log in"
+              break
+            case 408:
+              this.error = "Failed to connect to server"
+              break
+            default:
+              this.error = error.message
+          }
         }
       }
     },

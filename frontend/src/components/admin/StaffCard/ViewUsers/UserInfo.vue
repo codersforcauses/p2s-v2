@@ -25,6 +25,24 @@
         </v-list-item>
       </div>
 
+      <FeathersVuexFind
+        v-slot="{ items: sessions, isFindPending: isPending, queryInfo: info }"
+        service="sessions"
+        :params="{ query }"
+        watch="params"
+      >
+      <v-card v-if="user.coach.is" outlined rounded="lg" flat class="mx-4 my-6">
+        <v-card-text class="pb-0">Sessions</v-card-text>
+        <v-list-item v-for="session in sessions" :key="session._id" two-line >
+          <!-- <v-list-item-content>
+            <v-list-item-title>Name: {{getEmergencyInfo.name}}</v-list-item-title>
+            <v-list-item-subtitle>Num: {{getEmergencyInfo.num}}</v-list-item-subtitle>
+          </v-list-item-content> -->
+          <pre>{{JSON.stringify(session, null, 2)}}</pre>
+        </v-list-item>
+      </v-card>
+      </FeathersVuexFind>
+
       <v-card v-if="user.emergencyContact" outlined rounded="lg" flat class="mx-4 my-6">
         <v-card-text class="pb-0">Emergency Contact</v-card-text>
         <v-list-item two-line>
@@ -34,8 +52,16 @@
           </v-list-item-content>
         </v-list-item>
       </v-card>
+      <v-card v-else outlined rounded="lg" flat class="mx-4 my-6">
+        <v-card-text class="pb-0">Emergency Contact</v-card-text>
+        <v-list-item two-line>
+          <v-list-item-content>
+            <v-list-item-title>No contact provided</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </v-card>
 
-      <div class="coach">
+      <div v-if="user.coach.is" class="coach">
         <div class="coach-docs text-caption text--secondary">
           <div class="wwc">
             WWC
@@ -56,7 +82,7 @@
             </v-skeleton-loader>
           </div>
         </div>
-        <!-- <pre>{{JSON.stringify(user, null, 2)}}</pre> -->
+        <pre>{{JSON.stringify(user, null, 2)}}</pre>
       </div>
     </v-card-text>
   </v-card>
@@ -101,6 +127,11 @@ export default {
     },
     isSmAndUp() {
       return this.$vuetify.breakpoint.smAndUp ? 128 : 96;
+    },
+    query() {
+      return {
+        _id: this.user.id
+      }
     },
   },
 };

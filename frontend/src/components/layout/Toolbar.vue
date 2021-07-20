@@ -40,9 +40,6 @@
 
 <script>
 export default {
-  mounted() {
-    console.log(this.$route)
-  },
   computed: {
     theme() {
       return this.$vuetify.theme.dark ? 'Light' : 'Dark';
