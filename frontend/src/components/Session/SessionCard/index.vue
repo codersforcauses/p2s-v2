@@ -24,7 +24,7 @@
             <div>{{ coachText(session) }}</div>
           </div>
         </div>
-        <div v-else class="text-h6 pl-4">
+        <div v-else class="text-h6 pl-4 mb-10">
           No Session Found
         </div>
       </v-card>
@@ -38,9 +38,7 @@
     <v-card-actions class="py-1">
       <v-btn text rounded color="primary" :to="{ name: 'view sessions' }">View All</v-btn>
       <v-btn text rounded color="primary" @click="sessionDialog = true">Create New</v-btn>
-      <v-btn text rounded color="primary" @click="matrix = true">matrix</v-btn>
       <new-session v-model="sessionDialog" @created="this.$router.push({ path: `/session/${res._id}` })" />
-      <matrix v-model="matrix" />
     </v-card-actions>
   </v-card>
 </template>
@@ -51,10 +49,7 @@ import dayjs from 'dayjs'
 export default {
   components: {
     newSession: () => ({
-      component: import('./CreateSession.vue'),
-    }),
-    matrix: () => ({
-      component: import('./Matrix.vue'),
+      component: import('../CreateSession.vue'),
     }),
   },
   data() {
@@ -62,7 +57,6 @@ export default {
       selectedTab: 0,
       viewOverlay: false,
       sessionDialog: false,
-      matrix: false,
     };
   },
   computed: {

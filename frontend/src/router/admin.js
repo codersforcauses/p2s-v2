@@ -2,14 +2,14 @@ const adminRoutes = [
   {
     path: '/',
     name: 'admin dashboard',
-    component: () => import(/* webpackChunkName: "admin" */ '../components/admin/Dashboard.vue'),
+    component: () => import(/* webpackChunkName: "admin" */ '../components/AdminDashboard.vue'),
   },
   {
     path: '/staff',
     name: 'view staff',
     component: () =>
       import(
-        /* webpackChunkName: "admin-view-users" */ '../components/admin/StaffCard/ViewUsers/index.vue'
+        /* webpackChunkName: "admin-view-users" */ '../components/Staff/ViewUsers'
       ),
   },
   {
@@ -17,7 +17,7 @@ const adminRoutes = [
     name: 'view schools',
     component: () =>
       import(
-        /* webpackChunkName: "admin-view-schools" */ '../components/admin/SchoolCard/ViewSchools/index.vue'
+        /* webpackChunkName: "admin-view-schools" */ '../components/School/ViewSchools'
       ),
   },
   {
@@ -25,7 +25,7 @@ const adminRoutes = [
     name: 'view students',
     component: () =>
       import(
-        /* webpackChunkName: "admin-view-schools" */ '../components/StudentCard/ViewStudents/index.vue'
+        /* webpackChunkName: "admin-view-schools" */ '../components/Student/ViewStudents'
       ),
   },
 ];

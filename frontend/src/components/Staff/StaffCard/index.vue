@@ -43,7 +43,7 @@
 export default {
   components: {
     invite: () => ({
-      component: import('./UserInvite.vue'),
+      component: import('../UserInvite.vue'),
     }),
   },
   data() {

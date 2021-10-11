@@ -119,11 +119,11 @@
 import dayjs from 'dayjs'
 
 export default {
-  components: {
-    addStudents: () => ({
-      component: import('./addStudents.vue'),
-    }),
-  },
+  // components: {
+  //   addStudents: () => ({
+  //     component: import('./AddStudents.vue'),
+  //   }),
+  // },
   data() {
     return {
       selected: 0,

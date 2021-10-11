@@ -76,8 +76,8 @@
 
 <script>
 import { mapState } from 'vuex';
-import mobile from '../components/login/Mobile.vue';
-import desktop from '../components/login/Desktop.vue';
+import mobile from '../components/other/login/Mobile.vue';
+import desktop from '../components/other/login/Desktop.vue';
 
 export default {
   name: 'login',

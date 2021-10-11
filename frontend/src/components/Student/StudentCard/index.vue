@@ -25,7 +25,7 @@
 export default {
   components: {
     newStudent: () => ({
-      component: import('./CreateStudent.vue'),
+      component: import('../CreateStudent.vue'),
     }),
   },
   data() {

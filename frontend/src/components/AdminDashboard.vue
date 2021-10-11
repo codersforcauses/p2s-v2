@@ -17,10 +17,10 @@ export default {
     };
   },
   components: {
-    'session-card': () => import('../SessionCard'),
-    'staff-card': () => import('./StaffCard'),
-    'student-card': () => import('../StudentCard'),
-    'school-card': () => import('./SchoolCard'),
+    'session-card': () => import('./Session/SessionCard'),
+    'staff-card': () => import('./Staff/StaffCard'),
+    'student-card': () => import('./Student/StudentCard'),
+    'school-card': () => import('./School/SchoolCard'),
   },
 };
 </script>

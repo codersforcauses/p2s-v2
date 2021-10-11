@@ -45,20 +45,20 @@ const routes = [
     children: [
       {
         path: 'admin',
-        component: () => import(/* webpackChunkName: "admin" */ '../components/admin/index.vue'),
+        component: () => import(/* webpackChunkName: "admin" */ '../components/layout/Admin.vue'),
         meta: { permission: 'admin' },
         children: AdminRoutes,
       },
       {
         path: 'coach',
-        component: () => import(/* webpackChunkName: "coach" */ '../components/coach/index.vue'),
+        component: () => import(/* webpackChunkName: "coach" */ '../components/layout/Coach.vue'),
         meta: { permission: 'coach' },
         children: CoachRoutes,
       },
       {
         path: 'settings',
         component: () =>
-          import(/* webpackChunkName: "user_settings" */ '../components/user/Settings.vue'),
+          import(/* webpackChunkName: "user_settings" */ '../components/other/Settings.vue'),
         meta: { requiresAuth: true },
       },
     ],

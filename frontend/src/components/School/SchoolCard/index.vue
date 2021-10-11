@@ -18,7 +18,7 @@
 
 <script>
 import RegionImage from './RegionImage'
-import NewSchool from './CreateSchool'
+import NewSchool from '../CreateSchool'
 
 export default {
   components: {

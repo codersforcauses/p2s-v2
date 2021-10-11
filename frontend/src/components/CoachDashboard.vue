@@ -20,8 +20,8 @@ export default {
     };
   },
   components: {
-    'session-card': () => import('../SessionCard'),
-    'student-card': () => import('../StudentCard'),
+    'session-card': () => import('./Session/SessionCard'),
+    'student-card': () => import('./Student/StudentCard'),
     // 'staff-card': () => import('./StaffCard'),
     // 'region-card': () => import('./RegionCard'),
     // 'program-card': () => import('./ProgramCard'),

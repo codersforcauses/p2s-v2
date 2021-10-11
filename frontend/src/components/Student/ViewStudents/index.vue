@@ -8,14 +8,19 @@
     >
       <div>
         <div :style="{ width: $vuetify.breakpoint.smAndUp ? '50vw' : '100vw'}">
-          <div class="mb-2 mr-1 ml-auto d-flex align-center justify-space-between" style="width: 10rem;">
-            <v-btn icon color="primary" :disabled="skip === 0" @click="skip -= limit">
-              <v-icon>mdi-chevron-left</v-icon>
-            </v-btn>
-            <span>Page {{skip/limit+1}}</span>
-            <v-btn icon color="primary" :disabled="skip + limit >= info.total" @click="skip += limit">
-              <v-icon>mdi-chevron-right</v-icon>
-            </v-btn>
+          <div class="d-flex justify-space-between align-center">
+            <v-btn icon disabled class="ml-3"><v-icon>mdi-magnify</v-icon></v-btn>
+            <!-- <v-text-field outlined single-line hide-details class="pa-3" style="border-radius: 50px;"></v-text-field> -->
+            <v-select v-model="yearSelect" :items="years" item-text="text" item-value="value" label="School Year"></v-select>
+            <div class="mb-2 mr-1 ml-auto d-flex align-center justify-space-between" style="width: 10rem;">
+              <v-btn icon color="primary" :disabled="skip === 0" @click="skip -= limit">
+                <v-icon>mdi-chevron-left</v-icon>
+              </v-btn>
+              <span>Page {{skip/limit+1}}</span>
+              <v-btn icon color="primary" :disabled="skip + limit >= info.total" @click="skip += limit">
+                <v-icon>mdi-chevron-right</v-icon>
+              </v-btn>
+            </div>
           </div>
         </div>
         <v-skeleton-loader type="list-item-three-line@10" :loading="isPending">
@@ -25,6 +30,7 @@
                 <v-list-item :key="student._id" @click="drawer = true">
                   <v-list-item-content>
                     <v-list-item-title class="text--primary">{{ student.name }}</v-list-item-title>
+                    <v-list-item-subtitle class="text--secondary">Year {{ student.schoolYear }}</v-list-item-subtitle>
                   </v-list-item-content>
                 </v-list-item>
               </template>
@@ -72,7 +78,16 @@ export default {
       selected: 0,
       drawer: true,
       limit: 10,
-      skip: 0
+      skip: 0,
+      yearSelect: null,
+      years: [
+        { text: "All Years", value: null },
+        { text: "Year 8", value: 8 },
+        { text: "Year 9", value: 9 },
+        { text: "Year 10", value: 10 },
+        { text: "Year 11", value: 11 },
+        { text: "Year 12", value: 12 },
+      ]
     };
   },
   computed: {
@@ -83,6 +98,7 @@ export default {
         $sort: {
           name: 1,
         },
+        ...( this.yearSelect && {schoolYear: this.yearSelect})
       }
     }
   }

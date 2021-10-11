@@ -2,20 +2,14 @@ const coachRoutes = [
   {
     path: '/',
     name: 'coach dashboard',
-    component: () => import(/* webpackChunkName: "coach" */ '../components/coach/Dashboard.vue'),
+    component: () => import(/* webpackChunkName: "coach" */ '../components/CoachDashboard.vue'),
   },
-  // {
-  //   path: '/users',
-  //   name: 'admin users',
-  //   component: () =>
-  //     import(/* webpackChunkName: "admin-view-users" */ '../components/admin/ViewUsers.vue'),
-  // },
   {
     path: '/sessions',
     name: 'view sessions',
     component: () =>
       import(
-        /* webpackChunkName: "coach-view-sessions" */ '../components/SessionCard/ViewSessions/index.vue'
+        /* webpackChunkName: "coach-view-sessions" */ '../components/Session/ViewSessions'
       ),
   },
   {
@@ -23,7 +17,7 @@ const coachRoutes = [
     name: 'session page',
     component: () =>
       import(
-        /* webpackChunkName: "coach-view-session" */ '../components/coach/session/index.vue'
+        /* webpackChunkName: "coach-view-session" */ '../components/Session/ViewSessions'
       ),
   },
 ];

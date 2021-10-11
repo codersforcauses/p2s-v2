@@ -77,7 +77,7 @@
                 hide-details
               />
             </v-col>
-            <p v-if="permError" class="error--text text-caption pl-3">User must be either Admin or Coach</p>
+            <p v-if="!!permError" class="error--text text-caption pl-3">{{ permError }}</p>
             <p v-else class="grey--text text-caption pl-3">This can be changed later by an administrator.</p>
             </v-row>
             <v-col cols="12" class="my-4" v-show="alert">
@@ -112,18 +112,16 @@
 </template>
 
 <script>
-
 export default {
   props: ['value'],
   data() {
     return {
       user: {
         email: '',
-        region: '',
         name: ''
       },
       permissions: [],
-      permError: undefined,
+      permError: ' ',
       alert: false,
       error: '',
       valid: false,
@@ -142,12 +140,10 @@ export default {
   },
   watch: {
     permissions(val) {
-      this.permError = val.length === 0 ? 'This field is required' : undefined;
+      this.permError = val.length === 0 ? 'Users must be either admin, coach or both' : undefined;
     },
   },
   computed: {
-    // ...mapState('admin', { createAdmin: 'isCreatePending' }),
-    // ...mapState('coach', { createCoach: 'isCreatePending' }),
     showDialog: {
       get() {
         return this.value;
@@ -161,32 +157,34 @@ export default {
     },
   },
   methods: {
-    // async createUser() {
-    //   if (this.valid && !!this.permError) {
-    //     const tempUser = {
-    //       ...this.user,
-    //       ...this.permissions,
-    //     };
-    //     let user;
-    //     if (tempUser.admin.is) {
-    //       const { Admin } = this.$FeathersVuex;
-    //       user = new Admin(tempUser);
-    //     } else {
-    //       const { Coach } = this.$FeathersVuex;
-    //       user = new Coach(tempUser);
-    //     }
-    //     await user
-    //       .create()
-    //       .then(() => this.$emit('input'))
-    //       .catch(err => {
-    //         this.error = err.message
-    //           .charAt(0)
-    //           .toUpperCase()
-    //           .concat(err.message.slice(1));
-    //         this.alert = true;
-    //       });
-    //   }
-    // },
+    async createUser() {
+      console.log(this.valid, this.permError)
+      if (this.valid && !this.permError) {
+        console.log(this.permissions)
+        console.log(this.user)
+        const tempUser = {
+          ...this.user,
+          admin: {
+            is: this.permissions.includes('admin')
+          },
+          coach: {
+            is: this.permissions.includes('coach')
+          },
+        };
+        const { User } = this.$FeathersVuex.api
+        const user = new User(tempUser);
+        await user
+          .create()
+          .then(() => this.$emit('input'))
+          .catch(err => {
+            this.error = err.message
+              .charAt(0)
+              .toUpperCase()
+              .concat(err.message.slice(1));
+            this.alert = true;
+          });
+      }
+    },
   },
 };
 </script>

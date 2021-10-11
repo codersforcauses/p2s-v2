@@ -25,24 +25,27 @@ module.exports = function (app) {
         type: String,
       },
       address: {
-        street: {
-          type: String,
-          required: true,
-        },
-        suburb: {
-          type: String,
-          required: true,
-        },
-        postcode: {
-          type: String,
-          required: true,
-        },
-        state: {
-          type: String,
-          enum: ['WA', 'NSW', 'ACT', 'VIC', 'QLD', 'SA', 'TAS', 'NT'],
-          default: 'WA',
-          required: true,
-        },
+        required: false,
+        type: {
+          street: {
+            type: String,
+            required: true,
+          },
+          suburb: {
+            type: String,
+            required: true,
+          },
+          postcode: {
+            type: String,
+            required: true,
+          },
+          state: {
+            type: String,
+            enum: ['WA', 'NSW', 'ACT', 'VIC', 'QLD', 'SA', 'TAS', 'NT'],
+            default: 'WA',
+            required: true,
+          },
+        }
       },
       emergencyContact: {
         name: {
