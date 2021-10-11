@@ -12,9 +12,9 @@
 </template>
 
 <script>
-import toolbar from '@/components/layout/Toolbar';
-import fab from '@/components/layout/FAB';
-import bottomnav from '@/components/layout/BottomNav';
+import toolbar from '../components/layout/Toolbar.vue';
+import fab from '../components/layout/FAB';
+import bottomnav from '../components/layout/BottomNav';
 
 export default {
   name: 'dashboard',

@@ -213,14 +213,14 @@
 <script>
 import { mapGetters } from 'vuex';
 import { FeathersVuexFormWrapper } from 'feathers-vuex';
-import Clearence from './ClearenceCard.vue';
+// import Clearence from './ClearenceCard.vue';
 
 export default {
   name: 'UserSettings',
   title: 'User Settings',
   components: {
     FeathersVuexFormWrapper,
-    Clearence,
+    // Clearence,
   },
   data() {
     return {
