@@ -8,22 +8,26 @@ const {
   iff,
   isProvider,
   preventChanges,
+  some,
 } = require('feathers-hooks-common');
+const verifyHooks = require('feathers-authentication-management').hooks;
+const accountService = require('../authmanagement/notifier');
 
 module.exports = {
   before: {
     all: [],
     find: [authenticate('jwt')],
     get: [authenticate('jwt')],
-    create: [hashPassword('password'), disallow('external')],
+    create: [
+      hashPassword('password'),
+      iff(isProvider('external'), verifyHooks.addVerification()),
+    ],
     update: [disallow('external')],
     patch: [
       iff(
         isProvider('external'),
-        hashPassword('password'),
         preventChanges(
           true,
-          'email',
           'isVerified',
           'verifyToken',
           'verifyShortToken',
@@ -33,6 +37,7 @@ module.exports = {
           'resetShortToken',
           'resetExpires'
         ),
+        hashPassword('password'),
         authenticate('jwt')
       ),
     ],
@@ -47,7 +52,21 @@ module.exports = {
     ],
     find: [],
     get: [],
-    create: [],
+    create: [
+      iff(
+        some(
+          isProvider('external'),
+          () => process.env.NODE_ENV === 'production'
+        ),
+        context => {
+          accountService(context.app).notifier(
+            'resendVerifySignup',
+            context.result
+          );
+        },
+        verifyHooks.removeVerification()
+      ),
+    ],
     update: [],
     patch: [],
     remove: [],

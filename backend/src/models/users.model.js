@@ -2,7 +2,6 @@
 //
 // See http://mongoosejs.com/docs/models.html
 // for more of what you can do here.
-const mongoose = require('mongoose');
 
 module.exports = function (app) {
   const modelName = 'users';
@@ -19,17 +18,34 @@ module.exports = function (app) {
         type: String,
       },
       name: {
-        first: {
-          type: String,
-          required: true,
-        },
-        last: {
-          type: String,
-          required: true,
-        },
+        type: String,
+        required: true,
       },
       mobile: {
         type: String,
+      },
+      address: {
+        required: false,
+        type: {
+          street: {
+            type: String,
+            required: true,
+          },
+          suburb: {
+            type: String,
+            required: true,
+          },
+          postcode: {
+            type: String,
+            required: true,
+          },
+          state: {
+            type: String,
+            enum: ['WA', 'NSW', 'ACT', 'VIC', 'QLD', 'SA', 'TAS', 'NT'],
+            default: 'WA',
+            required: true,
+          },
+        }
       },
       emergencyContact: {
         name: {
@@ -43,11 +59,9 @@ module.exports = function (app) {
         type: String,
         enum: ['Male', 'Female', 'Other'],
       },
-      culture: [
-        {
-          type: String, // TODO add ethnicity options
-        },
-      ],
+      culture: {
+        type: String, // TODO add ethnicity options
+      },
       DOB: {
         type: Date, // YYYY-MM-DDTHH:MM:SS.MMMZ
       },
@@ -55,11 +69,6 @@ module.exports = function (app) {
         type: Boolean,
         default: false,
       },
-      // ! Not in use
-      // region: {
-      //   type: mongoose.ObjectId,
-      //   ref: 'regions',
-      // },
       coach: {
         is: {
           type: Boolean,
@@ -67,46 +76,22 @@ module.exports = function (app) {
         },
         qualifications: {
           policeClearance: {
-            verified: {
-              type: Boolean,
-              default: false,
-            },
             imageLink: {
-              type: String,
+              image: Buffer,
+              expiry: Date
             },
           },
           WWC: {
-            verified: {
-              type: Boolean,
-              default: false,
-            },
             imageLink: {
-              type: String,
+              image: Buffer,
+              expiry: Date
             },
           },
           medClearance: {
-            verified: {
-              type: Boolean,
-              default: false,
-            },
-            imageLink: {
-              type: String,
-            },
+            image: Buffer,
+            expiry: Date
           },
         },
-        feedback: [
-          {
-            type: mongoose.ObjectId,
-            ref: 'feedback',
-            default: '',
-          },
-        ],
-        sessions: [
-          {
-            type: mongoose.ObjectId,
-            ref: 'sessions',
-          },
-        ],
       },
       admin: {
         is: {

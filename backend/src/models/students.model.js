@@ -11,14 +11,8 @@ module.exports = function(app) {
   const schema = new Schema(
     {
       name: {
-        first: {
-          type: String,
-          required: true,
-        },
-        last: {
-          type: String,
-          required: true,
-        },
+        type: String,
+        required: true,
       },
       DOB: {
         type: Date,
@@ -29,15 +23,11 @@ module.exports = function(app) {
         enum: ['Male', 'Female', 'Other'],
         required: true,
       },
-      culture: [
-        {
-          type: String,
-          required: true, // TODO add ethnicity options
-        },
-      ],
+      culture: {
+        type: String,
+      },
       birthCountry: {
         type: String,
-        required: true, // TODO add country list
       },
       DOA: {
         type: Date,
@@ -61,16 +51,8 @@ module.exports = function(app) {
         condition: {
           type: String,
         },
-        medication: {
-          name: {
-            type: String,
-          },
-          dosage: {
-            type: String,
-          },
-          number: {
-            type: Number,
-          },
+        extraInfo: {
+          type: String,
         },
       },
       schoolYear: {
@@ -80,7 +62,6 @@ module.exports = function(app) {
       consent: {
         type: Boolean,
         required: true,
-        default: false,
       },
       contact: {
         home: {
@@ -118,11 +99,6 @@ module.exports = function(app) {
         type: mongoose.ObjectId,
         ref: 'schools',
         required: true,
-      },
-      trial: {
-        type: Boolean,
-        required: true,
-        default: false,
       },
       reports: [
         {

@@ -7,7 +7,7 @@ const { Forbidden, Unprocessable } = require('@feathersjs/errors');
  * Limits access to an endpoint based off a users permissions
  * @param {Object} options Options passed in from previous hooks
  * @param {[String]} options.roles Define which roles can access this route.
- * Should be in the form ['admin', 'manager', 'coach']
+ * Should be in the form ['admin', 'coach']
  */
 module.exports = (options = {}) => context => {
   if (context.type !== 'before') {

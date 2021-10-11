@@ -2,8 +2,6 @@
 //
 // See http://mongoosejs.com/docs/models.html
 // for more of what you can do here.
-const mongoose = require('mongoose');
-
 module.exports = function (app) {
   const modelName = 'schools';
   const mongooseClient = app.get('mongooseClient');
@@ -15,9 +13,18 @@ module.exports = function (app) {
         required: true,
         unique: true,
       },
-      phoneNumber: {
-        type: String,
-        required: true,
+      contact: {
+        name: {
+          type: String,
+        },
+        phoneNumber: {
+          type: String,
+          required: true,
+        },
+        email: {
+          type: String,
+          required: true,
+        },
       },
       address: {
         street: {
@@ -39,21 +46,6 @@ module.exports = function (app) {
           required: true,
         },
       },
-      students: [
-        {
-          type: mongoose.ObjectId,
-          ref: 'students',
-          required: true,
-        },
-      ],
-      // ? May implement later
-      // programs: [
-      //   {
-      //     type: mongoose.ObjectId,
-      //     ref: 'programs',
-      //     required: true,
-      //   },
-      // ],
     },
     {
       timestamps: true,

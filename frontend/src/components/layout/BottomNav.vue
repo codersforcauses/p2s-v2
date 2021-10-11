@@ -21,21 +21,29 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+// import { mapState } from 'vuex';
 
 export default {
   data() {
     return {
       bottomNav: 'admin',
+      user: {
+        admin: {
+          is: true
+        },
+        coach: {
+          is: true
+        }
+      }
     };
   },
   computed: {
-    ...mapState('auth', { user: 'user' }),
+    // ...mapState('auth', { user: 'user' }),
     coach() {
-      return this.user?.coach?.is || true;
+      return this.user?.coach?.is;
     },
     admin() {
-      return this.user?.admin?.is || true;
+      return this.user?.admin?.is;
     },
     checkMultiplePermissions() {
       return (
