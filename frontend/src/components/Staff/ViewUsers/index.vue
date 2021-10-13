@@ -76,7 +76,7 @@ export default {
   data() {
     return {
       selected: 0,
-      drawer: true,
+      drawer: false,
       limit: 10,
       skip: 0
     };
