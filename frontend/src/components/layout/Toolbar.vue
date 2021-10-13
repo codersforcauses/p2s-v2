@@ -1,6 +1,6 @@
 <template>
   <v-app-bar flat app height="64">
-    <v-btn icon v-show="isMobile" @click="$router.back()">
+    <v-btn icon v-show="isMobile" @click="$router.go('/')">
       <v-icon>mdi-arrow-left</v-icon>
     </v-btn>
 
