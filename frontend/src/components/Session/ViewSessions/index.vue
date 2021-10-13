@@ -7,22 +7,32 @@
       watch="params"
     >
       <div>
-        <div :style="{ width: $vuetify.breakpoint.smAndUp ? '50vw' : '100vw'}">
-          <div class="mb-2 mr-1 ml-auto d-flex align-center justify-space-between" :style="{ width: $vuetify.breakpoint.smAndUp ? '50vw' : '100vw'}">
-            <v-btn color="primary" text dense rounded @click="sessionDialog = true">Add Session</v-btn>
-              <add-session v-model="sessionDialog" />
-              <v-spacer></v-spacer>
-            <v-btn icon color="primary" :disabled="skip === 0" @click="skip -= limit">
-              <v-icon>mdi-chevron-left</v-icon>
-            </v-btn>
-            <span>Page {{skip/limit+1}}</span>
-            <v-btn icon color="primary" :disabled="skip + limit >= info.total" @click="skip += limit">
-              <v-icon>mdi-chevron-right</v-icon>
-            </v-btn>
+        <div :style="{ width: $vuetify.breakpoint.smAndUp && drawer ? '50vw' : '100vw'}">
+          <div class="d-flex justify-space-between">
+            <div>
+              <v-tabs v-model="selectedTab">
+                <v-tab class="text-capitalize text-body-2">Future Sessions</v-tab>
+                <v-tab class="text-capitalize text-body-2">Past Sessions</v-tab>
+              </v-tabs>
+            </div>
+            <div class="d-flex align-center">
+              <v-btn icon color="primary" :disabled="skip === 0" @click="skip -= limit">
+                <v-icon>mdi-chevron-left</v-icon>
+              </v-btn>
+              <span width="20px">Page {{skip/limit+1}}</span>
+              <v-btn icon color="primary" :disabled="skip + limit >= info.total" @click="skip += limit">
+                <v-icon>mdi-chevron-right</v-icon>
+              </v-btn>
+            </div>
           </div>
         </div>
         <v-skeleton-loader type="list-item-two-line@10" :loading="isPending">
           <v-list two-line subheader>
+              <v-list-item @click="drawer = false; sessionDialog = true">
+                <v-icon color="primary">mdi-plus</v-icon>
+                <v-list-item-subtitle class="ml-3" style="color: #f87f79">Add Session</v-list-item-subtitle>
+                <add-session v-model="sessionDialog" />
+              </v-list-item>
             <v-list-item-group v-model="selected" mandatory color="primary">
               <template v-for="session in sessions">
                 <v-list-item :key="session._id" @click="drawer = true">
@@ -36,6 +46,7 @@
           </v-list>
         </v-skeleton-loader>
         <v-navigation-drawer
+          v-model="drawer"
           v-if="$vuetify.breakpoint.smAndUp"
           width="50%"
           mobile-breakpoint="xs"
@@ -45,6 +56,7 @@
           disable-resize-watcher
           disable-route-watcher
           class="py-3 px-0"
+          
         >
           <template #default>
             <session-info :session="sessions[selected]" />
@@ -78,10 +90,11 @@ export default {
   data() {
     return {
       selected: 0,
-      drawer: true,
+      drawer: false,
       limit: 10,
       skip: 0,
       sessionDialog: false,
+      selectedTab: 0
     };
   },
   computed: {
@@ -91,6 +104,9 @@ export default {
         $skip: this.skip,
         $sort: {
           date: 1,
+        },
+        date: {
+          [this.selectedTab === 0 ? '$gte' : '$lt']: new Date().toISOString()
         }
       }
     },
