@@ -1,7 +1,7 @@
 <template>
   <v-sheet rounded="xl" class="py-3">
     <FeathersVuexFind
-      v-slot="{ items: students, isFindPending: isPending, queryInfo: info }"
+      v-slot="{ items: students, isFindPending: isPending }"
       service="students"
       :params="{ query }"
       watch="params"
@@ -16,66 +16,38 @@
               <v-btn icon color="primary" :disabled="skip === 0" @click="skip -= limit">
                 <v-icon>mdi-chevron-left</v-icon>
               </v-btn>
-              <span>Page {{skip/limit+1}}</span>
-              <v-btn icon color="primary" :disabled="skip + limit >= info.total" @click="skip += limit">
-                <v-icon>mdi-chevron-right</v-icon>
-              </v-btn>
-            </div>
-          </div>
+          <span>Page {{skip/limit+1}}</span>
+          <v-btn icon color="primary" :disabled="skip + limit >= info.total" @click="skip += limit">
+            <v-icon>mdi-chevron-right</v-icon>
+          </v-btn>
         </div>
-        <v-skeleton-loader type="list-item-three-line@10" :loading="isPending">
-          <v-list three-line subheader>
-            <v-list-item-group v-model="selected" mandatory color="primary">
-              <template v-for="student in students">
-                <v-list-item :key="student._id" @click="drawer = true">
-                  <v-list-item-content>
-                    <v-list-item-title class="text--primary">{{ student.name }}</v-list-item-title>
-                    <v-list-item-subtitle class="text--secondary">Year {{ student.schoolYear }}</v-list-item-subtitle>
-                  </v-list-item-content>
-                </v-list-item>
-              </template>
-            </v-list-item-group>
-          </v-list>
-        </v-skeleton-loader>
-        <v-navigation-drawer
-          v-if="$vuetify.breakpoint.smAndUp"
-          width="50%"
-          mobile-breakpoint="xs"
-          fixed
-          clipped
-          right
-          disable-resize-watcher
-          disable-route-watcher
-          class="py-3 px-0"
-        >
-          <template #default>
-            <student-info v-if="!isPending" :student="students[selected]" />
-          </template>
-        </v-navigation-drawer>
-        <v-bottom-sheet v-else v-model="drawer" scrollable>
-          <v-sheet class="rounded-t-xl pt-6">
-            <template #default>
-              <student-info :student="students[selected]" />
-            </template>
-          </v-sheet>
-        </v-bottom-sheet>
+      </div>
+    </div>
+        <StudentList :students="students" :isPending="isPending" />
+        <info-panel :open="drawer">
+          <student-info v-if="!isPending" :student="selectedStudent"></student-info>
+        </info-panel>
       </div>
     </FeathersVuexFind>
   </v-sheet>
 </template>
 
 <script>
+import StudentList from './StudentList';
 import StudentInfo from './StudentInfo';
+import InfoPanel from '../../other/InfoPanel.vue';
 
 export default {
   name: 'view-students',
   title: 'View Students',
   components: {
+    StudentList,
     StudentInfo,
+    InfoPanel,
   },
   data() {
     return {
-      selected: 0,
+      selectedStudent: null,
       drawer: false,
       limit: 10,
       skip: 0,

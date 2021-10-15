@@ -17,7 +17,7 @@ const coachRoutes = [
     name: 'session page',
     component: () =>
       import(
-        /* webpackChunkName: "coach-view-session" */ '../components/Session/ViewSessions'
+        /* webpackChunkName: "coach-view-session" */ '../components/Session/SessionDetail'
       ),
   },
 ];

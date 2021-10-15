@@ -37,7 +37,7 @@
           </v-list-item-content>
         </v-list-item>
       </v-card>
-      
+  
       <v-card v-if="student.contact.emergency" outlined rounded="lg" flat class="mx-4 my-6">
         <v-card-text class="pb-0">Emergency Contact</v-card-text>
         <v-list-item two-line>
