@@ -1,7 +1,7 @@
 <template>
   <v-sheet rounded="xl" class="py-3">
     <FeathersVuexFind
-      v-slot="{ items: students, isFindPending: isPending }"
+      v-slot="{ items: students, isFindPending: isPending, queryInfo: info }"
       service="students"
       :params="{ query }"
       watch="params"
@@ -23,8 +23,8 @@
         </div>
       </div>
     </div>
-        <StudentList :students="students" :isPending="isPending" />
-        <info-panel :open="drawer">
+        <StudentList :students="students" @selected="setStudent" :isPending="isPending" />
+        <info-panel v-model="drawer">
           <student-info v-if="!isPending" :student="selectedStudent"></student-info>
         </info-panel>
       </div>
@@ -49,7 +49,7 @@ export default {
     return {
       selectedStudent: null,
       drawer: false,
-      limit: 10,
+      limit: 20,
       skip: 0,
       yearSelect: null,
       years: [
@@ -72,6 +72,18 @@ export default {
         },
         ...( this.yearSelect && {schoolYear: this.yearSelect})
       }
+    },
+  },
+  methods: {
+    setStudent(student) {
+      console.log(student.name)
+      this.selectedStudent = student;
+      this.drawer = true;
+    }
+  },
+  watch: {
+    yearSelect() {
+      this.skip = 0;
     }
   }
 };

@@ -30,7 +30,17 @@ export default {
   title: "Info Panel",
   props: {
     selectedStudent: Object,
-    open: Boolean
+    value: Boolean
+  },
+  computed: {
+    open: {
+      get() {
+        return this.value
+      }, 
+      set(newVal) {
+        this.$emit('input', newVal)
+      }
+    }
   }
 }
 </script>

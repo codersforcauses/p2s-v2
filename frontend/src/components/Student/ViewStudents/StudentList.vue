@@ -1,9 +1,9 @@
 <template>
     <v-skeleton-loader type="list-item-three-line@10" :loading="isPending">
-      <v-list three-line subheader>
-        <v-list-item-group v-model="selected" mandatory color="primary">
+      <v-list v-if="students" three-line subheader>
+        <v-list-item-group v-model="selected" @change="selectStudent" mandatory color="primary">
           <template v-for="student in students">
-            <v-list-item :key="student._id" @click="drawer = true">
+            <v-list-item :key="student._id">
               <v-list-item-content>
                 <v-list-item-title class="text--primary">{{ student.name }}</v-list-item-title>
                 <v-list-item-subtitle class="text--secondary">Year {{ student.schoolYear }}</v-list-item-subtitle>
@@ -22,8 +22,23 @@ export default {
   title: "Student List",
   props: {
     students: Array,
-    selectedStudent: Object,
     isPending: Boolean,
   },
+  data: () => ({
+    selected: null
+  }),
+  methods: {
+    selectStudent() {
+      this.$emit('selected', this.students[this.selected])
+    }
+  },
+  watch: {
+    students: {
+      deep: true,
+      handler() {
+        this.selected = null
+      }
+    }
+  }
 }
 </script>
