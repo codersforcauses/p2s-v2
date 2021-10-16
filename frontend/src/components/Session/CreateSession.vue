@@ -153,6 +153,7 @@ import dayjs from 'dayjs'
 import { mapActions } from 'vuex'
 
 export default {
+  name: 'create-session',
   props: ['value'],
   data() {
     return {

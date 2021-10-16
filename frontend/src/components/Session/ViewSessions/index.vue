@@ -31,7 +31,7 @@
               <v-list-item @click="drawer = false; sessionDialog = true">
                 <v-icon color="primary">mdi-plus</v-icon>
                 <v-list-item-subtitle class="ml-3" style="color: #f87f79">Add Session</v-list-item-subtitle>
-                <add-session v-model="sessionDialog" />
+                <create-session v-model="sessionDialog" />
               </v-list-item>
             <v-list-item-group v-model="selected" mandatory color="primary">
               <template v-for="session in sessions">
@@ -77,15 +77,15 @@
 <script>
 import dayjs from 'dayjs'
 
-import SessionInfo from './SessionInfo';
-import AddSession from '../CreateSession';
+import SessionInfo from '../SessionInfo';
+import CreateSession from '../CreateSession';
 
 export default {
   name: 'view-sessions',
   title: 'View Sessions',
   components: {
     SessionInfo,
-    AddSession
+    CreateSession
   },
   data() {
     return {
