@@ -68,7 +68,7 @@
 import UserInfo from './UserInfo';
 
 export default {
-  name: 'view staff',
+  name: 'view-staff',
   title: 'View Staff',
   components: {
     UserInfo,

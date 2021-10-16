@@ -81,8 +81,8 @@ import SessionInfo from './SessionInfo';
 import AddSession from '../CreateSession';
 
 export default {
-  name: 'view staff',
-  title: 'View Staff',
+  name: 'view-sessions',
+  title: 'View Sessions',
   components: {
     SessionInfo,
     AddSession

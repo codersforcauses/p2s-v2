@@ -62,8 +62,8 @@ import dayjs from 'dayjs'
 import SessionInfo from '../ViewSessions/SessionInfo';
 
 export default {
-  name: 'view staff',
-  title: 'View Staff',
+  name: 'view-session',
+  title: 'View Session',
   components: {
     SessionInfo
   },
