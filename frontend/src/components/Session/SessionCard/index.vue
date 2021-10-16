@@ -32,19 +32,20 @@
     <v-card-title primary-title class="primary--text text-h6 pb-0">Manage Sessions</v-card-title>
     <v-card-text>
       View all the sessions on file
-      <br />Create a new session to be used in lessons or programs
+      <br /><span v-if="isAdminView">Create a new session to be used in lessons or programs</span>
     </v-card-text>
 
     <v-card-actions class="py-1">
       <v-btn text rounded color="primary" :to="{ name: 'view sessions' }">View All</v-btn>
-      <v-btn text rounded color="primary" @click="sessionDialog = true">Create New</v-btn>
-      <new-session v-model="sessionDialog" @created="this.$router.push({ path: `/session/${res._id}` })" />
+      <v-btn v-if="isAdminView" text rounded color="primary" @click="sessionDialog = true">Create New</v-btn>
+      <new-session v-if="isAdminView" v-model="sessionDialog" @created="this.$router.push({ path: `/session/${res._id}` })" />
     </v-card-actions>
   </v-card>
 </template>
 
 <script>
 import dayjs from 'dayjs'
+import { mapState } from 'vuex';
 
 export default {
   components: {
@@ -60,6 +61,7 @@ export default {
     };
   },
   computed: {
+    ...mapState('auth', { user: 'user' }),
     searchQuery() {
       const query = this.selectedTab === 0 ?
       {
@@ -81,6 +83,9 @@ export default {
         }
       }
       return query
+    },
+    isAdminView() {
+      return this.user?.admin?.is;
     },
   },
   methods: {
