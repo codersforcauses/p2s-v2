@@ -3,7 +3,7 @@
       <v-list v-if="students" three-line subheader>
         <v-list-item-group v-model="selected" @change="selectStudent" mandatory color="primary">
           <template v-for="student in students">
-            <v-list-item :key="student._id">
+            <v-list-item :key="student._id" @click="$emit('open')">
               <v-list-item-content>
                 <v-list-item-title class="text--primary">{{ student.name }}</v-list-item-title>
                 <v-list-item-subtitle class="text--secondary">Year {{ student.schoolYear }}</v-list-item-subtitle>
@@ -25,10 +25,14 @@ export default {
     isPending: Boolean,
   },
   data: () => ({
-    selected: null
+    selected: 0
   }),
+  mounted() {
+    console.log(this.selected)
+  },
   methods: {
     selectStudent() {
+      console.log(this.selected)
       this.$emit('selected', this.students[this.selected])
     }
   },

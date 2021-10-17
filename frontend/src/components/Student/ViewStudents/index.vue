@@ -7,23 +7,8 @@
       watch="params"
     >
       <div>
-        <div :style="{ width: $vuetify.breakpoint.smAndUp ? '50vw' : '100vw'}">
-          <div class="d-flex justify-space-between align-center">
-            <v-btn icon disabled class="ml-3"><v-icon>mdi-magnify</v-icon></v-btn>
-            <!-- <v-text-field outlined single-line hide-details class="pa-3" style="border-radius: 50px;"></v-text-field> -->
-            <v-select v-model="yearSelect" :items="years" item-text="text" item-value="value" label="School Year"></v-select>
-            <div class="mb-2 mr-1 ml-auto d-flex align-center justify-space-between" style="width: 10rem;">
-              <v-btn icon color="primary" :disabled="skip === 0" @click="skip -= limit">
-                <v-icon>mdi-chevron-left</v-icon>
-              </v-btn>
-          <span>Page {{skip/limit+1}}</span>
-          <v-btn icon color="primary" :disabled="skip + limit >= info.total" @click="skip += limit">
-            <v-icon>mdi-chevron-right</v-icon>
-          </v-btn>
-        </div>
-      </div>
-    </div>
-        <StudentList :students="students" @selected="setStudent" :isPending="isPending" />
+        <StudentFilter :skip="listSkip" @setSkip="setSkip" :limit="listLimit" @setYear="setYear" :queryInfo="info"/>
+        <StudentList :students="students" @selected="setStudent" :isPending="isPending" @open="drawer = true" />
         <info-panel v-model="drawer">
           <student-info v-if="!isPending" :student="selectedStudent"></student-info>
         </info-panel>
@@ -35,6 +20,7 @@
 <script>
 import StudentList from './StudentList';
 import StudentInfo from './StudentInfo';
+import StudentFilter from './StudentFilter';
 import InfoPanel from '../../other/InfoPanel.vue';
 
 export default {
@@ -43,30 +29,23 @@ export default {
   components: {
     StudentList,
     StudentInfo,
+    StudentFilter,
     InfoPanel,
   },
   data() {
     return {
       selectedStudent: null,
       drawer: false,
-      limit: 20,
-      skip: 0,
-      yearSelect: null,
-      years: [
-        { text: "All Years", value: null },
-        { text: "Year 8", value: 8 },
-        { text: "Year 9", value: 9 },
-        { text: "Year 10", value: 10 },
-        { text: "Year 11", value: 11 },
-        { text: "Year 12", value: 12 },
-      ]
+      listLimit: 20,
+      listSkip: 0,
+      yearSelect: null
     };
   },
   computed: {
     query() {
       return {
-        $limit: this.limit,
-        $skip: this.skip,
+        $limit: this.listLimit,
+        $skip: this.listSkip,
         $sort: {
           name: 1,
         },
@@ -75,8 +54,13 @@ export default {
     },
   },
   methods: {
+    setSkip(skip) {
+      this.listSkip = skip
+    },
+    setYear(year) {
+      this.yearSelect = year
+    },
     setStudent(student) {
-      console.log(student.name)
       this.selectedStudent = student;
       this.drawer = true;
     }
