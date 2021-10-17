@@ -11,7 +11,7 @@
         <div v-if="isPending">Loading...</div>
         <session-info :session="session" />
         <info-panel :open="drawer">
-          <div>Student Stuff goes here</div>
+          <div>Student stuff!</div>
         </info-panel>
       </div>
       </FeathersVuexGet>
@@ -32,6 +32,7 @@ export default {
   },
   props: {
     session: Object
+
   },
   data: () => ({
       drawer: true,

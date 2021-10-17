@@ -23,7 +23,7 @@
         </div>
       </div>
     </div>
-        <StudentList :students="students" @selected="setStudent" :isPending="isPending" />
+      <StudentList :students="students" @selected="setStudent" :isPending="isPending" />
         <info-panel v-model="drawer">
           <student-info v-if="!isPending" :student="selectedStudent"></student-info>
         </info-panel>
