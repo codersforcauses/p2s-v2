@@ -26,7 +26,7 @@
       </div>
 
       <FeathersVuexFind
-        v-slot="{ items: sessions, isFindPending: isPending, queryInfo: info }"
+        v-slot="{ items: sessions }"
         service="sessions"
         :params="{ query }"
         watch="params"

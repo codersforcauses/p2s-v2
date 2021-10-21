@@ -124,11 +124,10 @@ export default {
           });
           await this.$router.push({ name: 'dashboard' });
         } catch (error) {
-          console.log(error)
           this.alert = true;
           switch(error.code) {
             case 401:
-              this.error = "Failed to log in"
+              this.error = "Invalid Credentials"
               break
             case 408:
               this.error = "Failed to connect to server"

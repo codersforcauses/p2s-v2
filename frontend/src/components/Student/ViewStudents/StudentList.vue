@@ -1,0 +1,48 @@
+<template>
+    <v-skeleton-loader type="list-item-three-line@10" :loading="isPending">
+      <v-list v-if="students" three-line subheader>
+        <v-list-item-group v-model="selected" @change="selectStudent" mandatory color="primary">
+          <template v-for="student in students">
+            <v-list-item :key="student._id" @click="$emit('open')">
+              <v-list-item-content>
+                <v-list-item-title class="text--primary">{{ student.name }}</v-list-item-title>
+                <v-list-item-subtitle class="text--secondary">Year {{ student.schoolYear }}</v-list-item-subtitle>
+              </v-list-item-content>
+            </v-list-item>
+          </template>
+        </v-list-item-group>
+      </v-list>
+    </v-skeleton-loader>
+</template>
+
+<script>
+
+export default {
+  name: "student-list",
+  title: "Student List",
+  props: {
+    students: Array,
+    isPending: Boolean,
+  },
+  data: () => ({
+    selected: 0
+  }),
+  mounted() {
+    console.log(this.selected)
+  },
+  methods: {
+    selectStudent() {
+      console.log(this.selected)
+      this.$emit('selected', this.students[this.selected])
+    }
+  },
+  watch: {
+    students: {
+      deep: true,
+      handler() {
+        this.selected = null
+      }
+    }
+  }
+}
+</script>

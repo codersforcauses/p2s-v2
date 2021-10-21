@@ -37,28 +37,9 @@
             </v-list-item-group>
           </v-list>
         </v-skeleton-loader>
-        <v-navigation-drawer
-          v-if="$vuetify.breakpoint.smAndUp"
-          width="50%"
-          mobile-breakpoint="xs"
-          fixed
-          clipped
-          right
-          disable-resize-watcher
-          disable-route-watcher
-          class="py-3 px-0"
-        >
-          <template #default>
-            <user-info :user="users[selected]" />
-          </template>
-        </v-navigation-drawer>
-        <v-bottom-sheet v-else v-model="drawer" scrollable>
-          <v-sheet class="rounded-t-xl pt-6">
-            <template #default>
-              <user-info :user="users[selected]" />
-            </template>
-          </v-sheet>
-        </v-bottom-sheet>
+        <info-panel v-model="drawer">
+           <user-info :user="users[selected]" />
+        </info-panel>
       </div>
     </FeathersVuexFind>
   </v-sheet>
@@ -66,12 +47,14 @@
 
 <script>
 import UserInfo from './UserInfo';
+import InfoPanel from "../../other/InfoPanel.vue";
 
 export default {
-  name: 'view staff',
+  name: 'view-staff',
   title: 'View Staff',
   components: {
     UserInfo,
+    InfoPanel
   },
   data() {
     return {

@@ -31,11 +31,11 @@
               <v-list-item @click="drawer = false; sessionDialog = true">
                 <v-icon color="primary">mdi-plus</v-icon>
                 <v-list-item-subtitle class="ml-3" style="color: #f87f79">Add Session</v-list-item-subtitle>
-                <add-session v-model="sessionDialog" />
+                <create-session v-model="sessionDialog" />
               </v-list-item>
             <v-list-item-group v-model="selected" mandatory color="primary">
               <template v-for="session in sessions">
-                <v-list-item :key="session._id" @click="drawer = true">
+                <v-list-item :key="session._id" @click="drawer = !drawer">
                   <v-list-item-content>
                     <v-list-item-title class="text--primary">{{`${dayNum(session)}${dayOrdinal(session)} ${monthName(session)} - ${session.location}`}}</v-list-item-title>
                     <v-list-item-subtitle>{{`${formatTime(session)}, ${session.type}`}}</v-list-item-subtitle>
@@ -45,30 +45,9 @@
             </v-list-item-group>
           </v-list>
         </v-skeleton-loader>
-        <v-navigation-drawer
-          v-model="drawer"
-          v-if="$vuetify.breakpoint.smAndUp"
-          width="50%"
-          mobile-breakpoint="xs"
-          fixed
-          clipped
-          right
-          disable-resize-watcher
-          disable-route-watcher
-          class="py-3 px-0"
-          
-        >
-          <template #default>
-            <session-info :session="sessions[selected]" />
-          </template>
-        </v-navigation-drawer>
-        <v-bottom-sheet v-else v-model="drawer" scrollable>
-          <v-sheet class="rounded-t-xl pt-6">
-            <template #default>
-              <session-info :session="sessions[selected]" />
-            </template>
-          </v-sheet>
-        </v-bottom-sheet>
+        <info-panel v-model="drawer">
+          <session-info :session="sessions[selected]" />
+        </info-panel>
       </div>
     </FeathersVuexFind>
   </v-sheet>
@@ -77,15 +56,17 @@
 <script>
 import dayjs from 'dayjs'
 
-import SessionInfo from './SessionInfo';
-import AddSession from '../CreateSession';
+import SessionInfo from '../SessionInfo';
+import CreateSession from '../CreateSession';
+import InfoPanel from "../../other/InfoPanel.vue";
 
 export default {
-  name: 'view staff',
-  title: 'View Staff',
+  name: 'view-sessions',
+  title: 'View Sessions',
   components: {
     SessionInfo,
-    AddSession
+    CreateSession,
+    InfoPanel,
   },
   data() {
     return {

@@ -1,5 +1,5 @@
 <template>
-  <v-card flat tile height="100%" class="py-sm-12">
+  <v-card v-if="student" flat tile height="100%" class="py-sm-12">
       <div class="ml-4 mt-sm-4 d-flex">
         <v-sheet
           v-if="$vuetify.breakpoint.smAndUp"
@@ -37,7 +37,7 @@
           </v-list-item-content>
         </v-list-item>
       </v-card>
-      
+  
       <v-card v-if="student.contact.emergency" outlined rounded="lg" flat class="mx-4 my-6">
         <v-card-text class="pb-0">Emergency Contact</v-card-text>
         <v-list-item two-line>
@@ -63,10 +63,7 @@
 <script>
 export default {
   props: {
-    student: {
-      type: Object,
-      default: () => ({})
-    }
+    student: Object,
   },
   computed: {
     getInitials() {
