@@ -26,13 +26,6 @@ module.exports = function (app) {
           ref: 'users',
         },
       ],
-      reports: [
-        {
-          type: mongoose.ObjectId,
-          ref: 'reports',
-          required: true,
-        },
-      ],
       feedback: {
         type: String,
       },
