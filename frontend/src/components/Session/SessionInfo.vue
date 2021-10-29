@@ -1,14 +1,8 @@
 <template>
-  <v-card flat tile height="100%" class="py-sm-12">
+  <v-card flat tile class="py-sm-12">
     <v-card-text height="100%" class="pa-0 mt-sm-4">
       <div v-if="session" class="d-flex">
-        <div class="d-flex-row pl-5">
-          <div class="d-flex">
-            <div class="text-h2 primary--text">{{ dayNum(session) }}</div>
-            <div class="text-h5 primary--text">{{ dayOrdinal(session) }}</div>
-          </div>
-          <div class="text-body-1">{{ monthName(session) }}</div>
-        </div>
+        <DateView :date="session.date" />
         <v-divider
         inset vertical
         class="pl-7"
@@ -19,20 +13,18 @@
           <div>{{ coachText(session) }}</div>
         </div>
       </div>
-      <div v-else class="text-h6 pl-4">
-        No Session Selected
-      </div>
     </v-card-text>
-    <v-card-actions v-if="session">
-      <v-btn color="primary" text rounded :to="{ path: `/session/${session._id}`}">View Session</v-btn>
-    </v-card-actions>
   </v-card>
 </template>
 
 <script>
 import dayjs from 'dayjs'
+import DateView from './DateView.vue'
 
 export default {
+  components: {
+    DateView
+  },
   props: {
     session: {
       type: Object,
@@ -43,6 +35,12 @@ export default {
     isSmAndUp() {
       return this.$vuetify.breakpoint.smAndUp ? 128 : 96;
     },
+    currentYear() {
+      return dayjs().year()
+    },
+    dateYear() {
+      return this.dayjsDate.year()
+    }
   },
   methods: {
     formatTime(session) {
@@ -79,7 +77,7 @@ export default {
       return monthNames[date.month()]
     },
     coachText(session) {
-      if(!session.coaches || session.coaches.length < 1) return 'No CoachesAssigned'
+      if(!session.coaches || session.coaches.length < 1) return 'No Coaches Assigned'
       return `${session.coaches.length} Coach${session.coaches.length > 1 ? 'es' : ''} Assigned`
     },
   }
