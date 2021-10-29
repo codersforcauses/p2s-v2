@@ -27,7 +27,14 @@
             />
             <CoachesView :session="session" />
           </div>
-          <Attendence :students="[]"/>
+          <FeathersVuexFind
+            v-slot="{ items: students }"
+            service="students"
+            :params="{ query: { $limit: 200 } }"
+            watch="params"
+          >
+            <Attendence :students="students"/>
+          </FeathersVuexFind>
         </div>
       </div>
     </FeathersVuexGet>
@@ -49,7 +56,7 @@ export default {
     TimeView,
     ActivityView,
     CoachesView,
-    Attendence,
+    Attendence
   },
   computed: {
     id() {
