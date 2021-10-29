@@ -2,12 +2,24 @@
 //
 // See http://mongoosejs.com/docs/models.html
 // for more of what you can do here.
+const mongoose = require('mongoose');
+
 module.exports = function (app) {
   const modelName = 'reports';
   const mongooseClient = app.get('mongooseClient');
   const { Schema } = mongooseClient;
   const schema = new Schema(
     {
+      session: {
+        type: mongoose.ObjectId,
+        ref: 'sessions',
+        required: true,
+      },
+      student: {
+        type: mongoose.ObjectId,
+        ref: 'students',
+        required: true,
+      },
       attended: {
         type: String,
         enum: [
