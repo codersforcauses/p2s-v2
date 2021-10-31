@@ -9,10 +9,7 @@
       <v-list-item-group v-model="selected" @change="selectSession" mandatory color="primary">
         <template v-for="session in sessions">
           <v-list-item :key="session._id" @click="$emit('open')">
-            <v-list-item-content>
-              <v-list-item-title class="text--primary">{{`${dayNum(session)}${dayOrdinal(session)} ${monthName(session)}`}}{{session.location ? ` - ${session.location}` : ''}}</v-list-item-title>
-              <v-list-item-subtitle>{{`${formatTime(session)}, ${session.type}`}}</v-list-item-subtitle>
-            </v-list-item-content>
+            <ListEntry :session="session" />
           </v-list-item>
         </template>
       </v-list-item-group>
@@ -21,14 +18,15 @@
 </template>
 
 <script>
-import dayjs from 'dayjs'
 import CreateSession from '../CreateSession';
+import ListEntry from './ListEntry'
 
 export default {
   name: "session-list",
   title: "Session List",
   components: {
-    CreateSession
+    CreateSession,
+    ListEntry
   },
   props: {
     sessions: Array,
@@ -45,39 +43,6 @@ export default {
     },
     selectSession() {
       this.$emit('selected', this.sessions[this.selected])
-    },
-    formatTime(session) {
-      return dayjs(session.date).format('h:mma')
-    },
-    dayNum(session) {
-      return dayjs(session.date).date()
-    },
-    dayOrdinal(session) {
-      if (this.dayNum(session) > 3 && this.dayNum(session) < 21) return 'th';
-      switch (this.dayNum(session) % 10) {
-        case 1:  return "st";
-        case 2:  return "nd";
-        case 3:  return "rd";
-        default: return "th";
-      }
-    },
-    monthName(session) {
-      const monthNames = [
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec"
-      ];
-      const date = dayjs(session.date)
-      return monthNames[date.month()]
     },
   },
   watch: {

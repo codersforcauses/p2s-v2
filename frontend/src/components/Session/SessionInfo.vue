@@ -8,9 +8,9 @@
         class="pl-7"
         />
         <div class="d-flex flex-column justify-space-between pl-7">
-          <div class="text-subtitle-1">{{ formatTime(session) }} - {{ session.location }}</div>
+          <div class="text-subtitle-1">{{ formatTime }} - {{ session.location }}</div>
           <div>{{ session.type }}</div>
-          <div>{{ coachText(session) }}</div>
+          <div>{{ coachText }}</div>
         </div>
       </div>
     </v-card-text>
@@ -20,16 +20,15 @@
 <script>
 import dayjs from 'dayjs'
 import DateView from './DateView.vue'
+import dateUtils from '../../utils/date'
 
 export default {
+  mixins: [dateUtils],
   components: {
     DateView
   },
   props: {
-    session: {
-      type: Object,
-      default: null
-    }
+    session: Object
   },
   computed: {
     isSmAndUp() {
@@ -38,47 +37,12 @@ export default {
     currentYear() {
       return dayjs().year()
     },
-    dateYear() {
-      return this.dayjsDate.year()
-    }
-  },
-  methods: {
-    formatTime(session) {
-      return dayjs(session.date).format('h:mma')
+    date() {
+      return this.session.date
     },
-    dayNum(session) {
-      return dayjs(session.date).date()
-    },
-    dayOrdinal(session) {
-      if (this.dayNum(session) > 3 && this.dayNum(session) < 21) return 'th';
-      switch (this.dayNum(session) % 10) {
-        case 1:  return "st";
-        case 2:  return "nd";
-        case 3:  return "rd";
-        default: return "th";
-      }
-    },
-    monthName(session) {
-      const monthNames = [
-        "January",
-        "February",
-        "March",
-        "April",
-        "May",
-        "June",
-        "July",
-        "August",
-        "September",
-        "October",
-        "November",
-        "December"
-      ];
-      const date = dayjs(session.date)
-      return monthNames[date.month()]
-    },
-    coachText(session) {
-      if(!session.coaches || session.coaches.length < 1) return 'No Coaches Assigned'
-      return `${session.coaches.length} Coach${session.coaches.length > 1 ? 'es' : ''} Assigned`
+    coachText() {
+      if(!this.session.coaches || this.session.coaches.length < 1) return 'No Coaches Assigned'
+      return `${this.session.coaches.length} Coach${this.session.coaches.length > 1 ? 'es' : ''} Assigned`
     },
   }
 };
