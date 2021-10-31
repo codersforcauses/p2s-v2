@@ -4,9 +4,9 @@ import './registerServiceWorker';
 import router from './router';
 import store from './store';
 import vuetify from './plugins/vuetify';
-import titleMixin from './mixins/title';
+import titleUtil from './utils/title';
 
-Vue.mixin(titleMixin);
+Vue.mixin(titleUtil);
 
 Vue.config.productionTip = false;
 

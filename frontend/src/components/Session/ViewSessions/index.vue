@@ -7,46 +7,16 @@
       watch="params"
     >
       <div>
-        <div :style="{ width: $vuetify.breakpoint.smAndUp && drawer ? '50vw' : '100vw'}">
-          <div class="d-flex justify-space-between">
-            <div>
-              <v-tabs v-model="selectedTab">
-                <v-tab class="text-capitalize text-body-2">Future Sessions</v-tab>
-                <v-tab class="text-capitalize text-body-2">Past Sessions</v-tab>
-              </v-tabs>
-            </div>
-            <div class="d-flex align-center">
-              <v-btn icon color="primary" :disabled="skip === 0" @click="skip -= limit">
-                <v-icon>mdi-chevron-left</v-icon>
-              </v-btn>
-              <span width="20px">Page {{skip/limit+1}}</span>
-              <v-btn icon color="primary" :disabled="skip + limit >= info.total" @click="skip += limit">
-                <v-icon>mdi-chevron-right</v-icon>
-              </v-btn>
-            </div>
-          </div>
-        </div>
-        <v-skeleton-loader type="list-item-two-line@10" :loading="isPending">
-          <v-list two-line subheader>
-              <v-list-item @click="drawer = false; sessionDialog = true">
-                <v-icon color="primary">mdi-plus</v-icon>
-                <v-list-item-subtitle class="ml-3" style="color: #f87f79">Add Session</v-list-item-subtitle>
-                <create-session v-model="sessionDialog" />
-              </v-list-item>
-            <v-list-item-group v-model="selected" mandatory color="primary">
-              <template v-for="session in sessions">
-                <v-list-item :key="session._id" @click="drawer = !drawer">
-                  <v-list-item-content>
-                    <v-list-item-title class="text--primary">{{`${dayNum(session)}${dayOrdinal(session)} ${monthName(session)} - ${session.location}`}}</v-list-item-title>
-                    <v-list-item-subtitle>{{`${formatTime(session)}, ${session.type}`}}</v-list-item-subtitle>
-                  </v-list-item-content>
-                </v-list-item>
-              </template>
-            </v-list-item-group>
-          </v-list>
-        </v-skeleton-loader>
+        <SessionFilter :skip="listSkip" @setSkip="setSkip" :limit="listLimit" @setTab="setTab" :queryInfo="info"/>
+        <SessionList :sessions="sessions" @selected="setSession" :isPending="isPending" @open="drawer = true" />
         <info-panel v-model="drawer">
-          <session-info :session="sessions[selected]" />
+          <session-info v-if="selectedSession" :session="selectedSession" />
+          <v-card-actions v-if="selectedSession">
+            <v-btn color="primary" text rounded :to="{ path: `/session/${selectedSession._id}`}">View Session</v-btn>
+          </v-card-actions>
+          <div v-else class="text-h6 pl-4">
+            No Session Selected
+          </div>
         </info-panel>
       </div>
     </FeathersVuexFind>
@@ -54,10 +24,9 @@
 </template>
 
 <script>
-import dayjs from 'dayjs'
-
+import SessionFilter from './SessionFilter';
+import SessionList from './SessionList';
 import SessionInfo from '../SessionInfo';
-import CreateSession from '../CreateSession';
 import InfoPanel from "../../other/InfoPanel.vue";
 
 export default {
@@ -65,15 +34,16 @@ export default {
   title: 'View Sessions',
   components: {
     SessionInfo,
-    CreateSession,
+    SessionFilter,
+    SessionList,
     InfoPanel,
   },
   data() {
     return {
-      selected: 0,
+      selectedSession: null,
       drawer: false,
-      limit: 10,
-      skip: 0,
+      listLimit: 10,
+      listSkip: 0,
       sessionDialog: false,
       selectedTab: 0
     };
@@ -81,8 +51,8 @@ export default {
   computed: {
     query() {
       return {
-        $limit: this.limit,
-        $skip: this.skip,
+        $limit: this.listLimit,
+        $skip: this.listSkip,
         $sort: {
           date: 1,
         },
@@ -93,39 +63,16 @@ export default {
     },
   },
   methods: {
-    formatTime(session) {
-      return dayjs(session.date).format('h:mma')
+    setSkip(skip) {
+      this.listSkip = skip
     },
-    dayNum(session) {
-      return dayjs(session.date).date()
+    setSession(session) {
+      this.selectedSession = session;
+      this.drawer = true;
     },
-    dayOrdinal(session) {
-      if (this.dayNum(session) > 3 && this.dayNum(session) < 21) return 'th';
-      switch (this.dayNum(session) % 10) {
-        case 1:  return "st";
-        case 2:  return "nd";
-        case 3:  return "rd";
-        default: return "th";
-      }
-    },
-    monthName(session) {
-      const monthNames = [
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec"
-      ];
-      const date = dayjs(session.date)
-      return monthNames[date.month()]
-    },
+    setTab(tab) {
+      this.selectedTab = tab
+    }
   }
 };
 </script>

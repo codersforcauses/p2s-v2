@@ -7,21 +7,18 @@
           <v-tab class="text-capitalize text-body-2">Last Session</v-tab>
         </v-tabs>
         <div v-if="session" class="d-flex">
-          <div class="d-flex-row pl-5">
-            <div class="d-flex">
-              <div class="text-h2 primary--text">{{ dayNum(session) }}</div>
-              <div class="text-h5 primary--text">{{ dayOrdinal(session) }}</div>
-            </div>
-            <div class="text-body-1">{{ monthName(session) }}</div>
-          </div>
+          <DateView :date="session.date" />
           <v-divider
           inset vertical
           class="pl-7"
           />
-          <div class="d-flex flex-column justify-space-between pl-7" @mouseover="viewOverlay = true" @mouseout="viewOverlay = false">
+          <div class="d-flex flex-column justify-space-between pl-7">
             <div class="text-subtitle-1">{{ formatTime(session) }} - {{ session.location }}</div>
             <div>{{ session.type }}</div>
             <div>{{ coachText(session) }}</div>
+          </div>
+          <div class="d-flex flex-column justify-space-between  pl-7">
+            <v-btn text rounded class="align-center" color="primary" :to="{ path: `/session/${session._id}`}">View Session</v-btn>
           </div>
         </div>
         <div v-else class="text-h6 pl-4 mb-10">
@@ -38,20 +35,22 @@
     <v-card-actions class="py-1">
       <v-btn text rounded color="primary" :to="{ name: 'view sessions' }">View All</v-btn>
       <v-btn v-if="isAdminView" text rounded color="primary" @click="sessionDialog = true">Create New</v-btn>
-      <new-session v-if="isAdminView" v-model="sessionDialog" @created="this.$router.push({ path: `/session/${res._id}` })" />
+      <NewSession v-if="isAdminView" v-model="sessionDialog" @created="this.$router.push({ path: `/session/${res._id}` })" />
     </v-card-actions>
   </v-card>
 </template>
 
 <script>
-import dayjs from 'dayjs'
 import { mapState } from 'vuex';
+import dayjs from 'dayjs'
+
+import NewSession from '../CreateSession.vue'
+import DateView from '../DateView.vue'
 
 export default {
   components: {
-    newSession: () => ({
-      component: import('../CreateSession.vue'),
-    }),
+    NewSession,
+    DateView
   },
   data() {
     return {
@@ -91,36 +90,6 @@ export default {
   methods: {
     formatTime(session) {
       return dayjs(session.date).format('h:mma')
-    },
-    dayNum(session) {
-      return dayjs(session.date).date()
-    },
-    dayOrdinal(session) {
-      if (this.dayNum(session) > 3 && this.dayNum(session) < 21) return 'th';
-      switch (this.dayNum(session) % 10) {
-        case 1:  return "st";
-        case 2:  return "nd";
-        case 3:  return "rd";
-        default: return "th";
-      }
-    },
-    monthName(session) {
-      const monthNames = [
-        "January",
-        "February",
-        "March",
-        "April",
-        "May",
-        "June",
-        "July",
-        "August",
-        "September",
-        "October",
-        "November",
-        "December"
-      ];
-      const date = dayjs(session.date)
-      return monthNames[date.month()]
     },
     coachText(session) {
       return session.coaches.length < 1 ? 'No Coaches Assigned' : `${session.coaches.length} Coach${session.coaches.length > 1 ? 'es' : ''} Assigned`

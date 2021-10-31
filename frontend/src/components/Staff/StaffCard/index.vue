@@ -40,7 +40,10 @@
 </template>
 
 <script>
+
 export default {
+
+
   components: {
     invite: () => ({
       component: import('../UserInvite.vue'),
