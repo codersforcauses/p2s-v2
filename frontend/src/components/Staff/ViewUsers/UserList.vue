@@ -4,15 +4,7 @@
       <v-list-item-group v-model="selected" @change="selectUser" mandatory color="primary">
         <template v-for="user in users">
           <v-list-item :key="user._id" @click="$emit('open')">
-            <v-list-item-content>
-              <v-list-item-title class="text--primary">{{ user.name }}</v-list-item-title>
-              <v-list-item-subtitle>{{ user.email }}</v-list-item-subtitle>
-              <v-list-item-subtitle>
-                {{ user.admin.is ? 'admin' : null }}
-                <span v-show="user.admin.is && user.coach.is">&bull;</span>
-                {{ user.coach.is ? 'coach' : null }}
-              </v-list-item-subtitle>
-            </v-list-item-content>
+            <UserListDisplay :user="user" />
           </v-list-item>
         </template>
       </v-list-item-group>
@@ -21,8 +13,10 @@
 </template>
 
 <script>
+import UserListDisplay from './UserListDisplay.vue'
 
 export default {
+  components: { UserListDisplay },
   name: "user-list",
   title: "Staff List",
   props: {

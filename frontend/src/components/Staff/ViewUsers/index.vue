@@ -30,7 +30,7 @@ export default {
     UserInfo,
     UserFilter,
     UserList,
-    InfoPanel
+    InfoPanel,
   },
   data() {
     return {
