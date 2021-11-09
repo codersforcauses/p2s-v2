@@ -13,17 +13,14 @@
             <DateView :date="session.date" />
             <v-divider
             inset vertical
-            class="pl-7"
             />
             <TimeView :date="session.date" />
             <v-divider
             inset vertical
-            class="pl-7"
             />
             <ActivityView :session="session" />
             <v-divider
             inset vertical
-            class="pl-7"
             />
             <CoachesView :session="session" />
           </div>

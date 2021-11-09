@@ -1,6 +1,6 @@
 <template>
   <div class="d-flex flex-column align-center pr-5">
-    <div class="text-h3 primary--text">{{ coaches.length }}</div>
+    <div class="text-h5 text-sm-h4 text-md-h3 primary--text">{{ coaches.length }}</div>
     <div>{{ coachText }}</div>
   </div>
 </template>

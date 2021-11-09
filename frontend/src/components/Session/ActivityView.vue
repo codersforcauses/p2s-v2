@@ -1,6 +1,6 @@
 <template>
   <div class="d-flex flex-column">
-    <div class="text-h5 primary--text">{{ session.location }}</div>
+    <div class="text-body-1 text-sm-h6 text-md-h5 primary--text">{{ session.location }}</div>
     <div>{{ session.type }}</div>
   </div>
 </template>

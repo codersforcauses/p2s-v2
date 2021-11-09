@@ -1,7 +1,7 @@
 <template>
   <div class="d-flex">
-    <div class="text-h2 primary--text">{{ getTime }}</div>
-    <div class="text-h5 primary--text">{{ getAMPM }}</div>
+    <div class="text-h5 text-sm-h3 text-md-h2 text-h2 primary--text">{{ getTime }}</div>
+    <div class="text-body-1 text-sm-h6 text-md-h5 primary--text">{{ getAMPM }}</div>
   </div>
 </template>
 
