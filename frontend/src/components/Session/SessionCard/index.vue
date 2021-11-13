@@ -6,22 +6,20 @@
           <v-tab class="text-capitalize text-body-2">Next Session</v-tab>
           <v-tab class="text-capitalize text-body-2">Last Session</v-tab>
         </v-tabs>
-        <div v-if="session" class="d-flex">
+        <div v-if="session" class="d-flex justify-space-around align-center">
           <DateView :date="session.date" />
           <v-divider
           inset vertical
           class="pl-7"
           />
-          <div class="d-flex flex-column justify-space-between pl-7">
+          <div class="d-flex flex-column justify-space-between">
             <div class="text-subtitle-1">{{ formatTime(session) }} - {{ session.location }}</div>
             <div>{{ session.type }}</div>
             <div>{{ coachText(session) }}</div>
           </div>
-          <div class="d-flex flex-column justify-space-between  pl-7">
-            <v-btn text rounded class="align-center" color="primary" :to="{ path: `/session/${session._id}`}">View Session</v-btn>
-          </div>
+            <v-btn rounded outlined fab color="primary" class="align-center" :to="{ path: `/session/${session._id}`}"><v-icon>mdi-text-box-multiple-outline</v-icon></v-btn>
         </div>
-        <div v-else class="text-h6 pl-4 mb-10">
+        <div v-else class="text-h6 mb-10">
           No Session Found
         </div>
       </v-card>
