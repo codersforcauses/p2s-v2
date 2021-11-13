@@ -27,10 +27,23 @@
           <FeathersVuexFind
             v-slot="{ items: students }"
             service="students"
-            :params="{ query: { $limit: 200 } }"
+            :params="{ query: { $in: session.students } }"
             watch="params"
           >
-            <Attendence :students="students"/>
+            <FeathersVuexFind
+              v-slot="{ items: reports }"
+              service="reports"
+              :params="{ query: { session: session._id } }"
+              watch="params"
+            >
+            <div>
+              <v-divider class="mt-8" />
+              <Attendence :students="students" :reports="reports" @openReport="setReport"/>
+              <info-panel v-model="drawer">
+                <ReportInfo :report="selectedReport" />
+              </info-panel>
+            </div>
+            </FeathersVuexFind>
           </FeathersVuexFind>
         </div>
       </div>
@@ -44,6 +57,8 @@ import TimeView from '../TimeView.vue'
 import ActivityView from '../ActivityView.vue';
 import CoachesView from '../CoachesView.vue'
 import Attendence from '../Attendence.vue'
+import InfoPanel from '../../other/InfoPanel.vue';
+import ReportInfo from './ReportInfo.vue';
 
 export default {
   name: 'session-detail',
@@ -53,12 +68,24 @@ export default {
     TimeView,
     ActivityView,
     CoachesView,
-    Attendence
+    Attendence,
+    InfoPanel,
+    ReportInfo,
+  },
+  data: () => ({
+    selectedReport: null,
+    drawer: false
+  }),
+  methods: {
+    setReport(report) {
+      this.selectedReport = report;
+      this.drawer = true;
+    }
   },
   computed: {
     id() {
       return this.$route.params.id
-    }
+    },
   },
 };
 </script>
