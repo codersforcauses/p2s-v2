@@ -27,7 +27,7 @@
           <FeathersVuexFind
             v-slot="{ items: students }"
             service="students"
-            :params="{ query: { $in: session.students } }"
+            :params="{ query: {} }"
             watch="params"
           >
             <FeathersVuexFind
@@ -38,9 +38,9 @@
             >
             <div>
               <v-divider class="mt-8" />
-              <Attendence :students="students" :reports="reports" @openReport="setReport"/>
+              <Attendence :students="students" :reports="reports" :openReport="setReport"/>
               <info-panel v-model="drawer">
-                <ReportInfo :report="selectedReport" />
+                <ReportInfo :report="reports" />
               </info-panel>
             </div>
             </FeathersVuexFind>

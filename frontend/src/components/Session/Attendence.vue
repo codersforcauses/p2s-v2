@@ -24,7 +24,7 @@
                 </v-list-item-content>
               </template>
             </v-list-item>
-            <v-btn depressed large :disabled="!getReport(student._id)" :icon="!$vuetify.breakpoint.smAndUp" @click="$emit('openReport', getReport(student._id))">
+            <v-btn depressed large :icon="!$vuetify.breakpoint.smAndUp" @click="openReport">
               <v-icon>mdi-file-edit</v-icon>
             </v-btn>
           </div>
@@ -44,7 +44,8 @@ export default {
   props: {
     session: Object,
     students: Array,
-    reports: Array
+    reports: Array,
+    openReport: Function
   },
   data: () => ({
     attended: [],
@@ -56,6 +57,7 @@ export default {
       this.updateSession([this.session._id, students.map(student => student._id)])
     },
     getReport(studentId) {
+      console.log(this.$props.reports);
       return this.reports.find(report => report.student === studentId)
     },
   }
