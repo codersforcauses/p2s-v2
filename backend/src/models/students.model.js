@@ -100,12 +100,6 @@ module.exports = function(app) {
         ref: 'schools',
         required: true,
       },
-      reports: [
-        {
-          type: mongoose.ObjectId,
-          ref: 'reports',
-        },
-      ],
     },
     {
       timestamps: true,

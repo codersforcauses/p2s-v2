@@ -12,7 +12,7 @@
     <v-btn fab depressed :class="viewportWidth">
       <v-icon title="Next Session">mdi-clock-alert</v-icon>
     </v-btn>
-    <v-btn fab depressed :class="viewportWidth" to="/">
+    <v-btn fab depressed :class="viewportWidth" :to="{path: '/'}">
       <v-icon title="Home">mdi-home</v-icon>
     </v-btn>
   </v-speed-dial>

@@ -25,20 +25,20 @@
             <CoachesView :session="session" />
           </div>
           <FeathersVuexFind
-            v-slot="{ items: students }"
+            v-slot="{ items: students, isFindPending: studentsLoading }"
             service="students"
-            :params="{ query: {} }"
+            :params="{ query: { _id: { $in: session.students } } }"
             watch="params"
           >
             <FeathersVuexFind
-              v-slot="{ items: reports }"
+              v-slot="{ items: reports, isFindPending: reportsLoading }"
               service="reports"
               :params="{ query: { session: session._id } }"
               watch="params"
             >
-            <div>
+            <div v-if="!studentsLoading && !reportsLoading">
               <v-divider class="mt-8" />
-              <Attendence :students="students" :reports="reports" :openReport="setReport"/>
+              <Attendence :session="session" :students="students" :reports="reports" @openReport="setReport"/>
               <info-panel v-model="drawer">
                 <ReportInfo :report="reports" />
               </info-panel>
@@ -56,7 +56,7 @@ import DateView from '../DateView.vue'
 import TimeView from '../TimeView.vue'
 import ActivityView from '../ActivityView.vue';
 import CoachesView from '../CoachesView.vue'
-import Attendence from '../Attendence.vue'
+import Attendence from '../Attendence'
 import InfoPanel from '../../other/InfoPanel.vue';
 import ReportInfo from './ReportInfo.vue';
 
