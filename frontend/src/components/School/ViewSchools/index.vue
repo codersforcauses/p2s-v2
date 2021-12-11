@@ -7,10 +7,10 @@
       watch="params"
     >
       <div>
-        <SchoolFilter :skip="listSkip" :limit="listLimit" :queryInfo="info"></SchoolFilter>
-        <SchoolList :schools="schools" @selected="setSchool" :isPending="isPending" @open="drawer = true" />
+        <SchoolFilter :skip="listSkip" :limit="listLimit" :queryInfo="info" @setSkip="setSkip"></SchoolFilter>
+        <SchoolList v-if="!isPending" :schools="schools" @selected="setSchool" :isPending="isPending" @open="drawer = true" />
         <info-panel v-model="drawer">
-           <school-info :school="selectedSchool" />
+           <school-info v-if="selectedSchool" :school="selectedSchool" />
         </info-panel>
       </div>
     </FeathersVuexFind>
@@ -35,7 +35,7 @@ export default {
   data() {
     return {
       selectedSchool: null,
-      drawer: true,
+      drawer: false,
       listLimit: 20,
       listSkip: 0,
     };

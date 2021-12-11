@@ -1,10 +1,10 @@
 <template>
   <div class="mb-2 mr-1 ml-auto d-flex align-center justify-space-between" style="width: 10rem;">
-    <v-btn icon color="primary" :disabled="listSkip === 0" @click="listSkip -= listLimit">
+    <v-btn icon color="primary" :disabled="pageSkip === 0" @click="pageSkip -= limit">
       <v-icon>mdi-chevron-left</v-icon>
     </v-btn>
-    <span>Page {{listSkip/listLimit+1}}</span>
-    <v-btn icon color="primary" :disabled="listSkip + listLimit >= queryInfo.total" @click="listSkip += listLimit">
+    <span>Page {{pageSkip/limit+1}}</span>
+    <v-btn icon color="primary" :disabled="pageSkip + limit >= queryInfo.total" @click="pageSkip += limit">
       <v-icon>mdi-chevron-right</v-icon>
     </v-btn>
   </div>
