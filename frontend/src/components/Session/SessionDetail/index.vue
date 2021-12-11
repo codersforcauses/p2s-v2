@@ -40,7 +40,7 @@
               <v-divider class="mt-8" />
               <Attendence :session="session" :students="students" :reports="reports" @openReport="setReport"/>
               <info-panel v-model="drawer">
-                <ReportInfo :report="reports" />
+                <ReportInfo :report="selectedReport" />
               </info-panel>
             </div>
             </FeathersVuexFind>
