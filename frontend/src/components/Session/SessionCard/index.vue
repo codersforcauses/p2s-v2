@@ -41,9 +41,12 @@
 <script>
 import { mapState } from 'vuex';
 import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
 
 import NewSession from '../CreateSession.vue'
 import DateView from '../DateView.vue'
+
+dayjs.extend(utc)
 
 export default {
   components: {
@@ -60,11 +63,12 @@ export default {
   computed: {
     ...mapState('auth', { user: 'user' }),
     searchQuery() {
+      const currentDate = dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]')
       const query = this.selectedTab === 0 ?
       {
         $limit: 1,
         date: {
-          $gte: dayjs().format('YYYY-MM-DDTHH:mm:ss[Z]')
+          $gte: currentDate
         },
         $sort: {
           date: 1
@@ -73,7 +77,7 @@ export default {
        {
         $limit: 1,
         date: {
-          $lt: dayjs().format('YYYY-MM-DDTHH:mm:ss[Z]')
+          $lt: currentDate
         },
         $sort: {
           date: -1

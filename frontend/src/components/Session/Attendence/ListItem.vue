@@ -25,17 +25,11 @@ export default {
   props: {
     student: Object,
     session: Object,
-    presentList: Array,
+    isActive: Boolean,
     report: Object
-  },
-  computed: {
-    isActive() {
-      return this.presentList.some(id => id === this.student._id)
-    }
   },
   methods: {
     ...mapActions('reports', { findReports: 'find', createReport: 'create', updateReport: 'patch'}),
   }
-
 }
 </script>

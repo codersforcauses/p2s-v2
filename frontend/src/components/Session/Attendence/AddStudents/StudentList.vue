@@ -12,11 +12,8 @@
                   student.name
                 }}</v-list-item-title>
                 <v-list-item-subtitle class="text--secondary">
-                  {{ i }} {{ student._id }}
-                </v-list-item-subtitle>
-                <!-- <v-list-item-subtitle class="text--secondary">
                   Year {{ student.schoolYear }}
-                </v-list-item-subtitle> -->
+                </v-list-item-subtitle>
               </v-list-item-content>
               <FeathersVuexGet
                 v-slot="{ item: school }"

@@ -9,36 +9,22 @@
       <div>
         <div v-if="!session || isPending">Loading...</div>
         <div v-else>
-          <div class="d-flex justify-space-between align-center mx-10">
-            <DateView :date="session.date" />
-            <v-divider
-            inset vertical
-            />
-            <TimeView :date="session.date" />
-            <v-divider
-            inset vertical
-            />
-            <ActivityView :session="session" />
-            <v-divider
-            inset vertical
-            />
-            <CoachesView :session="session" />
-          </div>
+          <SessionInfoHeader :session="session"/>
           <FeathersVuexFind
-            v-slot="{ items: students, isFindPending: studentsLoading }"
+            v-slot="{ items: students }"
             service="students"
             :params="{ query: { _id: { $in: session.students } } }"
             watch="params"
           >
             <FeathersVuexFind
-              v-slot="{ items: reports, isFindPending: reportsLoading }"
+              v-slot="{ items: reports }"
               service="reports"
               :params="{ query: { session: session._id } }"
               watch="params"
             >
-            <div v-if="!studentsLoading && !reportsLoading">
+            <div>
               <v-divider class="mt-8" />
-              <Attendence :session="session" :students="students" :reports="reports" @openReport="setReport"/>
+              <Attendence :session="session" :registeredStudents="students" :reports="reports" @openReport="setReport"/>
               <info-panel v-model="drawer">
                 <ReportInfo :report="selectedReport" />
               </info-panel>
@@ -52,25 +38,20 @@
 </template>
 
 <script>
-import DateView from '../DateView.vue'
-import TimeView from '../TimeView.vue'
-import ActivityView from '../ActivityView.vue';
-import CoachesView from '../CoachesView.vue'
+
 import Attendence from '../Attendence'
 import InfoPanel from '../../other/InfoPanel.vue';
 import ReportInfo from './ReportInfo.vue';
+import SessionInfoHeader from './SessionInfoHeader.vue';
 
 export default {
   name: 'session-detail',
   title: 'Session Detail',
   components: {
-    DateView,
-    TimeView,
-    ActivityView,
-    CoachesView,
     Attendence,
     InfoPanel,
     ReportInfo,
+    SessionInfoHeader,
   },
   data: () => ({
     selectedReport: null,
