@@ -10,26 +10,24 @@
   >
     <v-card flat rounded="xl">
       <v-toolbar flat>
-        <v-toolbar-title class="text-h6">Edit Students</v-toolbar-title>
+        <v-toolbar-title class="text-h6">Edit Coaches</v-toolbar-title>
         <v-spacer />
         <v-btn icon @click="$emit('input')">
           <v-icon>mdi-close</v-icon>
         </v-btn>
       </v-toolbar>
-      <StudentFilter
-        :filterSchool="selectedSchool"
-        :filterYear="selectedYear"
-        @updateYear="selectedYear = $event"
-        @updateSchool="selectedSchool = $event"
+      <CoachFilter
+        :filterName="searchName"
+        @updateName="searchName = $event"
       />
       <v-card-text>
         <FeathersVuexFind
-          v-slot="{ items: students }"
-          service="students"
+          v-slot="{ items: coaches }"
+          service="users"
           :params="{ query }"
           watch="params"
         >
-          <StudentList :session="session" :students="students" @update="$emit('update', $event)" />
+          <CoachList :session="session" :coaches="coaches" @update="$emit('update', $event)" />
         </FeathersVuexFind>
       </v-card-text>
 
@@ -43,32 +41,22 @@
 </template>
 
 <script>
-import StudentFilter from './StudentFilter.vue';
-import StudentList from './StudentList.vue';
+import CoachFilter from './CoachFilter.vue';
+import CoachList from './CoachList.vue';
 
 export default {
   components: { 
-    StudentList,
-    StudentFilter
+    CoachList,
+    CoachFilter
    },
   props: {
     value: Boolean,
     session: Object
   },
   data: () => ({
-    selectedSchool: '',
-    selectedYear: null,
-    
+    searchName: '',    
   }),
-  methods: {
-    addStudents() {
-      this.$emit('update', this.selectedStudents)
-    },
-  },
   computed: {
-    selectedStudents() {
-      return this.selected.map(index => this.allStudents[index])
-    },
     showDialog: {
       get() {
         return this.value;
@@ -82,8 +70,7 @@ export default {
         $sort: {
           name: 1,
         },
-        ...(this.selectedYear && { schoolYear: this.selectedYear }),
-        ...(this.selectedSchool && { school: this.selectedSchool }),
+        "coach.is": true,
         $limit: 1000,
       };
     },

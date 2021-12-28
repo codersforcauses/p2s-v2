@@ -5,7 +5,7 @@
     <v-skeleton-loader type="list-item-two-line@10" :loading="!registeredStudents">
       <v-list two-line subheader flat>
         <v-card-subtitle v-show="registeredStudents.length" class="py-0">
-          Tap student to mark attendence
+          Select student to mark attendence
         </v-card-subtitle>
         <v-list-item-group multiple color="primary">
           <template v-for="student in registeredStudents">
@@ -16,13 +16,14 @@
               :report="getReport(student._id)"
               @toggleStudentPresent="togglePresent($event)"
               @openReport="$emit('openReport', getReport($event))"
+              @openInfo="$emit('openInfo', $event)"
             />
           </template>
         </v-list-item-group>
         <v-btn text color="primary" @click="studentAddDialog = true"
           ><v-icon>mdi-plus</v-icon>Edit Students</v-btn
         >
-        <AddStudents
+        <AssignStudents
           v-model="studentAddDialog"
           :session="session"
           @update="updateAttending($event)"
@@ -34,12 +35,12 @@
 
 <script>
 import { mapActions } from 'vuex';
-import AddStudents from './AddStudents';
+import AssignStudents from './AssignStudents';
 import ListItem from './ListItem.vue';
 
 export default {
   components: {
-    AddStudents,
+    AssignStudents,
     ListItem,
   },
   props: {
@@ -52,7 +53,6 @@ export default {
     studentAddDialog: false,
   }),
   mounted() {
-    console.log('woot');
     this.studentsAttending = this.registeredStudents
       .map(student => student._id)
       .filter(studentId => {

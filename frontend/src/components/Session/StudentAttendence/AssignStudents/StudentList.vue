@@ -2,7 +2,7 @@
   <v-skeleton-loader type="list-item-two-line@10" :loading="!students || students.length === 0">
     <v-list two-line subheader flat>
       <v-list-item-group multiple color="primary">
-        <template v-for="(student, i) in students">
+        <template v-for="student in students">
           <v-list-item :key="student._id" @click="updateList(student._id)" class="px-0 px-sm-3">
               <v-list-item-action>
                 <v-checkbox :input-value="isActive(student._id)" color="primary"></v-checkbox>

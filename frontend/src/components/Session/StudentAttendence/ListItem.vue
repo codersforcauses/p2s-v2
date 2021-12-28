@@ -1,9 +1,10 @@
 <template>
   <div class="d-flex align-center">
-    <v-list-item class="px-0 px-sm-3" @click="$emit('toggleStudentPresent', student._id)" >
+    <v-btn icon outlined :color="isActive ? 'primary' :  'white'" @click="$emit('toggleStudentPresent', student._id)" class="mx-3">
+      <v-icon>{{ isActive ? 'mdi-account-check' :  'mdi-account' }}</v-icon>
+    </v-btn>
+    <v-list-item class="px-0 px-sm-3" @click="$emit('openInfo', student)" >
       <template>
-        <v-list-item-action>
-          <v-icon>{{ isActive ? 'mdi-account-check' :  'mdi-account' }}</v-icon></v-list-item-action>
         <v-list-item-content>
           <v-list-item-title class="text--primary">{{ student.name }}</v-list-item-title>
           <v-list-item-subtitle class="text--secondary">
