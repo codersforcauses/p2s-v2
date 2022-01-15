@@ -99,7 +99,7 @@ function createStudentObject(schoolId) {
     culture: 'Other',
     birthCountry: faker.address.country(),
     DOA: faker.date.past(),
-    schoolYear: faker.random.number({ min: 7, max: 12 }),
+    schoolYear: faker.datatype.number({ min: 7, max: 12 }),
     consent: true,
     language: {
       englishCompetent: true,

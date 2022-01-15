@@ -3,9 +3,9 @@ module.exports = {
   env: {
     node: true,
   },
-  extends: ['plugin:vue/essential', '@vue/airbnb', 'prettier'],
+  extends: ['plugin:vue/essential', 'airbnb-base', 'prettier'],
   parserOptions: {
-    parser: 'babel-eslint',
+    parser: '@babel/eslint-parser',
   },
   rules: {
     'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
