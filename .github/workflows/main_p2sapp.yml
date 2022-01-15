@@ -1,7 +1,4 @@
-# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
-# More GitHub Actions for Azure: https://github.com/Azure/actions
-
-name: Build and deploy Node.js app to Azure Web App - p2sapp
+name: Build and deploy
 
 on:
   push:
@@ -21,11 +18,10 @@ jobs:
         with:
           node-version: '14.x'
 
-      - name: npm install, build, and test
+      - name: yarn stuff
         run: |
-          npm install
-          npm run build --if-present
-          npm run test --if-present
+          yarn
+          yarn workspace frontend build
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
