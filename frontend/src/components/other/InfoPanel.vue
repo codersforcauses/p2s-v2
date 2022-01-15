@@ -15,12 +15,10 @@
           <slot />
       </template>
     </v-navigation-drawer>
-    <v-bottom-sheet v-else v-model="open" scrollable>
-      <v-sheet class="rounded-t-xl pt-6">
-        <template #default>
-          <slot />
-        </template>
-      </v-sheet>
+    <v-bottom-sheet class="rounded-t-xl pt-6" v-else v-model="open" scrollable>
+      <template #default>
+        <slot />
+      </template>
     </v-bottom-sheet>
 </template>
 

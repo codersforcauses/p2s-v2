@@ -6,20 +6,20 @@
         <router-view />
       </v-sheet>
     </v-main>
-    <fab />
+    <!-- <fab /> -->
     <bottomnav />
   </div>
 </template>
 
 <script>
 import toolbar from '../components/layout/Toolbar.vue';
-import fab from '../components/layout/FAB';
+// import fab from '../components/layout/FAB';
 import bottomnav from '../components/layout/BottomNav';
 
 export default {
   name: 'dashboard',
   components: {
-    fab,
+    // fab,
     toolbar,
     bottomnav,
   },

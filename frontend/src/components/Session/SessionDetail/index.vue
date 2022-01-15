@@ -23,7 +23,7 @@
           >
           <div>
             <v-divider class="mt-8" />
-            <StudentAttendence :session="session" :registeredStudents="students" :reports="reports" @openReport="setReport" @openInfo="setStudentInfo"/>
+            <StudentAttendence :session="session" :registeredStudents="students" :reports="reports" @openReport="setReport" @openInfo="setStudentInfo" class="pr-3" :style="drawer && !$vuetify.breakpoint.xs ? 'width: 48%;' : ''"/>
             
             <info-panel v-model="drawer">
               <ReportInfo v-if="selectedReport" :report="selectedReport" @close="closeDrawer" />

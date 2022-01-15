@@ -33,9 +33,7 @@ module.exports = function (app) {
       },
       matrixResults: [
         {
-          type: Number,
-          default: 1,
-          required: true,
+          type: Object,
         },
       ],
       notes: {
