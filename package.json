@@ -6,12 +6,13 @@
     "backend"
   ],
   "scripts": {
-    "client-dev": "yarn workspace frontend serve",
-    "client": "yarn workspace frontend build && yarn workspace frontend start",
-    "server-dev": "yarn workspace backend dev",
-    "server": "yarn workspace backend start",
     "dev": "concurrently --kill-others-on-fail 'yarn client-dev' 'yarn server-dev'",
-    "start": "concurrently --kill-others-on-fail 'yarn client' 'yarn server'"
+    "client-dev": "yarn workspace frontend serve",
+    "server-dev": "yarn workspace backend dev",
+    "start": "concurrently --kill-others-on-fail 'yarn client' 'yarn server'",
+    "build": "yarn workspace frontend build",
+    "client": "yarn workspace frontend start",
+    "server": "yarn workspace backend start"
   },
   "dependencies": {
     "concurrently": "7.0.0"
