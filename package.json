@@ -9,7 +9,7 @@
     "dev": "concurrently --kill-others-on-fail 'yarn client-dev' 'yarn server-dev'",
     "client-dev": "yarn workspace frontend serve",
     "server-dev": "yarn workspace backend dev",
-    "start": "concurrently --kill-others-on-fail 'yarn client' 'yarn server'",
+    "start": "yarn client",
     "build": "yarn workspace frontend build",
     "client": "yarn workspace frontend start",
     "server": "yarn workspace backend start"
