@@ -5,14 +5,17 @@
     "frontend",
     "backend"
   ],
+  "engines": {
+    "npm": "^8"
+  },
   "scripts": {
-    "dev": "concurrently --kill-others-on-fail 'yarn client-dev' 'yarn server-dev'",
-    "client-dev": "yarn workspace frontend serve",
-    "server-dev": "yarn workspace backend dev",
-    "start": "concurrently --kill-others-on-fail 'yarn client' 'yarn server'",
-    "build": "yarn workspace frontend build",
-    "client": "yarn workspace frontend start",
-    "server": "yarn workspace backend start"
+    "dev": "concurrently --kill-others-on-fail 'npm run client-dev' 'npm run server-dev'",
+    "client-dev": "npm run serve --workspace=frontend",
+    "server-dev": "npm run dev --workspace=backend",
+    "start": "concurrently --kill-others-on-fail 'npm run client' 'npm run server'",
+    "build": "npm run build --workspace=frontend",
+    "client": "npm run start --workspace=frontend",
+    "server": "npm run start -workspace=backend"
   },
   "dependencies": {
     "concurrently": "7.0.0"

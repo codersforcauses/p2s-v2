@@ -24,6 +24,7 @@
     "vue": "2.6.14",
     "vue-router": "3.5.3",
     "vuetify": "2.6.2",
+    "@vue/cli-service": "4.5.15",
     "vuex": "3.6.2"
   },
   "devDependencies": {
@@ -33,7 +34,6 @@
     "@vue/cli-plugin-pwa": "4.5.15",
     "@vue/cli-plugin-router": "4.5.15",
     "@vue/cli-plugin-vuex": "4.5.15",
-    "@vue/cli-service": "4.5.15",
     "eslint": "^7.0.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-prettier": "8.3.0",

@@ -20,11 +20,10 @@
     "config": "config/"
   },
   "engines": {
-    "node": ">= 14.0.0",
-    "yarn": ">= 0.18.0"
+    "node": ">= 14.0.0"
   },
   "scripts": {
-    "test": "yarn run lint && yarn run jest",
+    "test": "npm run lint && npm run jest",
     "lint": "eslint src/. test/. --config .eslintrc.json --fix",
     "dev": "nodemon src/",
     "start": "node src/",
