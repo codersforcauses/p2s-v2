@@ -1,0 +1,12 @@
+{
+  "host": "localhost",
+  "port": 3030,
+  "api": "http://localhost:3030",
+  "mongodb": "mongodb://localhost:27017/p2s-dev",
+  "authentication": {
+    "secret": "+5AGhDjighjH5r/nmaFjh6gAlJ4=",
+    "jwtOptions": {
+      "audience": "http://localhost"
+    }
+  }
+}

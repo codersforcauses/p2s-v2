@@ -1,6 +1,4 @@
 {
-  "host": "localhost",
-  "port": 3030,
   "public": "../public/",
   "paginate": {
     "default": 10,
@@ -9,13 +7,11 @@
   "authentication": {
     "entity": "user",
     "service": "users",
-    "secret": "+5AGhDjighjH5r/nmaFjh6gAlJ4=",
     "authStrategies": ["jwt", "local"],
     "jwtOptions": {
       "header": {
         "typ": "access"
       },
-      "audience": "https://yourdomain.com",
       "issuer": "p2s-rugbyworks",
       "algorithm": "HS256",
       "expiresIn": "1d"
@@ -24,6 +20,5 @@
       "usernameField": "email",
       "passwordField": "password"
     }
-  },
-  "mongodb": "mongodb://localhost:27017/p2s-dev"
+  }
 }

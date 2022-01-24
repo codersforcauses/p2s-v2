@@ -4,7 +4,7 @@ import auth from '@feathersjs/authentication-client';
 import { iff, discard } from 'feathers-hooks-common';
 import feathersVuex from 'feathers-vuex';
 
-const restClient = rest(process.env.HOST || 'http://localhost:3030');
+const restClient = rest(process.env.API_URL);
 
 const feathersClient = feathers()
   .configure(restClient.fetch(window.fetch))

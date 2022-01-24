@@ -1,0 +1,12 @@
+{
+  "mongodb": "MONGO_CONNECTION",
+  "host": "WEBSITE_HOSTNAME",
+  "port": "PORT",
+  "api": "API_URL",
+  "authentication": {
+    "secret": "ENCRYPTION_KEY",
+    "jwtOptions": {
+      "audience": "WEBSITE_HOSTNAME"
+    }
+  }
+}
