@@ -3,6 +3,7 @@ const logger = require('./logger');
 const app = require('./app');
 const seeder = require('./seeder');
 const port = app.get('port');
+const host = app.get('host');
 const server = app.listen(port);
 
 process.on('unhandledRejection', (reason, p) =>
@@ -13,10 +14,11 @@ if (process.env.NODE_ENV !== 'production') {
   app.configure(seeder);
 }
 
-server.on('listening', () =>
+server.on('listening', () => {
+  logger.info('Starting in ' + process.env.NODE_ENV + ' mode.');
   logger.info(
-    'Feathers application started on http://%s:%d',
-    app.get('host'),
+    'Application started on http://%s:%d',
+    host,
     port
-  )
-);
+  );
+});
