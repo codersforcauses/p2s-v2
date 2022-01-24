@@ -6,6 +6,7 @@ module.exports = {
   extends: ['plugin:vue/essential', 'airbnb-base', 'prettier'],
   parserOptions: {
     parser: '@babel/eslint-parser',
+    "requireConfigFile": false
   },
   rules: {
     'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
