@@ -32,13 +32,14 @@ jobs:
           npm run build
       
       - name: zip files
-        run: zip -r frontend.zip .
+        run: zip release.zip ./* -r
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
         with:
           name: app-artifact
-          path: ./frontend.zip
+          path: ./frontend/release.zip
+          if-no-files-found: error
 
   deploy:
     runs-on: ubuntu-latest
@@ -60,4 +61,4 @@ jobs:
           app-name: 'p2sapp'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_60BBA6DFD22D48DF960A96F9667599ED }}
-          package: ./frontend.zip
+          package: release.zip
