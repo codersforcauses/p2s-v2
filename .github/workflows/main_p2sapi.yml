@@ -31,13 +31,13 @@ jobs:
           npm install --force
 
       - name: zip files
-        run: zip -r backend.zip .
+        run: zip backend.zip ./* -r
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
         with:
           name: api-artifact
-          path: ./backend.zip
+          path: backend.zip
 
   deploy:
     runs-on: ubuntu-latest
@@ -59,4 +59,4 @@ jobs:
           app-name: 'p2sapi'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_98EF0661B9304642AF71DD2EB9C76D8D }}
-          package: ./backend.zip
+          package: backend.zip
