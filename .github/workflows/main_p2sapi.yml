@@ -31,7 +31,7 @@ jobs:
           npm install --force
 
       - name: zip files
-        run: zip backend.zip ./* -r
+        run: zip release.zip ./* -r
         
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
