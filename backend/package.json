@@ -27,7 +27,7 @@
     "test": "npm run lint && npm run jest",
     "lint": "eslint src/. test/. --config .eslintrc.json --fix",
     "dev": "NODE_ENV=development nodemon src/",
-    "start": "NODE_ENV=production node src/",
+    "start": "node src/",
     "jest": "jest --maxWorkers=4 --detectOpenHandles --forceExit"
   },
   "standard": {
