@@ -32,15 +32,12 @@ jobs:
 
       - name: zip files
         run: zip backend.zip ./* -r
-
-      - name: check
-        run: ls -la
         
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
         with:
-          name: node-app
-          path: backend.zip
+          name: api-artifact
+          path: ./backend/release.zip
           if-no-files-found: error
 
   deploy:
@@ -54,7 +51,7 @@ jobs:
       - name: Download artifact from build job
         uses: actions/download-artifact@v2
         with:
-          name: node-app 
+          name: api-artifact 
 
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
@@ -63,4 +60,4 @@ jobs:
           app-name: 'p2sapi'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_98EF0661B9304642AF71DD2EB9C76D8D }}
-          package: backend.zip
+          package: release.zip
