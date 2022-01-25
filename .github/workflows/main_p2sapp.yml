@@ -26,7 +26,7 @@ jobs:
         with:
           node-version: '16.x'
 
-      - name: npm install, build, and test
+      - name: npm install and build
         run: |
           npm install --force
           npm run build
@@ -38,7 +38,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: app-artifact
-          path: frontend.zip
+          path: ./frontend.zip
 
   deploy:
     runs-on: ubuntu-latest
@@ -60,4 +60,4 @@ jobs:
           app-name: 'p2sapp'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_60BBA6DFD22D48DF960A96F9667599ED }}
-          package: frontend.zip
+          package: ./frontend.zip
