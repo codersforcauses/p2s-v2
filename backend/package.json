@@ -20,13 +20,14 @@
     "config": "config/"
   },
   "engines": {
-    "node": ">= 14.0.0"
+    "node": ">= 14.0.0",
+    "npm": "^8"
   },
   "scripts": {
     "test": "npm run lint && npm run jest",
     "lint": "eslint src/. test/. --config .eslintrc.json --fix",
     "dev": "NODE_ENV=development nodemon src/",
-    "start": "node src/",
+    "start": "NODE_ENV=production node src/",
     "jest": "jest --maxWorkers=4 --detectOpenHandles --forceExit"
   },
   "standard": {
@@ -57,15 +58,15 @@
     "mongoose": "6.1.6",
     "nodemailer-smtp-transport": "2.7.4",
     "serve-favicon": "2.5.0",
-    "winston": "3.4.0"
+    "winston": "3.4.0",
+    "faker": "^5"
   },
   "devDependencies": {
     "@babel/eslint-parser": "7.16.5",
     "@babel/plugin-proposal-nullish-coalescing-operator": "^7.12.1",
     "@babel/plugin-proposal-optional-chaining": "^7.12.1",
     "axios": "0.24.0",
-    "eslint": "^7.0.0",
-    "faker": "^5",
+    "eslint": "^7",
     "jest": "27.4.7",
     "nodemon": "2.0.15"
   },
