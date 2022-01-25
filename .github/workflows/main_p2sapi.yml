@@ -33,6 +33,9 @@ jobs:
       - name: zip files
         run: zip backend.zip ./* -r
 
+      - name: check
+        run: ls -la
+        
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
         with:
