@@ -39,8 +39,9 @@ jobs:
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
         with:
-          name: api-artifact
+          name: node-app
           path: backend.zip
+          if-no-files-found: error
 
   deploy:
     runs-on: ubuntu-latest
@@ -53,7 +54,7 @@ jobs:
       - name: Download artifact from build job
         uses: actions/download-artifact@v2
         with:
-          name: api-artifact
+          name: node-app 
 
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
