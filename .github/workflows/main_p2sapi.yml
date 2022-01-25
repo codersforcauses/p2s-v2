@@ -29,13 +29,15 @@ jobs:
       - name: npm install, build, and test
         run: |
           npm install --force
-          npm run build --if-present
+
+      - name: zip files
+        run: zip -r backend.zip .
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
         with:
-          name: node-app
-          path: .
+          name: api-artifact
+          path: backend.zip
 
   deploy:
     runs-on: ubuntu-latest
@@ -48,7 +50,7 @@ jobs:
       - name: Download artifact from build job
         uses: actions/download-artifact@v2
         with:
-          name: node-app
+          name: api-artifact
 
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
@@ -57,4 +59,4 @@ jobs:
           app-name: 'p2sapi'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_98EF0661B9304642AF71DD2EB9C76D8D }}
-          package: .
+          package: backend.zip
