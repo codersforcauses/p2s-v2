@@ -1,8 +1,6 @@
 import dayjs from 'dayjs';
 
-const dayjsDate = (date) => {
-    return dayjs(date);
-}; 
+const dayjsDate = (date) => dayjs(date); 
 
 export default {
     dayjsDate
