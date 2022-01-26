@@ -1,27 +1,15 @@
 {
-  "name": "backend",
-  "description": "",
-  "version": "0.0.0",
-  "homepage": "",
+  "name": "api",
+  "version": "1.0.0",
   "private": true,
   "main": "src",
-  "keywords": [
-    "feathers"
-  ],
-  "author": {
-    "name": "CFC",
-    "email": "hello@codersforcauses.org"
-  },
-  "contributors": [],
-  "bugs": {},
   "directories": {
     "lib": "src",
     "test": "test/",
     "config": "config/"
   },
   "engines": {
-    "node": ">= 14.0.0",
-    "npm": "^8"
+    "node": ">= 14.0.0"
   },
   "scripts": {
     "test": "npm run lint && npm run jest",

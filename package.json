@@ -2,20 +2,17 @@
   "private": true,
   "name": "p2s",
   "workspaces": [
-    "frontend",
-    "backend"
+    "app",
+    "api"
   ],
-  "engines": {
-    "npm": "^8"
-  },
   "scripts": {
-    "dev": "concurrently --kill-others-on-fail 'npm run client-dev' 'npm run server-dev'",
-    "client-dev": "npm run serve --workspace=frontend",
-    "server-dev": "npm run dev --workspace=backend",
-    "start": "concurrently --kill-others-on-fail 'npm run client' 'npm run server'",
-    "build": "npm run build --workspace=frontend",
-    "client": "npm run start --workspace=frontend",
-    "server": "npm run start -workspace=backend"
+    "dev": "concurrently --kill-others-on-fail 'yarn client-dev' 'yarn server-dev'",
+    "client-dev": "yarn workspace app serve",
+    "server-dev": "yarn workspace api dev",
+    "start": "concurrently --kill-others-on-fail 'yarn client' 'yarn server'",
+    "build": "yarn workspace app build",
+    "client": "yarn workspace app start",
+    "server": "yarn workspace api start"
   },
   "dependencies": {
     "concurrently": "7.0.0"

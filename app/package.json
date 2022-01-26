@@ -1,10 +1,7 @@
 {
-  "name": "frontend",
-  "version": "0.1.0",
+  "name": "app",
+  "version": "1.0.0",
   "private": true,
-  "engines": {
-    "npm": "^8"
-  },
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build --modern --silent",
