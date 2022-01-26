@@ -12,6 +12,7 @@ module.exports = function (app) {
     {
       date: {
         type: Date,
+        index: true,
         required: true,
       },
       students: [

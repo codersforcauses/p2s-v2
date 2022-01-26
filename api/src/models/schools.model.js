@@ -10,8 +10,8 @@ module.exports = function (app) {
     {
       name: {
         type: String,
+        index: true,
         required: true,
-        unique: true,
       },
       contact: {
         name: {
