@@ -24,8 +24,7 @@ jobs:
           node-version: '16.x'
 
       - name: Install packages
-        run: |
-          npm install --force
+        run: yarn
 
       - name: Zip files
         run: zip release.zip ./* -r
