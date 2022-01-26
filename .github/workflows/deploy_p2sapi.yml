@@ -23,11 +23,11 @@ jobs:
         with:
           node-version: '16.x'
 
-      - name: npm install
+      - name: Install packages
         run: |
           npm install --force
 
-      - name: zip files
+      - name: Zip files
         run: zip release.zip ./* -r
         
       - name: Upload artifact for deployment job
