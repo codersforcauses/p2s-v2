@@ -5,7 +5,8 @@ on:
     branches:
       - main
     paths:
-      - backend/**
+      - app/**
+  workflow_dispatch:
   pull_request:
     types: [opened, synchronize, reopened, closed]
     branches:
