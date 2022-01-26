@@ -1,4 +1,4 @@
-name: P2S API - Build and Deploy
+name: Backend - Build and Deploy
 
 on:
   push:
