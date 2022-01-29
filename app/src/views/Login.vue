@@ -25,7 +25,7 @@
             rounded
             solo-inverted
             color="#c22032"
-            suffix="@p2srugbyworks.com"
+            :suffix="getEmailSuffix"
             autocapitalize="off"
             name="email"
             type="text"
@@ -112,6 +112,9 @@ export default {
         ? 'slide-y-reverse-transition'
         : 'slide-y-transition';
     },
+    getEmailSuffix() {
+      return this.user.email.includes('@') ? '' : '@p2srugbyworks.com'
+    }
   },
   methods: {
     async login() {
@@ -120,7 +123,7 @@ export default {
           await this.$store.dispatch('auth/authenticate', {
             strategy: 'local',
             ...this.user,
-            email: `${this.user.email}@p2srugbyworks.com`,
+            email: `${this.user.email}${this.getEmailSuffix}`,
           });
           await this.$router.push({ name: 'dashboard' });
         } catch (error) {
