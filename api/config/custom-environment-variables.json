@@ -2,6 +2,11 @@
   "host": "WEBSITE_HOSTNAME",
   "port": "PORT",
   "mongodb": "MONGO_CONNECTION",
+  "smtp": {
+    "host": "SMTP_HOST",
+    "user": "SMTP_USER",
+    "pass": "SMTP_PASS"
+  },
   "authentication": {
     "secret": "ENCRYPTION_KEY",
     "jwtOptions": {

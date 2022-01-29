@@ -1,22 +1,26 @@
-const hooks = require('./mailer.hooks');
 const Mailer = require('feathers-mailer');
 const smtpTransport = require('nodemailer-smtp-transport');
+const config = require('config');
+const hooks = require('./mailer.hooks');
 
 module.exports = function (app) {
-  app.use(
-    '/mailer',
-    Mailer(
-      smtpTransport({
-        host: 'email-smtp.us-east-1.amazonaws.com',
-        secure: true,
-        auth: {
-          user: process.env.SMTP_USER,
-          pass: process.env.SMTP_PASS,
+  if(config.has('smtp')) {
+    app.use(
+      '/mailer',
+      Mailer(
+        smtpTransport({
+          host: config.get('smtp.host'),
+          secure: false,
+          auth: {
+            user: config.get('smtp.user'),
+            pass: config.get('smtp.pass'),
+          },
         },
-      })
-    )
-  );
-
-  const service = app.service('mailer');
-  service.hooks(hooks);
+        { from: config.get('smtp.user') })
+      )
+    );
+        
+    const service = app.service('mailer');
+    service.hooks(hooks);
+  }
 };
