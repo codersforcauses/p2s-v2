@@ -16,12 +16,12 @@ module.exports = function(app) {
         console.log('Sent email', result);
       })
       .catch(err => {
-        console.err('Error sending email', err);
+        console.log('Error sending email', err);
       });
   }
 
   const getEmail = (user, subjectData, htmlData) => ({
-    from: 'mailer@p2srugbyworks.com',
+    from: 'webapp@p2srugbyworks.com',
     to: user.email,
     subject: subjectData,
     html: htmlData,
