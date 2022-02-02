@@ -1,24 +1,21 @@
 /* eslint-disable indent */
 const errors = require('@feathersjs/errors');
+const config = require('config');
 
-module.exports = function(app) {
-  function getLink(type, hash) {
-    // TODO: fix url
-    const url = 'http://localhost:3030/' + type + '?token=' + hash;
-    return url;
-  }
+module.exports = (app) => {
+  const getLink = (type, hash) => `${config.get('api')}/${type}?token=${hash}`;
 
-  function sendEmail(email) {
+  const sendEmail = (email) => {
     return app
       .service('mailer')
       .create(email)
-      .then(function(result) {
+      .then((result) => {
         console.log('Sent email', result);
       })
       .catch(err => {
         console.log('Error sending email', err);
       });
-  }
+  };
 
   const getEmail = (user, subjectData, htmlData) => ({
     from: 'webapp@p2srugbyworks.com',
@@ -28,7 +25,7 @@ module.exports = function(app) {
   });
 
   return {
-    notifier: function(type, user) {
+    notifier: (type, user) => {
       let tokenLink;
       let email;
       switch (type) {
