@@ -24,6 +24,16 @@ const routes = [
     },
   },
   {
+    path: '/register',
+    name: 'register',
+    component: () => import(/* webpackChunkName: "login" */ '../views/Register.vue'),
+    beforeEnter(to, from, next) {
+      Store.dispatch('auth/authenticate')
+        .then(() => next({ name: 'dashboard' }))
+        .catch(() => next());
+    },
+  },
+  {
     path: '/',
     name: 'dashboard',
     component: () => import(/* webpackChunkName: "dashboard" */ '../views/Dashboard.vue'),
