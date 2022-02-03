@@ -6,17 +6,19 @@ const {
 const {
   disallow,
   iff,
+  iffElse,
   isProvider,
   preventChanges,
   some,
 } = require('feathers-hooks-common');
 const verifyHooks = require('feathers-authentication-management').hooks;
 const accountService = require('../authmanagement/notifier');
+const {hasVerifyToken, restrictVerifyQuery, restrictVerifyData } = require('./hooks/verifyToken');
 
 module.exports = {
   before: {
     all: [],
-    find: [authenticate('jwt')],
+    find: [iffElse(hasVerifyToken(), restrictVerifyQuery(), authenticate('jwt'))],
     get: [authenticate('jwt')],
     create: [
       hashPassword('password'),
@@ -50,7 +52,7 @@ module.exports = {
       // Always must be the last hook
       protect('password'),
     ],
-    find: [],
+    find: [iff(hasVerifyToken(), restrictVerifyData())],
     get: [],
     create: [
       iff(
