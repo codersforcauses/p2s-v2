@@ -3,7 +3,7 @@ const errors = require('@feathersjs/errors');
 const config = require('config');
 
 module.exports = (app) => {
-  const getLink = (type, hash) => `${config.get('api')}/${type}?token=${hash}`;
+  const getLink = (type, hash) => `${config.get('client')}/${type}?token=${hash}`;
 
   const sendEmail = (email) => {
     return app

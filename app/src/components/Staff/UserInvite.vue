@@ -99,7 +99,7 @@
                 class="black--text ma-0"
                 style="float: right"
                 color="primary"
-                :disabled="!valid || loading || permError"
+                :disabled="!valid || loading || !!permError"
                 :loading="loading"
                 @click.stop.prevent="createUser"
               >Send Invite</v-btn>
@@ -125,6 +125,7 @@ export default {
       alert: false,
       error: '',
       valid: false,
+      loading: false,
       validation: {
         required: value => !!value || 'This field is required',
         email: value => {
@@ -151,9 +152,6 @@ export default {
       set(value) {
         this.$emit('input', value);
       },
-    },
-    loading() {
-      return this.createAdmin || this.createCoach;
     },
   },
   methods: {

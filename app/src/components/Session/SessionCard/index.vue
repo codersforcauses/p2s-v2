@@ -10,7 +10,7 @@
           <DateView :date="session.date" />
           <v-divider
           inset vertical
-          class="mx-7"
+          class="mx-3"
           />
           <FeathersVuexGet 
             v-slot="{ item: school }"
