@@ -31,6 +31,7 @@ const routes = [
       Store.dispatch('auth/authenticate')
         .then(() => next({ name: 'dashboard' }))
         .catch(() => next());
+      if(!to.query.verifyToken) next({ name: 'login' });
     },
   },
   {

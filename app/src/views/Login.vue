@@ -12,7 +12,7 @@
           :transition="transitionClass"
           >{{ error }}</v-alert
         >
-
+        <h1 class="mb-10 text-h4">Login</h1>
         <v-form
           v-model="valid"
           @keyup.native.enter="valid && login($event)"
@@ -77,11 +77,11 @@
 
 <script>
 import { mapState } from 'vuex';
-import mobile from '../components/other/login/Mobile.vue';
-import desktop from '../components/other/login/Desktop.vue';
+import mobile from '../components/other/auth/Mobile.vue';
+import desktop from '../components/other/auth/Desktop.vue';
 
 export default {
-  name: 'login',
+  name: 'login-form',
   title: 'Login',
   data() {
     return {

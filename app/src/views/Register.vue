@@ -12,64 +12,86 @@
           :transition="transitionClass"
           >{{ error }}</v-alert
         >
-
-        <v-form
-          v-model="valid"
-          @keyup.native.enter="valid && login($event)"
-          style="min-width: 55%;"
-        >
-          <label class="v-label ml-6 theme--dark">EMAIL</label>
-          <v-text-field
-            flat
-            single-line
-            rounded
-            solo-inverted
-            color="#c22032"
-            :suffix="getEmailSuffix"
-            autocapitalize="off"
-            name="email"
-            type="text"
-            class="mb-2 mt-1"
-            v-model="user.email"
-            :disabled="loading"
-            :rules="[rules.required]"
-          />
-
-          <label class="v-label ml-6 theme--dark">PASSWORD</label>
-          <v-text-field
-            flat
-            single-line
-            rounded
-            solo-inverted
-            name="password"
-            class="mb-2 mt-1"
-            color="#c22032"
-            v-model="user.password"
-            :rules="[rules.required]"
-            :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
-            :type="show ? 'text' : 'password'"
-            :disabled="loading"
-            @click:append="show = !show"
-          />
-
-          <v-col class="text-center py-0">
-            <v-btn
-              large
+        <h1 class="mb-10 text-h4">Register</h1>
+        <!-- <FeathersVuexFind
+          v-slot="{ item: user }"
+          service="schools"
+          :params="{ query: { verifyToken: this.$route.query.verifyToken } }"
+          watch="params"
+        > -->
+          <v-form
+            v-model="valid"
+            @keyup.native.enter="valid && login($event)"
+            style="min-width: 55%;"
+          >
+            <label class="v-label ml-6 theme--dark">EMAIL</label>
+            <v-text-field
+              flat
+              single-line
               rounded
-              depressed
-              name="login"
-              class="my-3 px-12 white--text"
+              solo-inverted
               color="#c22032"
-              :disabled="!valid || loading"
-              :loading="loading"
-              @click.stop.prevent="login"
-              >
-                Login
-              </v-btn>
-            <v-spacer />
-            <v-btn text small rounded name="forgotPass" color="#888">Forgot Password?</v-btn>
-          </v-col>
-        </v-form>
+              autocapitalize="off"
+              name="email"
+              type="text"
+              class="mb-2 mt-1"
+              value="useremail@email.com"
+              :disabled="true"
+              :rules="[rules.required]"
+            />
+
+            <label class="v-label ml-6 theme--dark">PASSWORD</label>
+            <v-text-field
+              flat
+              single-line
+              rounded
+              solo-inverted
+              name="password"
+              class="mb-2 mt-1"
+              color="#c22032"
+              v-model="user.password"
+              :rules="[rules.required]"
+              :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
+              :type="show ? 'text' : 'password'"
+              :disabled="loading"
+              @click:append="show = !show"
+            />
+
+            <label class="v-label ml-6 theme--dark">CONFIRM PASSWORD</label>
+            <v-text-field
+              flat
+              single-line
+              rounded
+              solo-inverted
+              name="password"
+              class="mb-2 mt-1"
+              color="#c22032"
+              v-model="user.passwordMatch"
+              :rules="[rules.required, comparePasswords]"
+              :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
+              :type="show ? 'text' : 'password'"
+              :disabled="loading"
+              @click:append="show = !show"
+            />
+
+            <v-col class="text-center py-0">
+              <v-btn
+                large
+                rounded
+                depressed
+                name="register"
+                class="my-3 px-12 white--text"
+                color="#c22032"
+                :disabled="!valid || loading"
+                :loading="loading"
+                @click.stop.prevent="login"
+                >
+                  register
+                </v-btn>
+              <v-spacer />
+            </v-col>
+          </v-form>
+        <!-- </FeathersVuexFind> -->
       </template>
     </component>
   </v-main>
@@ -77,25 +99,22 @@
 
 <script>
 import { mapState } from 'vuex';
-import mobile from '../components/other/register/Mobile.vue';
-import desktop from '../components/other/register/Desktop.vue';
+import mobile from '../components/other/auth/Mobile.vue';
+import desktop from '../components/other/auth/Desktop.vue';
 
 export default {
-  name: 'register',
+  name: 'register-form',
   title: 'Register',
   data() {
     return {
-      user: {
-        email: '',
-        password: '',
-      },
+      password: '',
+      passwordMatch: '',
       valid: false,
       show: false,
       alert: false,
       error: '',
       rules: {
-        required: v => !!v || 'This field is required',
-        email: v => /.+@.+/.test(v) || 'Email must be valid',
+        required: v => !!v || 'Password is required',
       },
     };
   },
@@ -112,26 +131,25 @@ export default {
         ? 'slide-y-reverse-transition'
         : 'slide-y-transition';
     },
-    getEmailSuffix() {
-      return this.user.email.includes('@') ? '' : '@p2srugbyworks.com'
-    }
+    comparePasswords() {
+      return (this.password === this.passwordMatch) ||'Passwords must match'
+    } 
   },
   methods: {
-    async login() {
+    async register() {
       if (this.valid) {
         try {
-          await this.$store.dispatch('auth/authenticate', {
-            strategy: 'local',
-            ...this.user,
-            email: `${this.user.email}${this.getEmailSuffix}`,
+          await this.$axios.post('/authManagement', {
+            action: "verifySignupSetPasswordLong",
+            value: {
+              token: this.$route.query.verifyToken,
+              password: this.password
+            }	
           });
           await this.$router.push({ name: 'dashboard' });
         } catch (error) {
           this.alert = true;
           switch(error.code) {
-            case 401:
-              this.error = "Invalid Credentials"
-              break
             case 408:
               this.error = "Failed to connect to server"
               break
