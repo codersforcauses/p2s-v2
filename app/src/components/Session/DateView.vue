@@ -1,6 +1,6 @@
 <template>
-  <div class="d-flex-row pl-5">
-    <div class="d-flex">
+  <div class="d-flex-row">
+    <div class="d-flex justify-center">
       <div class="text-h5 text-sm-h3 text-md-h2 text-h2 primary--text">{{ dayNum }}</div>
       <div class="text-body-1 text-sm-h6 text-md-h5 primary--text">{{ dayOrdinal }}</div>
     </div>

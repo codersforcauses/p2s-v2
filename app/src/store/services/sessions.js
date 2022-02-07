@@ -12,7 +12,7 @@ class Session extends BaseModel {
   static instanceDefaults() {
     return {
       type: 'Other',
-      location: ''
+      school: ''
     }
   }
 }

@@ -20,7 +20,7 @@
         <v-container class="pa-4">
           <v-row no-gutters>
             <v-col cols="6" tag="label" class="v-label pl-6">TYPE</v-col>
-            <v-col cols="6" tag="label" class="v-label pl-6">LOCATION</v-col>
+            <v-col cols="6" tag="label" class="v-label pl-6">SCHOOL</v-col>
             <v-col cols="6" class="pr-3 pt-1">
               <v-select
                 v-model="type"
@@ -36,18 +36,7 @@
               />
             </v-col>
             <v-col cols="6">
-              <v-text-field
-                v-model="location"
-                label="Session Location"
-                class="mb-2 mt-1"
-                solo-inverted
-                flat
-                validate-on-blur
-                rounded
-                type="text"
-                color="primary"
-                :disabled="loading"
-              />
+              <SchoolSearch v-model="school" />
             </v-col>
             <v-col cols="6" tag="label" class="v-label pl-6">DATE</v-col>
             <v-col cols="6" tag="label" class="v-label pl-6">TIME</v-col>
@@ -151,15 +140,17 @@
 <script>
 import dayjs from 'dayjs'
 import { mapActions } from 'vuex'
+import SchoolSearch from '../forms/schoolSearch.vue';
 
 export default {
+  components: { SchoolSearch },
   name: 'create-session',
   props: ['value'],
   data() {
     return {
       date: null,
       time: null,
-      location: '',
+      school: '',
       type: '',
       types: [
         'Rugby',
@@ -171,6 +162,7 @@ export default {
       ],
       menu: false,
       menu2: false,
+      search: '',
       loading: false,
       alert: false,
       error: '',
@@ -194,12 +186,12 @@ export default {
   methods: {
     ...mapActions('sessions', { create: 'create'}),
     async createSession() {
-      const { time, date, location, type } = this
+      const { time, date, school, type } = this
       const timeArr = time.split(':')
       const dateTime = dayjs(date).set('hour', timeArr[0]).set('minute', timeArr[1]).toDate()
       const res = await this.create({
         date: dateTime,
-        location,
+        school,
         type
       })
       this.$emit('created', res._id)

@@ -7,11 +7,17 @@
         inset vertical
         class="pl-7"
         />
-        <div class="d-flex flex-column justify-space-between pl-7">
-          <div class="text-subtitle-1">{{ formatTime }} - {{ session.location }}</div>
-          <div>{{ session.type }}</div>
-          <div>{{ coachText }}</div>
-        </div>
+        <FeathersVuexGet 
+            v-slot="{ item: school }"
+            service="schools"
+            :id="session.school"  
+          >
+          <div class="d-flex flex-column justify-space-between pl-7">
+            <div class="text-subtitle-1">{{ formatTime }} - {{ school.name }}</div>
+            <div>{{ session.type }}</div>
+            <div>{{ coachText }}</div>
+          </div>
+        </FeathersVuexGet>
       </div>
     </v-card-text>
   </v-card>

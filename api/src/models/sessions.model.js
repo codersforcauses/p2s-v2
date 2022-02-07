@@ -41,8 +41,9 @@ module.exports = function (app) {
           'Induction',
         ],
       },
-      location: {
-        type: String,
+      school: {
+        type: mongoose.ObjectId,
+        ref: 'schools',
       },
     },
     {

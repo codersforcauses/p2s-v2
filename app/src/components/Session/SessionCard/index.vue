@@ -10,18 +10,24 @@
           <DateView :date="session.date" />
           <v-divider
           inset vertical
-          class="pl-7"
+          class="mx-7"
           />
-          <div class="d-flex flex-column justify-space-between">
-            <div class="text-subtitle-1">{{ formatTime(session) }} - {{ session.location }}</div>
-            <div>{{ session.type }}</div>
-            <div>{{ coachText(session) }}</div>
-          </div>
-            <v-btn rounded outlined fab color="primary" class="align-center" :to="{ path: `/session/${session._id}`}"><v-icon>mdi-text-box-multiple-outline</v-icon></v-btn>
+          <FeathersVuexGet 
+            v-slot="{ item: school }"
+            service="schools"
+            :id="session.school"  
+          >
+            <div class="d-flex flex-column justify-space-between">
+              <div class="text-subtitle-1">{{ formatTime(session) }} - {{ school.name }}</div>
+              <div>{{ session.type }}</div>
+              <div>{{ coachText(session) }}</div>
+            </div>
+          </FeathersVuexGet>
         </div>
-        <div v-else class="text-h6 mb-10">
+        <div v-else class="text-h6 mb-10 px-4">
           No Session Found
         </div>
+        <v-btn v-if="session" text rounded color="primary" :to="{ path: `/session/${session._id}`}">View Session</v-btn>
       </v-card>
     </FeathersVuexFind>
     <v-card-title primary-title class="primary--text text-h6 pb-0">Manage Sessions</v-card-title>
