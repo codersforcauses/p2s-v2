@@ -18,7 +18,7 @@
             :id="session.school"  
           >
             <div class="d-flex flex-column justify-space-between">
-              <div class="text-subtitle-1">{{ formatTime(session) }} - {{ school.name }}</div>
+              <div class="text-subtitle-1">{{ formatTime(session) }} - {{ school ? school.name : 'loading' }}</div>
               <div>{{ session.type }}</div>
               <div>{{ coachText(session) }}</div>
             </div>

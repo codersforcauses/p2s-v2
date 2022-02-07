@@ -21,7 +21,7 @@
                 :id="student.school"
                 :watch="[student.school]"
               >
-                <v-list-item-content v-if="school">{{ school.name }}</v-list-item-content>
+                <v-list-item-content v-if="school">{{ school ? school.name : 'loading' }}</v-list-item-content>
               </FeathersVuexGet>
           </v-list-item>
         </template>

@@ -13,7 +13,7 @@
             :id="session.school"  
           >
           <div class="d-flex flex-column justify-space-between pl-7">
-            <div class="text-subtitle-1">{{ formatTime }} - {{ school.name }}</div>
+            <div class="text-subtitle-1">{{ formatTime }} - {{ school ? school.name : 'loading' }}</div>
             <div>{{ session.type }}</div>
             <div>{{ coachText }}</div>
           </div>
