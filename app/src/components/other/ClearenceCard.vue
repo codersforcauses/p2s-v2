@@ -68,7 +68,6 @@ export default {
     onButtonClick() {
       this.isSelecting = true
       window.addEventListener('focus', () => {
-        console.log("hello")
         this.isSelecting = false
       }, { once: true })
 

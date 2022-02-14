@@ -18,7 +18,7 @@ const {hasVerifyToken, restrictVerifyQuery, restrictVerifyData } = require('./ho
 module.exports = {
   before: {
     all: [],
-    find: [iffElse(hasVerifyToken(), restrictVerifyQuery(), authenticate('jwt'))],
+    find: [ iffElse(hasVerifyToken(), restrictVerifyQuery(), authenticate('jwt'))],
     get: [authenticate('jwt')],
     create: [
       hashPassword('password'),

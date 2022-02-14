@@ -156,10 +156,7 @@ export default {
   },
   methods: {
     async createUser() {
-      console.log(this.valid, this.permError)
       if (this.valid && !this.permError) {
-        console.log(this.permissions)
-        console.log(this.user)
         const tempUser = {
           ...this.user,
           admin: {

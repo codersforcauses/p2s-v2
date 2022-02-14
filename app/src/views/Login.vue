@@ -125,7 +125,7 @@ export default {
             ...this.user,
             email: `${this.user.email}${this.getEmailSuffix}`,
           });
-          await this.$router.push({ name: 'dashboard' });
+          this.$router.push({ name: 'dashboard' });
         } catch (error) {
           this.alert = true;
           switch(error.code) {

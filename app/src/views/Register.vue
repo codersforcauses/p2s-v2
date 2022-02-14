@@ -1,6 +1,6 @@
 <template>
   <v-main>
-    <component :is="loginScreen">
+    <component :is="registerScreen">
       <template #form>
         <v-alert
           dismissible
@@ -13,19 +13,22 @@
           >{{ error }}</v-alert
         >
         <h1 class="mb-10 text-h4">Register</h1>
-        <!-- <FeathersVuexFind
-          v-slot="{ item: user }"
-          service="schools"
-          :params="{ query: { verifyToken: this.$route.query.verifyToken } }"
+        <FeathersVuexFind
+          v-slot="{ items: [user] }"
+          service="users"
+          :params="{ query: { verifyToken: $route.query.verifyToken } }"
           watch="params"
-        > -->
+        >
           <v-form
+            ref="form"
+            v-if="user"
             v-model="valid"
             @keyup.native.enter="valid && login($event)"
             style="min-width: 55%;"
           >
             <label class="v-label ml-6 theme--dark">EMAIL</label>
             <v-text-field
+              ref="email"
               flat
               single-line
               rounded
@@ -35,7 +38,7 @@
               name="email"
               type="text"
               class="mb-2 mt-1"
-              value="useremail@email.com"
+              :value="user.email"
               :disabled="true"
               :rules="[rules.required]"
             />
@@ -49,7 +52,7 @@
               name="password"
               class="mb-2 mt-1"
               color="#c22032"
-              v-model="user.password"
+              v-model="password"
               :rules="[rules.required]"
               :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
               :type="show ? 'text' : 'password'"
@@ -63,10 +66,11 @@
               single-line
               rounded
               solo-inverted
-              name="password"
+              validate-on-blur
+              name="confirmPassword"
               class="mb-2 mt-1"
               color="#c22032"
-              v-model="user.passwordMatch"
+              v-model="passwordMatch"
               :rules="[rules.required, comparePasswords]"
               :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
               :type="show ? 'text' : 'password'"
@@ -84,14 +88,16 @@
                 color="#c22032"
                 :disabled="!valid || loading"
                 :loading="loading"
-                @click.stop.prevent="login"
+                @click.stop.prevent="register"
                 >
                   register
                 </v-btn>
               <v-spacer />
+              <v-btn text small rounded name="login" :to="{path: '/login'}" color="#888">Already have an account</v-btn>
             </v-col>
           </v-form>
-        <!-- </FeathersVuexFind> -->
+          <v-alert v-else color="error">Couldn't load user invite</v-alert>
+        </FeathersVuexFind>
       </template>
     </component>
   </v-main>
@@ -101,6 +107,9 @@
 import { mapState } from 'vuex';
 import mobile from '../components/other/auth/Mobile.vue';
 import desktop from '../components/other/auth/Desktop.vue';
+import app from '../store/feathers-client'
+
+const authManagement = app.service("authManagement");
 
 export default {
   name: 'register-form',
@@ -120,7 +129,7 @@ export default {
   },
   computed: {
     ...mapState('auth', { loading: 'isAuthenticatePending' }),
-    loginScreen() {
+    registerScreen() {
       return this.$vuetify.breakpoint.smAndDown ? mobile : desktop;
     },
     alertClass() {
@@ -132,21 +141,27 @@ export default {
         : 'slide-y-transition';
     },
     comparePasswords() {
-      return (this.password === this.passwordMatch) ||'Passwords must match'
+      return (this.password === this.passwordMatch) || 'Passwords must match'
     } 
   },
   methods: {
     async register() {
+      this.$refs.form.validate()
       if (this.valid) {
         try {
-          await this.$axios.post('/authManagement', {
-            action: "verifySignupSetPasswordLong",
-            value: {
-              token: this.$route.query.verifyToken,
-              password: this.password
-            }	
+          await authManagement.create({
+              action: 'verifySignupSetPasswordLong',
+              value: {
+                token: this.$route.query.verifyToken,
+                password: this.password
+              }
+          })
+          await this.$store.dispatch('auth/authenticate', {
+            strategy: 'local',
+            email: this.$refs.email.value,
+            password: this.password
           });
-          await this.$router.push({ name: 'dashboard' });
+          this.$router.push({ name: 'dashboard' });
         } catch (error) {
           this.alert = true;
           switch(error.code) {
