@@ -3,7 +3,7 @@ const errors = require('@feathersjs/errors');
 const config = require('config');
 
 module.exports = (app) => {
-  const getLink = (type, hash) => `${config.get('client')}/${type}?token=${hash}`;
+  const getLink = (type, hash) => `${config.get('client')}/${type}?verifyToken=${hash}`;
 
   const sendEmail = (email) => {
     return app
@@ -35,7 +35,6 @@ module.exports = (app) => {
           return sendEmail(email);
 
         case 'verifySignup': // confirming verification
-          tokenLink = getLink('register', user.verifyToken);
           email = getEmail(
             user,
             'Confirm Signup',
@@ -47,9 +46,12 @@ module.exports = (app) => {
           tokenLink = getLink('reset', user.resetToken);
           email = getEmail(user, 'Reset Password', tokenLink);
           return sendEmail(email);
+        
+          case 'verifySignupSetPassword':
+          email = getEmail(user, 'Account Verified', '<p>Your account has been verified.</p>');
+          return sendEmail(email);
 
         case 'resetPwd':
-          tokenLink = getLink('reset', user.resetToken);
           email = getEmail(
             user,
             'Your password was reset',
