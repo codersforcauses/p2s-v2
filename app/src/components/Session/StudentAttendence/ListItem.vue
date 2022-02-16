@@ -1,6 +1,6 @@
 <template>
   <div class="d-flex align-center">
-    <v-btn icon outlined :color="isActive ? 'primary' :  'white'" @click="$emit('toggleStudentPresent', student._id)" class="mx-3">
+    <v-btn icon outlined :color="isActive ? 'primary' :  ''" @click="toggleAttendence" class="mx-3">
       <v-icon>{{ isActive ? 'mdi-account-check' :  'mdi-account' }}</v-icon>
     </v-btn>
     <v-list-item class="px-0 px-sm-3" @click="$emit('openInfo', student)" >
@@ -26,11 +26,18 @@ export default {
   props: {
     student: Object,
     session: Object,
-    isActive: Boolean,
     report: Object
   },
   methods: {
     ...mapActions('reports', { findReports: 'find', createReport: 'create', updateReport: 'patch'}),
+    toggleAttendence() {
+      this.updateReport([this.report._id, { attended: this.report.attended === 'Present' ? 'SchoolAttended' : 'Present' }]);
+    }
+  },
+  computed: {
+    isActive() {
+      return this.report ? this.report.attended === 'Present' : false
+    }
   }
 }
 </script>

@@ -12,9 +12,7 @@
             <ListItem
               :key="student._id"
               :student="student"
-              :isActive="studentsAttending.some(studentId => studentId === student._id)"
               :report="getReport(student._id)"
-              @toggleStudentPresent="togglePresent($event)"
               @openReport="$emit('openReport', getReport($event))"
               @openInfo="$emit('openInfo', $event)"
             />
@@ -52,40 +50,64 @@ export default {
     studentsAttending: [],
     studentAddDialog: false,
   }),
-  mounted() {
-    this.studentsAttending = this.registeredStudents
-      .map(student => student._id)
-      .filter(studentId => {
-        const studentReport = this.getReport(studentId);
-        return studentReport?.attended === 'Present';
-      });
-  },
   methods: {
     ...mapActions('sessions', { updateSession: 'patch' }),
-    ...mapActions('reports', { createReport: 'create', updateReport: 'patch' }),
-    togglePresent(studentId) {
-      const index = this.studentsAttending.findIndex(
-        presentStudentId => studentId === presentStudentId,
-      );
-      if (index >= 0) this.studentsAttending.splice(index, 1);
-      else this.studentsAttending.push(studentId);
-      const report = this.getReport(studentId)
-      this.updateReport([report._id, { attended: this.studentsAttending.some(id => studentId === id)? 'Present': 'SchoolAttended'}]);
-    },
+    ...mapActions('reports', { createReport: 'create' }),
     updateAttending(students) {
       this.updateSession([this.session._id, { students }]);
-      students.forEach(studentId => {
-        if (!this.reports.some(report => report.student === studentId)) this.addReport(studentId);
+      students.forEach((studentId) => {
+        if (!this.reports.some((report) => report.student === studentId)) this.addReport(studentId);
       });
     },
     getReport(studentId) {
-      return this.reports.find(report => report.student === studentId);
+      return this.reports.find((report) => report.student === studentId);
     },
     addReport(studentId) {
       this.createReport({
         session: this.session._id,
         student: studentId,
         attended: 'SchoolAttended',
+        matrixResults: {
+          autonomy: {
+            coping: {
+              value: -1,
+            },
+            confidence: {
+              value: -1,
+            },
+          },
+          attitude: {
+            responsible: {
+              value: -1,
+            },
+            tolerannce: {
+              value: -1,
+            },
+            enthusiasm: {
+              value: -1,
+            },
+            learning: {
+              value: -1,
+            },
+          },
+          communication: {
+            verbal: {
+              value: -1,
+            },
+            listening: {
+              value: -1,
+            },
+            responsivness: {
+              value: -1,
+            },
+          },
+          thinking: {
+            solving: {
+              value: -1,
+            },
+          },
+        },
+        notes: ''
       });
     },
   },

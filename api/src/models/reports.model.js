@@ -31,11 +31,9 @@ module.exports = function (app) {
         ],
         required: true,
       },
-      matrixResults: [
-        {
-          type: Object,
-        },
-      ],
+      matrixResults: {
+        type: Object,
+      },
       notes: {
         type: String,
       },
