@@ -4,9 +4,16 @@ module.exports = {
     node: true,
   },
   extends: ['plugin:vue/essential', 'airbnb-base', 'prettier'],
+  settings: {
+    'import/resolver': {
+      node: {
+        extensions: ['.js', '.vue'],
+      },
+    },
+  },
   parserOptions: {
     parser: '@babel/eslint-parser',
-    "requireConfigFile": false
+    requireConfigFile: false,
   },
   rules: {
     'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',

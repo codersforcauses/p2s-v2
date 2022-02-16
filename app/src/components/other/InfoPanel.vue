@@ -15,7 +15,7 @@
           <slot />
       </template>
     </v-navigation-drawer>
-    <v-bottom-sheet class="rounded-t-xl pt-6" v-else v-model="open" scrollable>
+    <v-bottom-sheet class="rounded-t-xl pt-6" persistent v-else v-model="open" scrollable>
       <template #default>
         <slot />
       </template>
