@@ -12,7 +12,7 @@
       <v-card-title class="text-h5">{{ student.name }}'s Report</v-card-title>
     </FeathersVuexGet>
 
-    <pre>{{ JSON.stringify(report, null, 2) }}</pre>
+    <!-- <pre>{{ JSON.stringify(report, null, 2) }}</pre> -->
     <v-card-text :style="$vuetify.breakpoint.xs ? 'height: 75vh;' : ''">
       <v-card flat>
         <v-card-title class="text-h6">Attendence</v-card-title>
@@ -40,20 +40,23 @@
             <v-card-subtitle class="text-body-1">{{
               matrix[category][entry].title
             }}</v-card-subtitle>
-            <FeathersVuexInputWrapper :item="report" prop="value">
+            <FeathersVuexInputWrapper :item="report" :prop="`matrixResults.${category}.${entry}.value`">
               <template #default="{ current, prop, createClone, handler }">
                 <div class="d-flex justify-space-between align-start" style="width: 90%">
                   <v-card-title class="text-h5 py-0" color="primary">{{
-                    current['matrixResults'][category][entry][prop] >= 0 ? current['matrixResults'][category][entry][prop] : '-' 
+                    getDeep(current, prop) >= 0 ? getDeep(current, prop) : '-' 
                   }}</v-card-title>
                   <v-slider
-                    v-model="current['matrixResults'][category][entry][prop]"
+                    :value="getDeep(current, prop)"
+                    @change="(e) => {
+                      setDeep(current, prop, e)
+                      handler(e, saveReport)
+                    }"
                     ticks="always"
                     :max="maxScore"
                     :min="-1"
                     color="primary"
                     @click="createClone"
-                    @change="(e) => handler(e, saveReport)"
                   ></v-slider>
                 </div>
               </template>
@@ -78,15 +81,14 @@
 </template>
 
 <script>
+import _ from 'lodash'
+
 export default {
   props: {
     report: {
       type: Object,
       required: true,
     },
-  },
-  mounted() {
-    // if(Object.keys(this.report.matrix).length === 0)
   },
   data: () => ({
     attendence: 0,
@@ -140,14 +142,16 @@ export default {
     },
   },
   methods: {
-    async saveReport({ event, clone, prop, data }) {
-      console.log(data)
+    async saveReport({ clone, event, prop }) {
       const report = clone.commit();
-      return report.patch({ data });
+      return report.patch({ [prop]: event });
     },
-    handleSaveReponse(savedItem) {
-      console.log(savedItem);
+    getDeep(obj, prop){
+      return _.get(obj, prop)
     },
+    setDeep(obj, prop, val){
+      return _.set(obj, prop, val)
+    }
   },
 };
 </script>
