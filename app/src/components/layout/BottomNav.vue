@@ -10,7 +10,7 @@
   >
     <v-btn v-show="coach" value="coach" :to="{path: '/coach'}">
       <span>Coach</span>
-      <v-icon>mdi-football</v-icon>
+      <v-icon>mdi-account-heart</v-icon>
     </v-btn>
 
     <v-btn v-show="admin" value="admin" :to="{path: '/admin'}">

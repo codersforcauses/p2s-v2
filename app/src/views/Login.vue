@@ -125,7 +125,7 @@ export default {
             ...this.user,
             email: `${this.user.email}${this.getEmailSuffix}`,
           });
-          this.$router.push({ name: 'dashboard' });
+          this.$router.push({ name: 'dashboard' }).catch((err) => console.log(`[nav] rerouting from ${err.to.path}`));
         } catch (error) {
           this.alert = true;
           switch(error.code) {
