@@ -72,7 +72,6 @@ module.exports = function(app) {
           },
           homeNumber: {
             type: String,
-            required: true,
           },
           mobileNumber: {
             type: String,
