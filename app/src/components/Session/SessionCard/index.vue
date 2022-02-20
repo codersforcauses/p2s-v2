@@ -39,7 +39,7 @@
     <v-card-actions class="py-1">
       <v-btn text rounded color="primary" :to="{ name: 'view sessions' }">View All</v-btn>
       <v-btn v-if="isAdminView" text rounded color="primary" @click="sessionDialog = true">Create New</v-btn>
-      <NewSession v-if="isAdminView" v-model="sessionDialog" @created="this.$router.push({ path: `/session/${res._id}` })" />
+      <NewSession v-if="isAdminView" v-model="sessionDialog" @created="(e) => $router.push({ path: `/session/${e}` })" />
     </v-card-actions>
   </v-card>
 </template>

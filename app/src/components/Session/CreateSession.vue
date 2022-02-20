@@ -19,8 +19,9 @@
       <v-form v-model="valid" @keyup.native.enter="createSession($event)">
         <v-container class="pa-4">
           <v-row no-gutters>
+
             <v-col cols="6" tag="label" class="v-label pl-6">TYPE</v-col>
-            <v-col cols="6" tag="label" class="v-label pl-6">SCHOOL</v-col>
+            <v-col cols="6" tag="label" class="v-label pl-6">LOCATION</v-col>
             <v-col cols="6" class="pr-3 pt-1">
               <v-select
                 v-model="type"
@@ -33,11 +34,30 @@
                 color="primary"
                 height="48"
                 dense
+                :menu-props="{
+                  offsetY: true,
+                  light: dark,
+                  dark: !dark,
+                  transition: 'slide-y-transition',
+                  rounded: 'xl',
+                  contentClass: 'elevation-0',
+                }"
               />
             </v-col>
             <v-col cols="6">
-              <SchoolSearch v-model="school" />
+             <v-text-field
+                v-model="location"
+                label="Location Details"
+                class="mb-2 mt-1"
+                solo-inverted
+                flat
+                rounded
+                type="text"
+                color="primary"
+                :disabled="loading"
+              />
             </v-col>
+            
             <v-col cols="6" tag="label" class="v-label pl-6">DATE</v-col>
             <v-col cols="6" tag="label" class="v-label pl-6">TIME</v-col>
             <v-col cols="6" style="padding-right: 2px;">
@@ -107,6 +127,17 @@
                 ></v-time-picker>
               </v-menu>
             </v-col>
+
+            <v-col cols="12" tag="label" class="v-label pl-6">SCHOOL</v-col>
+            <v-col cols="12">
+              <SchoolSearch v-model="school" />
+            </v-col>
+
+            <v-col cols="12" tag="label" class="v-label pl-6">COACHES</v-col>
+            <v-col cols="12">
+              <CoachSearch v-model="coaches" />
+            </v-col>
+
             <v-col cols="12" class="my-4" v-show="alert">
               <v-alert
                 dismissible
@@ -141,9 +172,10 @@
 import dayjs from 'dayjs'
 import { mapActions } from 'vuex'
 import SchoolSearch from '../forms/schoolSearch.vue';
+import CoachSearch from '../forms/coachSearch.vue';
 
 export default {
-  components: { SchoolSearch },
+  components: { SchoolSearch, CoachSearch },
   name: 'create-session',
   props: ['value'],
   data() {
@@ -159,10 +191,12 @@ export default {
         'Employability',
         'Tournament',
         'Induction',
+        'Other'
       ],
       menu: false,
       menu2: false,
-      search: '',
+      location: '',
+      coaches: [],
       loading: false,
       alert: false,
       error: '',
@@ -182,19 +216,25 @@ export default {
         this.$emit('input', value);
       },
     },
+    dark(){
+      return this.$vuetify.theme.dark
+    }
   },
   methods: {
     ...mapActions('sessions', { create: 'create'}),
     async createSession() {
-      const { time, date, school, type } = this
+      const { type, location, time, date, school, coaches } = this
       const timeArr = time.split(':')
       const dateTime = dayjs(date).set('hour', timeArr[0]).set('minute', timeArr[1]).toDate()
-      const res = await this.create({
+      this.loading = true
+      const session = await this.create({
+        type,
+        location,
         date: dateTime,
         school,
-        type
+        coaches
       })
-      this.$emit('created', res._id)
+      this.$emit('created', session._id)
       this.$emit('input')
     }
   }

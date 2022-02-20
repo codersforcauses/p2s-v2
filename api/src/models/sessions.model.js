@@ -39,12 +39,16 @@ module.exports = function (app) {
           'Employability',
           'Tournament',
           'Induction',
+          'Other'
         ],
       },
       school: {
         type: mongoose.ObjectId,
         ref: 'schools',
       },
+      location: {
+        type: String
+      }
     },
     {
       timestamps: true,

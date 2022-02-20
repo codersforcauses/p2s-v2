@@ -58,8 +58,10 @@ export default {
   data: () => ({
     selectedSchool: '',
     selectedYear: null,
-    
   }),
+  mounted() {
+    this.selectedSchool = this.session.school
+  },
   computed: {
     showDialog: {
       get() {
