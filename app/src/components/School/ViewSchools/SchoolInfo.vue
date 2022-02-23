@@ -1,6 +1,6 @@
 <template>
-  <v-card flat tile height="100%" class="py-sm-12">
-    <v-card-text height="100%" class="pa-0 mt-sm-4">
+  <v-card flat tile class="py-sm-12">
+    <v-card-text class="pa-0 mt-sm-4">
       <v-list-item three-line class="px-2 px-sm-4">
         <v-list-item-content class="py-0">
           <v-list-item-title class="text-h6">{{school.name}}</v-list-item-title>
@@ -25,11 +25,7 @@
 <script>
 export default {
   props: {
-    school: {
-      type: Object,
-      default: () => ({
-      })
-    }
+    school: Object,
   },
   computed: {
     isSmAndUp() {

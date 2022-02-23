@@ -8,9 +8,11 @@
     >
       <div>
         <SchoolFilter :skip="listSkip" :limit="listLimit" :queryInfo="info" @setSkip="setSkip"></SchoolFilter>
-        <SchoolList v-if="!isPending" :schools="schools" @selected="setSchool" :isPending="isPending" @open="drawer = true" />
+        <SchoolList v-if="!isPending" v-model="selectedSchool" :schools="schools" :isPending="isPending" @selected="handleSelected" />
         <info-panel v-model="drawer">
-           <school-info v-if="selectedSchool" :school="selectedSchool" />
+          <SchoolInfo v-if="getSchool(schools, selectedSchool)" :school="getSchool(schools, selectedSchool)" />
+          <v-btn rounded outlined color="primary" @click="editSchoolDialog = true"><v-icon color="primary">mdi-plus</v-icon>Edit School</v-btn>
+          <SchoolDialog v-model="editSchoolDialog" :schoolId="selectedSchool" />
         </info-panel>
       </div>
     </FeathersVuexFind>
@@ -22,6 +24,8 @@ import SchoolInfo from './SchoolInfo';
 import InfoPanel from "../../other/InfoPanel.vue";
 import SchoolList from './SchoolList.vue';
 import SchoolFilter from './SchoolFilter.vue';
+import SchoolDialog from '../SchoolDialog';
+
 
 export default {
   name: 'view-schools',
@@ -30,15 +34,19 @@ export default {
     SchoolInfo,
     InfoPanel,
     SchoolList,
-    SchoolFilter
+    SchoolFilter,
+    SchoolDialog
   },
-  data() {
-    return {
-      selectedSchool: null,
-      drawer: false,
-      listLimit: 20,
-      listSkip: 0,
-    };
+  data: () => ({
+    selectedSchool: null,
+    drawer: false,
+    listLimit: 20,
+    listSkip: 0,
+    editSchoolDialog: false
+  }),
+  async mounted() {
+    this.selectedSchool = this.$route.params.id
+    this.drawer = true
   },
   computed: {
     query() {
@@ -49,19 +57,22 @@ export default {
           name: 1,
         }
       }
-    }
+    },
   },
   methods: {
+    getSchool(schools, selectedSchool) {
+      return schools.find(school => school._id === selectedSchool)
+    },
+    handleSelected(val) {
+      this.selectedSchool = val
+      this.drawer = true
+    },
     setSkip(skip) {
       this.listSkip = skip
     },
     setYear(year) {
       this.yearSelect = year
     },
-    setSchool(school) {
-      this.selectedSchool = school;
-      this.drawer = true;
-    }
   }
 };
 </script>

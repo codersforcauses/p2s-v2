@@ -1,14 +1,14 @@
 <template>
   <v-skeleton-loader type="list-item-two-line@10" :loading="isPending">
     <v-list two-line subheader>
-      <v-list-item-group v-model="selected" @change="selectSchool" mandatory color="primary">
+      <v-list-item @click="createDialogOpen = true">
+        <v-icon color="primary">mdi-plus</v-icon>
+        <v-list-item-subtitle class="ml-3" style="color: #f87f79">Add School</v-list-item-subtitle>
+        <SchoolDialog v-model="createDialogOpen" />
+      </v-list-item>
+      <v-list-item-group v-model="selected"  color="primary">
         <template v-for="school in schools">
-          <v-list-item :key="school._id" @click="$emit('open')">
-            <v-list-item-content>
-              <v-list-item-title class="text--primary">{{school.name}}</v-list-item-title>
-              <v-list-item-subtitle>{{`${school.address.suburb}, ${school.address.state}`}}</v-list-item-subtitle>
-            </v-list-item-content>
-          </v-list-item>
+          <ListItem :key="school._id" :school="school" @click="$emit('open')" />
         </template>
       </v-list-item-group>
     </v-list>
@@ -16,21 +16,33 @@
 </template>
 
 <script>
+import ListItem from './ListItem.vue'
+import SchoolDialog from '../SchoolDialog';
 
 export default {
+  components: {
+    ListItem,
+    SchoolDialog
+  },
   name: "school-list",
   title: "School List",
   props: {
+    value: String,
     schools: Array,
     isPending: Boolean,
   },
   data: () => ({
-    selected: 0
+    createDialogOpen: false
   }),
-  methods: {
-    selectSchool() {
-      this.$emit('selected', this.schools[this.selected])
-    }
+  computed: {
+    selected: {
+      get() {
+        return this.schools.findIndex(school => school._id === this.value)
+      },
+      set(val) {
+        this.$emit('selected', this.schools[val]._id)
+      }
+    },
   },
   watch: {
     schools: {
@@ -38,7 +50,7 @@ export default {
       handler() {
         this.selected = null
       }
-    }
+    },
   }
 }
 </script>
