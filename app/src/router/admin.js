@@ -13,7 +13,7 @@ const adminRoutes = [
       ),
   },
   {
-    path: '/schools',
+    path: '/schools/:id?',
     name: 'view schools',
     component: () =>
       import(

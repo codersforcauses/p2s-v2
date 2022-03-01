@@ -7,12 +7,11 @@
         <v-card-subtitle v-show="registeredCoaches.length" class="py-0">
           Select coach for more info
         </v-card-subtitle>
-        <v-list-item-group color="primary">
+        <v-list-item-group color="primary" v-model="selectedUser">
           <template v-for="coach in registeredCoaches">
             <ListItem
               :key="coach._id"
-              :coach="coach"
-              @openInfo="$emit('openInfo', $event)"
+              :user="coach"
             />
           </template>
         </v-list-item-group>
@@ -38,15 +37,26 @@ export default {
   props: {
     session: Object,
     registeredCoaches: Array,
+    value: Object
   },
   data: () => ({
     coachAddDialog: false,
   }),
+  computed: {
+    selectedUser: {
+      get() {
+        return this.value
+      },
+      set(val) {
+        this.$emit('setSelectedUser', val)
+      }
+    }
+  },
   methods: {
     ...mapActions('sessions', { updateSession: 'patch' }),
     updateAttending(coaches) {
       this.updateSession([this.session._id, { coaches }]);
-    }
+    },
   },
 };
 </script>

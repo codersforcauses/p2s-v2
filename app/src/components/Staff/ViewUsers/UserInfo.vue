@@ -22,7 +22,7 @@
               <a :href="'tel:' + user.mobile">{{user.mobile}}</a>
             </v-list-item-subtitle>
             <div>
-              <v-icon v-if="user.coach.is" title="Coach" color="primary">mdi-football-australian</v-icon>
+              <v-icon v-if="user.coach.is" title="Coach" color="primary">mdi-account-heart</v-icon>
               <v-icon v-if="user.admin.is" title="Administrator" color="primary">mdi-shield-account</v-icon>
             </div>
           </v-list-item-content>

@@ -11,19 +11,20 @@
     <v-card-actions class="py-1">
       <v-btn text rounded color="primary" :to="{ name: 'view schools' }">View All</v-btn>
       <v-btn text rounded color="primary" @click="schoolDialog = true">Create New</v-btn>
-      <new-school v-model="schoolDialog" />
+      <SchoolDialog v-model="schoolDialog" />
+      
     </v-card-actions>
   </v-card>
 </template>
 
 <script>
 import RegionImage from './RegionImage'
-import NewSchool from '../CreateSchool'
+import SchoolDialog from '../SchoolDialog'
 
 export default {
   components: {
     RegionImage,
-    NewSchool
+    SchoolDialog
   },
   data() {
     return {

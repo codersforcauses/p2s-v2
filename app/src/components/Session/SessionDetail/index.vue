@@ -23,7 +23,7 @@
           >
           <div>
             <v-divider class="mt-8" />
-            <StudentAttendence :session="session" :registeredStudents="students" :reports="reports" @openReport="setReport" @openInfo="setStudentInfo" class="pr-3" :style="drawer && !$vuetify.breakpoint.xs ? 'width: 48%;' : ''"/>
+            <StudentAttendence v-model="selectedStudent" :session="session" :registeredStudents="students" :reports="reports" :selectedReport="selectedReport" @setReport="setReport" @setStudent="setStudentInfo" @close="closeDrawer" class="pr-3" :style="drawer && !$vuetify.breakpoint.xs ? 'width: 48%;' : ''"/>
             
             <info-panel v-model="drawer">
               <ReportInfo v-if="selectedReport" :report="selectedReport" @close="closeDrawer" />
@@ -40,7 +40,7 @@
           :params="{ query: { _id: { $in: session.coaches } } }"
           watch="params"
         >
-          <AttendingCoaches :session="session" :registeredCoaches="coaches" @openInfo="setUserInfo" />
+          <AttendingCoaches v-model="selectedUser" :session="session" :registeredCoaches="coaches" @setSelectedUser="setUserInfo" />
         </FeathersVuexFind>
       </div>
     </FeathersVuexGet>
@@ -86,6 +86,7 @@ export default {
       this.drawer = true;
     },
     setUserInfo(user) {
+      console.log(user)
       this.selectedReport = null
       this.selectedStudent = null;
       this.selectedUser = user;
@@ -96,6 +97,26 @@ export default {
       this.selectedUser = null;
       this.selectedStudent = student;
       this.drawer = true;
+    }
+  },
+  watch: {
+    selectedUser() {
+      if(!this.selectedUser && !this.selectedStudent && !this.selectedReport) this.drawer = false
+    },
+    selectedStudent() {
+      if(!this.selectedUser && !this.selectedStudent && !this.selectedReport) this.drawer = false
+    },
+    selectedReport() {
+      if(!this.selectedUser && !this.selectedStudent && !this.selectedReport) this.drawer = false
+    },
+    drawer() {
+      if(!this.drawer) {
+        setTimeout(() => {
+          this.selectedUser = null
+          this.selectedStudent = null;
+          this.selectedReport = null;
+        }, 50)
+      }
     }
   },
   computed: {

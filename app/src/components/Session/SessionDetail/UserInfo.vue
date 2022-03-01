@@ -1,6 +1,5 @@
 <template>
   <v-card flat tile height="100%" class="py-sm-12">
-    <v-btn icon class="float-right ma-0 ma-sm-2" @click="$emit('close')"><v-icon>mdi-close</v-icon></v-btn>
     <v-card-text height="100%" class="pa-0">
       <div class="ml-4 mt-sm-4 d-flex">
         <v-sheet
@@ -23,7 +22,7 @@
               <a :href="'tel:' + user.mobile">{{user.mobile}}</a>
             </v-list-item-subtitle>
             <div>
-              <v-icon v-if="user.coach.is" title="Coach" color="primary">mdi-football-australian</v-icon>
+              <v-icon v-if="user.coach.is" title="Coach" color="primary">mdi-account-heart</v-icon>
               <v-icon v-if="user.admin.is" title="Administrator" color="primary">mdi-shield-account</v-icon>
             </div>
           </v-list-item-content>

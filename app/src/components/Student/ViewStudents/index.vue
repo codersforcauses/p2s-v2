@@ -7,7 +7,15 @@
       watch="params"
     >
       <div>
-        <StudentFilter :skip="listSkip" @setSkip="setSkip" :limit="listLimit" @setYear="setYear" :queryInfo="info"/>
+        <StudentFilter
+          :filterSchool="selectedSchool"
+          :filterYear="selectedYear"
+          @updateYear="selectedYear = $event"
+          @updateSchool="selectedSchool = $event"
+          :skip="listSkip"
+          @setSkip="setSkip"
+          :limit="listLimit"
+          :queryInfo="info"/>
         <StudentList :students="students" @selected="setStudent" :isPending="isPending" @open="drawer = true" />
         <info-panel v-model="drawer">
           <student-info v-if="!isPending" :student="selectedStudent"></student-info>
@@ -38,18 +46,22 @@ export default {
       drawer: false,
       listLimit: 20,
       listSkip: 0,
-      yearSelect: null
+      selectedSchool: '',
+      selectedYear: null,
     };
   },
   computed: {
     query() {
+      console.log(this.selectedYear)
+      console.log(this.selectedSchool)
       return {
         $limit: this.listLimit,
         $skip: this.listSkip,
         $sort: {
           name: 1,
         },
-        ...( this.yearSelect && {schoolYear: this.yearSelect})
+        ...( this.selectedYear && {schoolYear: this.selectedYear} ),
+        ...( this.selectedSchool && { school: this.selectedSchool }),
       }
     },
   },
@@ -57,17 +69,17 @@ export default {
     setSkip(skip) {
       this.listSkip = skip
     },
-    setYear(year) {
-      this.yearSelect = year
-    },
     setStudent(student) {
       this.selectedStudent = student;
       this.drawer = true;
     }
   },
   watch: {
-    yearSelect() {
-      this.skip = 0;
+    query: {
+      handler() {
+        this.skip = 0;
+      },
+      deep: true
     }
   }
 };
