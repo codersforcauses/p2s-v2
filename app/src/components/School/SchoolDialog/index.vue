@@ -220,7 +220,7 @@ export default {
     handleSaveReponse(savedSchool) {
       console.log(savedSchool)
       if (!this.schoolId) {
-        this.$router.push({ path: `/school/${savedSchool._id}` })
+        this.$router.push({ path: `/schools/${savedSchool._id}` })
       }
       this.$emit('input')
     }
