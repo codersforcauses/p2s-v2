@@ -1,23 +1,22 @@
 <template>
   <v-card flat tile class="py-sm-12">
+    <v-card-title class="text-h6">{{school.name}}</v-card-title>
     <v-card-text class="pa-0 mt-sm-4">
       <v-list-item three-line class="px-2 px-sm-4">
         <v-list-item-content class="py-0">
-          <v-list-item-title class="text-h6">{{school.name}}</v-list-item-title>
-          <v-list-item-subtitle>{{school.email}}</v-list-item-subtitle>
-          <v-list-item-subtitle>{{school.phoneNumber}}</v-list-item-subtitle>
+          <v-list-item-title>Contact</v-list-item-title>
+          <v-list-item-subtitle>{{school.contact.name}}</v-list-item-subtitle>
+          <v-list-item-subtitle>{{school.contact.phoneNumber}}</v-list-item-subtitle>
+          <v-list-item-subtitle>{{school.contact.email}}</v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
-      <v-list subheader dense flat>
-        <v-subheader>Address</v-subheader>
-        <v-list-item three-line class="px-2 px-sm-4">
-          <v-list-item-content class="py-0">
-            <v-list-item-subtitle>{{school.address.street}}</v-list-item-subtitle>
-            <v-list-item-subtitle>{{`${school.address.suburb}, ${school.address.state}`}}</v-list-item-subtitle>
-            <v-list-item-subtitle>{{school.address.postcode}}</v-list-item-subtitle>
-          </v-list-item-content>
-        </v-list-item>
-      </v-list>
+      <v-list-item three-line class="px-2 px-sm-4">
+        <v-list-item-content class="py-0">
+          <v-list-item-title>Address</v-list-item-title>
+          <v-list-item-subtitle>{{school.address.street}}</v-list-item-subtitle>
+          <v-list-item-subtitle>{{`${school.address.suburb}, ${school.address.state} ${school.address.postcode}`}}</v-list-item-subtitle>
+      </v-list-item-content>
+    </v-list-item>
     </v-card-text>
   </v-card>
 </template>
@@ -34,27 +33,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.coach-docs {
-  margin: 1rem;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
-  grid-gap: 0.75rem;
-}
-.wwc {
-  grid-column: 1 / span 2;
-}
-
-@media only screen and (min-width: 960px) {
-  .coach-docs {
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: 1fr;
-    grid-gap: 1rem;
-  }
-  .wwc {
-    grid-column: 1;
-  }
-}
-</style>
