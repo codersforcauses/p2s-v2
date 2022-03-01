@@ -1,6 +1,5 @@
 <template>
   <v-card v-if="student" flat tile height="100%" class="py-sm-12">
-    <v-btn icon class="float-right ma-0 ma-sm-2" @click="$emit('close')"><v-icon>mdi-close</v-icon></v-btn>
     <div class="ml-4 mt-sm-4 d-flex">
       <v-sheet
         v-if="$vuetify.breakpoint.smAndUp"

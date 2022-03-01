@@ -1,6 +1,5 @@
 <template>
   <v-card flat tile height="100%" class="py-sm-12">
-    <v-btn icon class="float-right ma-0 ma-sm-2" @click="$emit('close')"><v-icon>mdi-close</v-icon></v-btn>
     <v-card-text height="100%" class="pa-0">
       <div class="ml-4 mt-sm-4 d-flex">
         <v-sheet

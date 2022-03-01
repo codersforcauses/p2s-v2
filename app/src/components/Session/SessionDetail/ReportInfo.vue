@@ -1,8 +1,5 @@
 <template>
   <v-card flat tile height="100%" class="py-sm-12 px-2">
-    <v-btn icon class="float-right ma-0 ma-sm-2" @click="$emit('close')"
-      ><v-icon>mdi-close</v-icon></v-btn
-    >
     <FeathersVuexGet
       v-slot="{ item: student }"
       service="students"
@@ -12,7 +9,6 @@
       <v-card-title class="text-h5">{{ student.name }}'s Report</v-card-title>
     </FeathersVuexGet>
 
-    <!-- <pre>{{ JSON.stringify(report, null, 2) }}</pre> -->
     <v-card-text :style="$vuetify.breakpoint.xs ? 'height: 75vh;' : ''">
       <v-card flat>
         <v-card-title class="text-h6">Attendence</v-card-title>
