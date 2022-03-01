@@ -8,9 +8,9 @@
     >
       <div>
         <UserFilter :skip="listSkip" @setSkip="setSkip" :limit="listLimit" :queryInfo="info"/>
-        <UserList :users="users" @selected="setUser" :isPending="isPending" @open="drawer = true" />
+        <UserList v-model="selectedUser" @selected="setUser" :users="users" :isPending="isPending" @close="closeDrawer" />
         <info-panel v-model="drawer">
-           <user-info v-if="!isPending" :user="selectedUser" />
+           <user-info v-if="selectedUser" :user="selectedUser" @close="closeDrawer" />
         </info-panel>
       </div>
     </FeathersVuexFind>
@@ -52,12 +52,27 @@ export default {
     }
   },
   methods: {
+    closeDrawer() {
+      this.drawer = false
+    },
     setSkip(skip) {
       this.listSkip = skip
     },
     setUser(user) {
       this.selectedUser = user;
       this.drawer = true;
+    }
+  },
+  watch: {
+    selectedUser() {
+      if(!this.selectedUser) this.drawer = false
+    },
+    drawer() {
+      if(!this.drawer) {
+        setTimeout(() => {
+          this.selectedUser = null;
+        }, 50)
+      }
     }
   }
 };
