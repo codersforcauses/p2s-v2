@@ -8,7 +8,7 @@
       </v-list-item>
       <v-list-item-group v-model="selected"  color="primary">
         <template v-for="school in schools">
-          <ListItem :key="school._id" :school="school" @click="$emit('open')" />
+          <ListItem :key="school._id" :school="school" />
         </template>
       </v-list-item-group>
     </v-list>
@@ -27,7 +27,7 @@ export default {
   name: "school-list",
   title: "School List",
   props: {
-    value: String,
+    value: Object,
     schools: Array,
     isPending: Boolean,
   },
@@ -37,10 +37,10 @@ export default {
   computed: {
     selected: {
       get() {
-        return this.schools.findIndex(school => school._id === this.value)
+        return this.value
       },
       set(val) {
-        this.$emit('selected', this.schools[val]._id)
+        this.$emit('selected', val)
       }
     },
   },

@@ -7,12 +7,12 @@
       watch="params"
     >
       <div>
-        <SchoolFilter :skip="listSkip" :limit="listLimit" :queryInfo="info" @setSkip="setSkip"></SchoolFilter>
+        <SchoolFilter   :queryInfo="info" :limit="listLimit" :skip="listSkip" @setSkip="setSkip"></SchoolFilter>
         <SchoolList v-if="!isPending" v-model="selectedSchool" :schools="schools" :isPending="isPending" @selected="handleSelected" />
         <info-panel v-model="drawer">
-          <SchoolInfo v-if="getSchool(schools, selectedSchool)" :school="getSchool(schools, selectedSchool)" />
+          <SchoolInfo v-if="selectedSchool" :school="selectedSchool" />
           <v-btn class="ml-5" rounded outlined color="primary" @click="editSchoolDialog = true"><v-icon color="primary">mdi-plus</v-icon>Edit School</v-btn>
-          <SchoolDialog v-model="editSchoolDialog" :schoolId="selectedSchool" />
+          <SchoolDialog v-if="selectedSchool" v-model="editSchoolDialog" :schoolId="selectedSchool._id" />
         </info-panel>
       </div>
     </FeathersVuexFind>
@@ -20,6 +20,8 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+
 import SchoolInfo from './SchoolInfo';
 import InfoPanel from "../../other/InfoPanel.vue";
 import SchoolList from './SchoolList.vue';
@@ -45,8 +47,10 @@ export default {
     editSchoolDialog: false
   }),
   async mounted() {
-    this.selectedSchool = this.$route.params.id
-    this.drawer = true
+    if(this.$route.params.id) {
+      this.selectedSchool = await this.getSchool(this.$route.params.id)
+      this.drawer = true
+    }
   },
   computed: {
     query() {
@@ -60,8 +64,9 @@ export default {
     },
   },
   methods: {
-    getSchool(schools, selectedSchool) {
-      return schools.find(school => school._id === selectedSchool)
+    ...mapActions('schools', { getSchool: 'get' }),
+    closeDrawer() {
+      this.drawer = false
     },
     handleSelected(val) {
       this.selectedSchool = val
@@ -73,6 +78,18 @@ export default {
     setYear(year) {
       this.yearSelect = year
     },
-  }
+  },
+  watch: {
+    selectedSchool() {
+      if(!this.selectedSchool) this.drawer = false
+    },
+    drawer() {
+      if(!this.drawer) {
+        setTimeout(() => {
+          this.selectedSchool = null
+        }, 50)
+      }
+    }
+  },
 };
 </script>
