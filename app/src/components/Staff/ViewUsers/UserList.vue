@@ -1,7 +1,7 @@
 <template>
   <v-skeleton-loader type="list-item-three-line@10" :loading="isPending">
     <v-list three-line subheader>
-      <v-list-item-group v-model="selected" @change="selectUser" mandatory color="primary">
+      <v-list-item-group v-model="selected" @change="selectUser" color="primary">
         <template v-for="user in users">
           <v-list-item :key="user._id" @click="$emit('open')">
             <UserListDisplay :user="user" />
