@@ -11,14 +11,19 @@
       disable-route-watcher
       class="py-3 px-0"
     >
-      <template #default>
-          <slot />
-      </template>
+      <v-btn icon class="float-right ma-0 mt-16 mr-3" style="z-index:10;" @click="open = false">
+        <v-icon>mdi-close</v-icon>
+      </v-btn>
+      <slot />
     </v-navigation-drawer>
-    <v-bottom-sheet class="rounded-t-xl pt-6" persistent v-else v-model="open" scrollable>
-      <template #default>
+    <v-bottom-sheet v-else v-model="open" scrollable>
+      <v-sheet
+        class="pa-4 rounded-t-xl">
+        <v-btn icon class="float-right ma-2" style="z-index:10;" @click="open = false">
+          <v-icon>mdi-close</v-icon>
+        </v-btn>
         <slot />
-      </template>
+      </v-sheet>
     </v-bottom-sheet>
 </template>
 
