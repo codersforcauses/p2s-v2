@@ -16,9 +16,9 @@
           @setSkip="setSkip"
           :limit="listLimit"
           :queryInfo="info"/>
-        <StudentList :students="students" @selected="setStudent" :isPending="isPending" @open="drawer = true" />
+        <StudentList v-model="selectedStudent" @selected="setStudent" :students="students" :isPending="isPending" @close="closeDrawer" />
         <info-panel v-model="drawer">
-          <student-info v-if="!isPending" :student="selectedStudent"></student-info>
+          <student-info v-if="selectedStudent" :student="selectedStudent" @close="closeDrawer"></student-info>
         </info-panel>
       </div>
     </FeathersVuexFind>
@@ -52,8 +52,6 @@ export default {
   },
   computed: {
     query() {
-      console.log(this.selectedYear)
-      console.log(this.selectedSchool)
       return {
         $limit: this.listLimit,
         $skip: this.listSkip,
@@ -66,6 +64,9 @@ export default {
     },
   },
   methods: {
+    closeDrawer() {
+      this.drawer = false
+    },
     setSkip(skip) {
       this.listSkip = skip
     },
@@ -75,11 +76,21 @@ export default {
     }
   },
   watch: {
-    query: {
-      handler() {
-        this.skip = 0;
-      },
-      deep: true
+    selectedStudent() {
+      if(!this.selectedStudent) this.drawer = false
+    },
+    selectedYear() {
+      this.listSkip = 0;
+    },
+    selectedSchool() {
+      this.listSkip = 0;
+    },
+    drawer() {
+      if(!this.drawer) {
+        setTimeout(() => {
+          this.selectedStudent = null;
+        }, 50)
+      }
     }
   }
 };
