@@ -7,14 +7,15 @@
         <v-card-subtitle v-show="registeredStudents.length" class="py-0">
           Select student to mark attendence
         </v-card-subtitle>
-        <v-list-item-group multiple color="primary">
+        <v-list-item-group color="primary" v-model="activeStudent">
           <template v-for="student in registeredStudents">
             <ListItem
               :key="student._id"
               :student="student"
               :report="getReport(student._id)"
-              @openReport="$emit('openReport', getReport($event))"
-              @openInfo="$emit('openInfo', $event)"
+              :activeReport="activeReport"
+              :activeStudent="activeStudent"
+              @openReport="(report) => activeReport = report"
             />
           </template>
         </v-list-item-group>
@@ -42,14 +43,34 @@ export default {
     ListItem,
   },
   props: {
+    value: Object,
     session: Object,
     registeredStudents: Array,
     reports: Array,
+    selectedReport: Object,
   },
   data: () => ({
     studentsAttending: [],
     studentAddDialog: false,
   }),
+  computed: {
+    activeStudent: {
+      get() {
+        return this.value
+      },
+      set(val) {
+        this.$emit('setStudent', val)
+      }
+    },
+    activeReport: {
+      get() {
+        return this.selectedReport
+      },
+      set(val) {
+        this.$emit('setReport', val)
+      }
+    }
+  },
   methods: {
     ...mapActions('sessions', { updateSession: 'patch' }),
     ...mapActions('reports', { createReport: 'create' }),
