@@ -16,17 +16,17 @@
     <v-card-actions class="py-1">
       <v-btn text rounded color="primary" :to="{ name: 'view students' }">View All</v-btn>
       <v-btn text rounded color="primary" @click="studentDialog = true">Create New</v-btn>
-      <new-student v-model="studentDialog" />
+      <StudentDialog v-model="studentDialog" />
     </v-card-actions>
   </v-card>
 </template>
 
 <script>
+import StudentDialog from '../StudentDialog'
+
 export default {
   components: {
-    newStudent: () => ({
-      component: import('../CreateStudent.vue'),
-    }),
+    StudentDialog
   },
   data() {
     return {

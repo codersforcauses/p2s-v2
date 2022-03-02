@@ -36,7 +36,6 @@ module.exports = function(app) {
       language: {
         englishCompetent: {
           type: Boolean,
-          required: true,
         },
         nativeLanguage: {
           type: String,
