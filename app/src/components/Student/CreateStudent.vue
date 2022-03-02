@@ -45,7 +45,48 @@
 
               <v-col cols="12" tag="label" class="v-label pl-6">DATE OF BIRTH</v-col>
               <v-col cols="12">
-                <v-menu
+                <v-text-field
+                  v-model="date"
+                  hint="(required)"
+                  placeholder="DD/MM/YYYY"
+                  solo-inverted
+                  flat
+                  rounded
+                  color="primary"
+                  class="mb-2 mt-1"
+                  persistent-hint
+                  @blur="saveDate"
+                  :rules="[validation.required, validation.past]"
+                  lazy-validation
+                  append-icon="mdi-calendar"
+                >
+                  <template v-slot:append>
+                    <v-menu
+                      ref="menu"
+                      v-model="dateMenu"
+                      :close-on-content-click="false"
+                      transition="scale-transition"
+                      offset-y
+                      min-width="auto"
+                    >
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-btn icon v-bind="attrs" @click="on"><v-icon>mdi-calendar</v-icon></v-btn>
+                      </template>
+                      <v-date-picker
+                        v-model="date"
+                        :active-picker.sync="activePicker"
+                        :max="
+                          new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
+                            .toISOString()
+                            .substr(0, 10)
+                        "
+                        min="1970-01-01"
+                        @change="saveDate"
+                      ></v-date-picker>
+                    </v-menu>
+                  </template>
+                </v-text-field>
+                <!-- <v-menu
                   ref="menu"
                   v-model.trim="dateMenu"
                   :close-on-content-click="false"
@@ -81,7 +122,7 @@
                     @input="dateMenu = false"
                     color="primary"
                   ></v-date-picker>
-                </v-menu>
+                </v-menu> -->
               </v-col>
 
               <v-col cols="12" tag="label" class="v-label pl-6">GENDER</v-col>
@@ -400,9 +441,8 @@
           </v-container>
         </v-form>
       </v-card-text>
-        <v-divider></v-divider>
+      <v-divider></v-divider>
       <v-card-actions>
-
         <v-row class="pb-4" no-gutters>
           <v-col cols="6">
             <v-alert
@@ -430,7 +470,6 @@
             >
           </v-col>
         </v-row>
-
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -484,6 +523,10 @@ export default {
       dateFormatted: '01/01/2000',
       datePicker: null,
       dateMenu: false,
+
+      activePicker: null,
+      date: null,
+
       alert: false,
       error: '',
       loading: false,
@@ -516,8 +559,8 @@ export default {
   },
   watch: {
     error(val) {
-      if(val) this.alert = true
-      else this.alert = false
+      if (val) this.alert = true;
+      else this.alert = false;
     },
     // eslint-disable-next-line func-names
     'student.DOB': function () {
@@ -526,7 +569,7 @@ export default {
     dateMenu(val) {
       if (val)
         setTimeout(() => {
-          this.$refs.picker.activePicker = 'YEAR';
+          this.activePicker = 'YEAR';
         });
     },
     contactSame() {
@@ -557,7 +600,7 @@ export default {
           this.$emit('created', res._id);
           this.$emit('input');
         } catch (err) {
-          this.error = err.message
+          this.error = err.message;
         }
       }
     },
@@ -573,8 +616,8 @@ export default {
       const [day, month, year] = date.split('/');
       return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
     },
-    saveDate (date) {
-        this.$refs.menu.save(date)
+    saveDate(date) {
+      this.$refs.menu.save(date);
     },
     searchFilter(item, queryText) {
       const text = item.name.toLowerCase();

@@ -9,7 +9,7 @@
   >
     <v-card flat rounded="xl">
       <v-toolbar flat>
-        <v-toolbar-title class="text-h6">{{ schoolId ? 'Edit' : 'Create' }} School</v-toolbar-title>
+        <v-toolbar-title class="text-h6">{{ schoolId ? 'Edit' : 'Add' }} School</v-toolbar-title>
         <v-spacer />
         <v-btn icon @click="$emit('input')">
           <v-icon>mdi-close</v-icon>
@@ -160,7 +160,7 @@
                   :disabled="!valid || loading"
                   :loading="loading"
                   type="submit"
-                >{{ schoolId ? 'Update' : 'Create' }} School</v-btn>
+                >{{ schoolId ? 'Update' : 'Add' }} School</v-btn>
               </v-col>
             </v-row>
           </v-container>
@@ -214,11 +214,9 @@ export default {
   },
   methods: {
     handleSubmit(school, callback) {
-      console.log(school)
       callback(school).then((savedSchool) => this.handleSaveReponse(savedSchool))
     },
     handleSaveReponse(savedSchool) {
-      console.log(savedSchool)
       if (!this.schoolId) {
         this.$router.push({ path: `/schools/${savedSchool._id}` })
       }

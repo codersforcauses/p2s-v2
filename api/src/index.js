@@ -10,7 +10,7 @@ process.on('unhandledRejection', (reason, p) =>
   logger.error('Unhandled Rejection at: Promise ', p, reason)
 );
 
-if (process.env.NODE_ENV !== 'production') {
+if (process.env.NODE_ENV === 'development') {
   app.configure(seeder);
 }
 
