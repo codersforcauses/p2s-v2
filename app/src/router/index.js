@@ -67,10 +67,50 @@ const routes = [
         children: CoachRoutes,
       },
       {
-        path: 'settings',
+        path: '/sessions',
+        name: 'view sessions',
         component: () =>
-          import(/* webpackChunkName: "user_settings" */ '../components/other/Settings.vue'),
-        meta: { requiresAuth: true },
+          import(
+            /* webpackChunkName: "view-sessions" */ '../components/Session/ViewSessions'
+          ),
+      },
+      {
+        path: '/session/:id',
+        name: 'session page',
+        component: () =>
+          import(
+            /* webpackChunkName: "view-session" */ '../components/Session/SessionDetail'
+          ),
+      },
+      {
+        path: '/staff',
+        name: 'view staff',
+        component: () =>
+          import(
+            /* webpackChunkName: "view-users" */ '../components/Staff/ViewUsers'
+          ),
+      },
+      {
+        path: '/schools/:id?',
+        name: 'view schools',
+        component: () =>
+          import(
+            /* webpackChunkName: "view-schools" */ '../components/School/ViewSchools'
+          ),
+      },
+      {
+        path: '/students',
+        name: 'view students',
+        component: () =>
+          import(
+            /* webpackChunkName: "view-schools" */ '../components/Student/ViewStudents'
+          ),
+      },
+      {
+        path: 'settings',
+        name: 'user settings',
+        component: () =>
+          import(/* webpackChunkName: "user-settings" */ '../components/other/Settings.vue'),
       },
     ],
   },
