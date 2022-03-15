@@ -39,7 +39,7 @@
     <v-card-actions class="py-1">
       <v-btn text rounded color="primary" :to="{ name: 'view sessions' }">View All</v-btn>
       <v-btn v-if="isAdminView" text rounded color="primary" @click="sessionDialog = true">Create New</v-btn>
-      <NewSession v-if="isAdminView" v-model="sessionDialog" @created="(e) => $router.push({ path: `/session/${e}` })" />
+      <SessionDialog v-if="isAdminView" v-model="sessionDialog" />
     </v-card-actions>
   </v-card>
 </template>
@@ -49,14 +49,14 @@ import { mapState } from 'vuex';
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 
-import NewSession from '../CreateSession.vue'
+import SessionDialog from '../SessionDialog'
 import DateView from '../DateView.vue'
 
 dayjs.extend(utc)
 
 export default {
   components: {
-    NewSession,
+    SessionDialog,
     DateView
   },
   data() {
