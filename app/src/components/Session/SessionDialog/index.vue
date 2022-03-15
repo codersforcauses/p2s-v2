@@ -308,11 +308,6 @@ export default {
       },
     };
   },
-  mounted() {
-    if(this.item) {
-      this.dateTime = dayjs(this.item.date)
-    }
-  },
   computed: {
     item() {
       const { Session } = this.$FeathersVuex.api
@@ -360,13 +355,16 @@ export default {
     },
     handleSaveReponse(session) {
       if (!this.sessionId) {
-        // this.$router.push({ path: `/students/${savedStudent._id}` });
         this.$router.push({ path: `/session/${session._id}` });
       }
       this.$emit('input');
     },
   },
   watch: {
+    // eslint-disable-next-line func-names
+    'item.date': function(val) {
+      this.dateTime = dayjs(val)
+    },
     dateTime: {
       handler(val) {
         const parsed = dayjs(val)
