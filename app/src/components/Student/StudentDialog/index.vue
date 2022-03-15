@@ -49,8 +49,8 @@
                   <v-col cols="12">
                     <v-text-field
                       v-model="dateFormatted"
+                      label="Student Date of Birth"
                       hint="DD/MM/YYYY"
-                      placeholder="DD/MM/YYYY"
                       solo-inverted
                       flat
                       rounded
@@ -61,7 +61,6 @@
                       @blur="internalDate = dateFormatted"
                       :rules="[validation.required, validation.validDate, validation.past]"
                       lazy-validation
-                      append-icon="mdi-calendar"
                     >
                       <template v-slot:append>
                         <v-menu
