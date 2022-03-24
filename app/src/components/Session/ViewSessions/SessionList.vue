@@ -4,7 +4,7 @@
       <v-list-item @click="openCreateDialog">
         <v-icon color="primary">mdi-plus</v-icon>
         <v-list-item-subtitle class="ml-3" style="color: #f87f79">Add Session</v-list-item-subtitle>
-        <CreateSession v-model="sessionDialog" />
+        <SessionDialog v-model="sessionDialog" />
       </v-list-item>
       <v-list-item-group v-model="selected" @change="selectSession" mandatory color="primary">
         <template v-for="session in sessions">
@@ -18,14 +18,14 @@
 </template>
 
 <script>
-import CreateSession from '../CreateSession';
+import SessionDialog from '../SessionDialog';
 import ListEntry from './ListEntry'
 
 export default {
   name: "session-list",
   title: "Session List",
   components: {
-    CreateSession,
+    SessionDialog,
     ListEntry
   },
   props: {

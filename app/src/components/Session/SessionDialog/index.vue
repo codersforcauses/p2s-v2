@@ -73,7 +73,7 @@
                   color="primary"
                   class="mb-2 mt-1 rounded-l-xl rounded-r-0"
                   persistent-hint
-                  @change="clone.date = dateTime.toISOString()"
+                  @change="clone.date = dateTime ? dateTime.toISOString() : null"
                   @blur="internalDate = dateFormatted"
                   :rules="[validation.required, validation.validDate]"
                   lazy-validation
@@ -97,7 +97,7 @@
                       <v-date-picker
                         v-model="internalDate"
                         min="1970-01-01"
-                        @input="dateMenu = false; clone.date = dateTime.toISOString()"
+                        @input="dateMenu = false; clone.date = dateTime ? dateTime.toISOString() : null"
                         color="primary"
                       ></v-date-picker>
                     </v-menu>
@@ -114,8 +114,7 @@
                   color="primary"
                   class="mb-2 mt-1 rounded-l-0 rounded-r-xl"
                   persistent-hint
-                  @change="clone.date = dateTime.toISOString()"
-                  @blur="internalTime = timeFormatted"
+                  @blur="internalTime = timeFormatted; clone.date = dateTime ? dateTime.toISOString() : null"
                   :rules="[validation.required, validation.validTime]"
                   lazy-validation
                 >
@@ -139,7 +138,7 @@
                         v-model="internalTime"
                         color="primary"
                       >
-                        <v-btn color="primary" style="width: 100%;" @click="$refs.menu.save(internalTime); clone.date = dateTime.toISOString()"
+                        <v-btn color="primary" style="width: 100%;" @click="$refs.menu.save(internalTime); clone.date = dateTime ? dateTime.toISOString() : null"
                           ><v-icon>mdi-check</v-icon></v-btn
                         >
                       </v-time-picker>
@@ -147,77 +146,6 @@
                   </template>
                 </v-text-field>
               </v-col>
-
-              <!-- OLD -->
-              <!-- <v-col cols="6" tag="label" class="v-label pl-6">Date</v-col>
-              <v-col cols="6" tag="label" class="v-label pl-6">Time</v-col>
-              <v-col cols="6" style="padding-right: 2px;">
-                <v-menu
-                  v-model="menu"
-                  :close-on-content-click="false"
-                  :nudge-right="40"
-                  transition="scale-transition"
-                  offset-y
-                  min-width="290px"
-                >
-                  <template v-slot:activator="{ on, attrs }">
-                    <v-text-field
-                      v-model="date"
-                      :rules="[validation.required]"
-                      class="mb-2 mt-1 rounded-l-xl rounded-r-0"
-                      color="primary"
-                      solo-inverted
-                      flat
-                      label="Session Date"
-                      hint="Enter the session's date"
-                      readonly
-                      v-bind="attrs"
-                      v-on="on"
-                    ></v-text-field>
-                  </template>
-                  <v-date-picker
-                    v-model="date"
-                    color="primary"
-                    @input="menu = false"
-                  ></v-date-picker>
-                </v-menu>
-              </v-col>
-              <v-col cols="6">
-                <v-menu
-                  ref="menu"
-                  v-model="menu2"
-                  :close-on-content-click="false"
-                  :nudge-right="40"
-                  :return-value.sync="time"
-                  transition="scale-transition"
-                  offset-y
-                  max-width="290px"
-                  min-width="290px"
-                >
-                  <template v-slot:activator="{ on, attrs }">
-                    <v-text-field
-                      v-model="time"
-                      :rules="[validation.required]"
-                      class="mb-2 mt-1 rounded-l-0 rounded-r-xl"
-                      color="primary"
-                      solo-inverted
-                      flat
-                      label="Session Time"
-                      hint="Enter the session's time"
-                      readonly
-                      v-bind="attrs"
-                      v-on="on"
-                    ></v-text-field>
-                  </template>
-                  <v-time-picker
-                    v-if="menu2"
-                    v-model="time"
-                    full-width
-                    @click:minute="$refs.menu.save(time)"
-                    color="primary"
-                  ></v-time-picker>
-                </v-menu>
-              </v-col> -->
 
               <v-col cols="12" tag="label" class="v-label pl-6">SCHOOL</v-col>
               <v-col cols="12">
@@ -278,7 +206,7 @@ export default {
   },
   data() {
     return {
-      dateTime: null,
+      dateTime: dayjs(),
       dateFormatted: '',
       timeFormatted: '',
       school: '',
@@ -307,6 +235,9 @@ export default {
         validTime: value => dayjs(value.toUpperCase(), ['h:mmA', 'hA', 'h:mmA', 'HH:mm']).isValid() || 'Time is not valid',
       },
     };
+  },
+  mounted() {
+    this.dateTime = dayjs(this.item.date)
   },
   computed: {
     item() {
