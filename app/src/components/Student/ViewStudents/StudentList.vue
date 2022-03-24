@@ -25,9 +25,6 @@ export default {
     students: Array,
     isPending: Boolean,
   },
-  data: () => ({
-    selected: 0
-  }),
   computed: {
     selectedStudent: {
       get() {
@@ -38,13 +35,5 @@ export default {
       }
     }
   },
-  watch: {
-    students: {
-      deep: true,
-      handler() {
-        this.selected = null
-      }
-    }
-  }
 }
 </script>

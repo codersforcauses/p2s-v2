@@ -8,9 +8,9 @@
     >
       <div>
         <SessionFilter :skip="listSkip" @setSkip="setSkip" :limit="listLimit" @setTab="setTab" :queryInfo="info"/>
-        <SessionList :sessions="sessions" @selected="setSession" :isPending="isPending" @open="drawer = true" />
+        <SessionList  v-model="selectedSession" @selected="setSession" :sessions="sessions" :isPending="isPending" @close="closeDrawer" />
         <info-panel v-model="drawer">
-          <SessionInfo v-if="selectedSession" :session="selectedSession" />
+          <SessionInfo v-if="selectedSession" :session="selectedSession" @close="closeDrawer" />
           <v-card-actions v-if="selectedSession">
             <v-btn color="primary" text rounded :to="{ path: `/session/${selectedSession._id}`}">View Session</v-btn>
             <v-btn color="primary" text rounded @click="editSessionDialog = true">Edit Session</v-btn>
@@ -67,6 +67,9 @@ export default {
     },
   },
   methods: {
+    closeDrawer() {
+      this.drawer = false
+    },
     setSkip(skip) {
       this.listSkip = skip
     },
@@ -76,6 +79,21 @@ export default {
     },
     setTab(tab) {
       this.selectedTab = tab
+    }
+  },
+  watch: {
+    selectedSession() {
+      if(!this.selectedSession) this.drawer = false
+    },
+    selectedTab() {
+      this.listSkip = 0;
+    },
+    drawer() {
+      if(!this.drawer) {
+        setTimeout(() => {
+          this.selectedSession = null;
+        }, 50)
+      }
     }
   }
 };
