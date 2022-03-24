@@ -49,19 +49,18 @@
                   <v-col cols="12">
                     <v-text-field
                       v-model="dateFormatted"
+                      label="Student Date of Birth"
                       hint="DD/MM/YYYY"
-                      placeholder="DD/MM/YYYY"
                       solo-inverted
                       flat
                       rounded
                       color="primary"
                       class="mb-2 mt-1"
                       persistent-hint
-                      @change="clone.DOB = parseDate(dateFormatted)"
-                      @blur="clone.DOB = parseDate(dateFormatted)"
+                      @change="clone.DOB = internalDate"
+                      @blur="internalDate = dateFormatted"
                       :rules="[validation.required, validation.validDate, validation.past]"
                       lazy-validation
-                      append-icon="mdi-calendar"
                     >
                       <template v-slot:append>
                         <v-menu
@@ -80,10 +79,9 @@
                             >
                           </template>
                           <v-date-picker
-                            v-model="date"
+                            v-model="internalDate"
                             :active-picker.sync="activePicker"
-                            :max="
-                              new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
+                            :max="new Date()
                                 .toISOString()
                                 .substr(0, 10)
                             "
@@ -451,7 +449,11 @@
 </template>
 
 <script>
+import dayjs from 'dayjs'
+import customParseFormat from 'dayjs/plugin/customParseFormat'
 import SchoolSearch from '../../forms/schoolSearch.vue';
+
+dayjs.extend(customParseFormat)
 
 export default {
   name: 'StudentDialog',
@@ -462,38 +464,47 @@ export default {
     value: Boolean,
     studentId: String,
   },
-  data: (vm) => ({
-    textFocus: false,
-    medTextFocus: false,
-    contactSame: true,
-    date: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
-    dateFormatted: '01/01/2000',
-    activePicker: null,
-    dateMenu: false,
-    loading: false,
-    alert: false,
-    error: '',
-    valid: false,
-    validation: {
-      required: (value) => !!value || 'This field is required',
-      name: (value) => {
-        const pattern = /^[a-z ,.'-]+$/i;
-        return pattern.test(value) || 'Name must only contain letters';
+  data() {
+    return {
+      textFocus: false,
+      medTextFocus: false,
+      contactSame: true,
+      date: '2000-01-01',
+      dateFormatted: '',
+      activePicker: null,
+      dateMenu: false,
+      loading: false,
+      alert: false,
+      error: '',
+      valid: false,
+      validation: {
+        required: (value) => !!value || 'This field is required',
+        name: (value) => {
+          const pattern = /^[a-z ,.'-]+$/i;
+          return pattern.test(value) || 'Name must only contain letters';
+        },
+        number: (value) => {
+          const pattern = /^[0-9]+$/i;
+          return pattern.test(value) || 'Number required';
+        },
+        past: (value) =>
+          dayjs(value, 'DD/MM/YYYY').isBefore(dayjs()) ||
+          'Date must be in the past',
+        validDate: (value) =>
+          dayjs(value, 'DD/MM/YYYY').isValid() || 'Invalid date',
       },
-      number: (value) => {
-        const pattern = /^[0-9]+$/i;
-        return pattern.test(value) || 'Number required';
-      },
-      past: (value) =>
-        vm.parseDate(value) <= new Date().toISOString().substr(0, 10) ||
-        'Date must be in the past',
-      validDate: (value) =>
-        vm.validateDate(value) || 'Invalid date',
-    },
-  }),
+    }
+  },
   computed: {
-    computedDateFormatted () {
-      return this.formatDate(this.date)
+    internalDate: {
+      get() {
+        const parsed = dayjs(this.date, 'YYYY-MM-DD')
+        return parsed.isValid() ? parsed.format('YYYY-MM-DD') : ''
+      },
+      set(val) {
+        const parsed = dayjs(val, ['DD/MM/YYYY', 'YYYY-MM-DD'])
+        this.date = parsed.isValid() ? parsed : null
+      }
     },
     showDialog: {
       get() {
@@ -522,41 +533,6 @@ export default {
     },
   },
   methods: {
-    validateDate (date) {
-      if(!/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(date))
-        return false;
-
-      // Parse the date parts to integers
-      const parts = date.split("/");
-      const day = parseInt(parts[0], 10);
-      const month = parseInt(parts[1], 10);
-      const year = parseInt(parts[2], 10);
-
-      // Check the ranges of month and year
-      if(year < 1000 || year > 3000 || month === 0 || month > 12)
-          return false;
-
-      const monthLength = [ 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 ];
-
-      // Adjust for leap years
-      if(year % 400 === 0 || (year % 100 !== 0 && year % 4 === 0))
-          monthLength[1] = 29;
-
-      // Check the range of the day
-      return day > 0 && day <= monthLength[month - 1];
-    },
-    formatDate (date) {
-      if (!date) return null
-      
-      const [year, month, day] = date.split('-')
-      return `${day}/${month}/${year}`
-    },
-    parseDate (date) {
-      if (!date) return null
-      if(!this.validateDate(date)) return null
-      const [day, month, year] = date.split('/')
-      return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
-    },
     handleSubmit(student, callback) {
       callback(student).then((savedStudent) => this.handleSaveReponse(savedStudent));
     },
@@ -569,8 +545,9 @@ export default {
     },
   },
   watch: {
-    date (val) {
-      if(val) this.dateFormatted = this.formatDate(this.date)
+    date(val) {
+      const parsed = dayjs(val, 'YYYY-MM-DD')
+      if (parsed.isValid()) this.dateFormatted = parsed.format('DD/MM/YYYY')
     },
     dateMenu (val) {
       if(val) setTimeout(() => {this.activePicker = 'YEAR'})

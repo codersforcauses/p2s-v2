@@ -4,11 +4,11 @@
       <v-list-item @click="openCreateDialog">
         <v-icon color="primary">mdi-plus</v-icon>
         <v-list-item-subtitle class="ml-3" style="color: #f87f79">Add Session</v-list-item-subtitle>
-        <CreateSession v-model="sessionDialog" />
+        <SessionDialog v-model="sessionDialog" />
       </v-list-item>
-      <v-list-item-group v-model="selected" @change="selectSession" mandatory color="primary">
+      <v-list-item-group v-model="selectedSession" color="primary">
         <template v-for="session in sessions">
-          <v-list-item :key="session._id" @click="$emit('open')">
+          <v-list-item :key="session._id" :value="session">
             <ListEntry :session="session" />
           </v-list-item>
         </template>
@@ -18,14 +18,14 @@
 </template>
 
 <script>
-import CreateSession from '../CreateSession';
+import SessionDialog from '../SessionDialog';
 import ListEntry from './ListEntry'
 
 export default {
   name: "session-list",
   title: "Session List",
   components: {
-    CreateSession,
+    SessionDialog,
     ListEntry
   },
   props: {
@@ -33,25 +33,23 @@ export default {
     isPending: Boolean,
   },
   data: () => ({
-    selected: 0,
     sessionDialog: false
   }),
   methods: {
     openCreateDialog() {
-      this.$emit('selected', null)
+      this.selectedSession = null
       this.sessionDialog = true
     },
-    selectSession() {
-      this.$emit('selected', this.sessions[this.selected])
-    },
   },
-  watch: {
-    sessions: {
-      deep: true,
-      handler() {
-        this.selected = null
+  computed: {
+    selectedSession: {
+      get() {
+        return this.value
+      },
+      set(val) {
+        this.$emit('selected', val)
       }
     }
-  }
+  },
 }
 </script>

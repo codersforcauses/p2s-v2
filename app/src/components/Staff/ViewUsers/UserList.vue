@@ -24,9 +24,6 @@ export default {
     users: Array,
     isPending: Boolean,
   },
-  data: () => ({
-    selected: 0
-  }),
   computed: {
     selectedUser: {
       get() {
@@ -37,13 +34,5 @@ export default {
       }
     }
   },
-  watch: {
-    users: {
-      deep: true,
-      handler() {
-        this.selected = null
-      }
-    }
-  }
 }
 </script>

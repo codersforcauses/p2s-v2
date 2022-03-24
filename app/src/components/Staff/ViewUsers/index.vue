@@ -10,7 +10,7 @@
         <UserFilter :skip="listSkip" @setSkip="setSkip" :limit="listLimit" :queryInfo="info"/>
         <UserList v-model="selectedUser" @selected="setUser" :users="users" :isPending="isPending" @close="closeDrawer" />
         <info-panel v-model="drawer">
-           <user-info v-if="selectedUser" :user="selectedUser" @close="closeDrawer" />
+           <UserInfo v-if="selectedUser" :user="selectedUser" @close="closeDrawer" />
         </info-panel>
       </div>
     </FeathersVuexFind>

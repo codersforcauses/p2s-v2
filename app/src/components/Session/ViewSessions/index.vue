@@ -8,11 +8,13 @@
     >
       <div>
         <SessionFilter :skip="listSkip" @setSkip="setSkip" :limit="listLimit" @setTab="setTab" :queryInfo="info"/>
-        <SessionList :sessions="sessions" @selected="setSession" :isPending="isPending" @open="drawer = true" />
+        <SessionList  v-model="selectedSession" @selected="setSession" :sessions="sessions" :isPending="isPending" @close="closeDrawer" />
         <info-panel v-model="drawer">
-          <session-info v-if="selectedSession" :session="selectedSession" />
+          <SessionInfo v-if="selectedSession" :session="selectedSession" @close="closeDrawer" />
           <v-card-actions v-if="selectedSession">
             <v-btn color="primary" text rounded :to="{ path: `/session/${selectedSession._id}`}">View Session</v-btn>
+            <v-btn color="primary" text rounded @click="editSessionDialog = true">Edit Session</v-btn>
+            <SessionDialog v-model="editSessionDialog" :sessionId="selectedSession._id" />
           </v-card-actions>
           <div v-else class="text-h6 pl-4">
             No Session Selected
@@ -27,6 +29,7 @@
 import SessionFilter from './SessionFilter';
 import SessionList from './SessionList';
 import SessionInfo from '../SessionInfo';
+import SessionDialog from '../SessionDialog';
 import InfoPanel from "../../other/InfoPanel.vue";
 
 export default {
@@ -37,6 +40,7 @@ export default {
     SessionFilter,
     SessionList,
     InfoPanel,
+    SessionDialog
   },
   data() {
     return {
@@ -44,7 +48,7 @@ export default {
       drawer: false,
       listLimit: 10,
       listSkip: 0,
-      sessionDialog: false,
+      editSessionDialog: false,
       selectedTab: 0
     };
   },
@@ -63,6 +67,9 @@ export default {
     },
   },
   methods: {
+    closeDrawer() {
+      this.drawer = false
+    },
     setSkip(skip) {
       this.listSkip = skip
     },
@@ -72,6 +79,21 @@ export default {
     },
     setTab(tab) {
       this.selectedTab = tab
+    }
+  },
+  watch: {
+    selectedSession() {
+      if(!this.selectedSession) this.drawer = false
+    },
+    selectedTab() {
+      this.listSkip = 0;
+    },
+    drawer() {
+      if(!this.drawer) {
+        setTimeout(() => {
+          this.selectedSession = null;
+        }, 50)
+      }
     }
   }
 };
