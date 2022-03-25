@@ -1,6 +1,6 @@
 <template>
   <v-card flat rounded="xl">
-    <v-card-subtitle>Current Staff</v-card-subtitle>
+    <v-card-subtitle>Current Users</v-card-subtitle>
     <div class="d-flex pl-4">
       <div>
         <FeathersVuexCount v-slot="{ total: numCoaches }" service="users" :params="{ query: {
@@ -23,15 +23,15 @@
         <div class="text-body-1 text-center">Admins</div>
       </div>
     </div>
-    <v-card-title primary-title class="primary--text text-h6 pb-0">Manage Staff</v-card-title>
+    <v-card-title primary-title class="primary--text text-h6 pb-0">Manage Users</v-card-title>
 
     <v-card-text>
-      View all the staff currently active
+      View all the users currently active
       <br />Invite a new member to P2S
     </v-card-text>
 
     <v-card-actions class="py-1">
-      <v-btn text rounded color="primary" :to="{ name: 'view staff' }">View All</v-btn>
+      <v-btn text rounded color="primary" :to="{ name: 'view-users' }">View All</v-btn>
 
       <v-btn text rounded color="primary" @click="inviteDialog = true">Add New</v-btn>
       <invite v-model="inviteDialog" />

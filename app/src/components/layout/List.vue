@@ -27,10 +27,3 @@ export default {
   }
 }
 </script>
-
-// Usage:
-// <UserList name="Staff" :items="users">
-//   <template v-slot:itemDisplay="props">
-//     <UserListDisplay :user="props.item" />
-//   </template>
-// </UserList>

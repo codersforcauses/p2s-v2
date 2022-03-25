@@ -12,7 +12,7 @@
       </v-icon>
     </v-btn>
 
-    <v-toolbar-title class="mt-2 ml-0 text-capitalize text-h5">{{ $route.name }}</v-toolbar-title>
+    <v-toolbar-title class="mt-2 ml-0 text-capitalize text-h5">{{ title }}</v-toolbar-title>
 
     <v-spacer />
 
@@ -61,6 +61,12 @@ export default {
         /(iPhone|iPod|iPad|Android|webOS|BlackBerry|IEMobile|Opera Mini)/i,
       );
     },
+    title() {
+      return this.$route.name.split("-").join(" ")
+    }
+  },
+  mounted() {
+    console.log(this.$route)
   },
   methods: {
     async logout() {

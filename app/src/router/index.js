@@ -83,11 +83,11 @@ const routes = [
           ),
       },
       {
-        path: '/staff',
-        name: 'view staff',
+        path: '/users',
+        name: 'view-users',
         component: () =>
           import(
-            /* webpackChunkName: "view-users" */ '../components/Staff/ViewUsers'
+            /* webpackChunkName: "view-users" */ '../components/User/ViewUsers'
           ),
       },
       {

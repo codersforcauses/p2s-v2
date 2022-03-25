@@ -9,7 +9,7 @@ export default {
   data() {
     return {
       cards: [
-        'staff-card',
+        'user-card',
         'session-card',
         'student-card',
         'school-card',
@@ -18,7 +18,7 @@ export default {
   },
   components: {
     'session-card': () => import('./Session/SessionCard'),
-    'staff-card': () => import('./Staff/StaffCard'),
+    'user-card': () => import('./User/UserCard'),
     'student-card': () => import('./Student/StudentCard'),
     'school-card': () => import('./School/SchoolCard'),
   },

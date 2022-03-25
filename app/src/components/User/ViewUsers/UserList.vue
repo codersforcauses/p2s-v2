@@ -18,7 +18,7 @@ import UserListDisplay from './UserListDisplay.vue'
 export default {
   components: { UserListDisplay },
   name: "user-list",
-  title: "Staff List",
+  title: "User List",
   props: {
     value: Object,
     users: Array,

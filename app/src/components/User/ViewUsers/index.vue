@@ -25,7 +25,7 @@ import InfoPanel from "../../other/InfoPanel.vue";
 
 export default {
   name: 'view-users',
-  title: 'View Staff',
+  title: 'View Users',
   components: {
     UserInfo,
     UserFilter,
