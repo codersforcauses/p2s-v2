@@ -68,7 +68,7 @@ const routes = [
       },
       {
         path: '/sessions',
-        name: 'view sessions',
+        name: 'view-sessions',
         component: () =>
           import(
             /* webpackChunkName: "view-sessions" */ '../components/Session/ViewSessions'
@@ -76,14 +76,14 @@ const routes = [
       },
       {
         path: '/session/:id',
-        name: 'session page',
+        name: 'session-page',
         component: () =>
           import(
             /* webpackChunkName: "view-session" */ '../components/Session/SessionDetail'
           ),
       },
       {
-        path: '/users',
+        path: '/users/:id?',
         name: 'view-users',
         component: () =>
           import(
@@ -92,7 +92,7 @@ const routes = [
       },
       {
         path: '/schools/:id?',
-        name: 'view schools',
+        name: 'view-schools',
         component: () =>
           import(
             /* webpackChunkName: "view-schools" */ '../components/School/ViewSchools'
@@ -100,7 +100,7 @@ const routes = [
       },
       {
         path: '/students',
-        name: 'view students',
+        name: 'view-students',
         component: () =>
           import(
             /* webpackChunkName: "view-schools" */ '../components/Student/ViewStudents'
@@ -108,7 +108,7 @@ const routes = [
       },
       {
         path: 'settings',
-        name: 'user settings',
+        name: 'user-settings',
         component: () =>
           import(/* webpackChunkName: "user-settings" */ '../components/other/Settings.vue'),
       },

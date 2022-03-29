@@ -37,7 +37,7 @@
     </v-card-text>
 
     <v-card-actions class="py-1">
-      <v-btn text rounded color="primary" :to="{ name: 'view sessions' }">View All</v-btn>
+      <v-btn text rounded color="primary" :to="{ name: 'view-sessions' }">View All</v-btn>
       <v-btn v-if="isAdminView" text rounded color="primary" @click="sessionDialog = true">Create New</v-btn>
       <SessionDialog v-if="isAdminView" v-model="sessionDialog" />
     </v-card-actions>
