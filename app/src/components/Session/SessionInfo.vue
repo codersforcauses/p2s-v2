@@ -1,6 +1,6 @@
 <template>
   <v-card flat tile class="py-sm-12">
-    <v-card-text height="100%" class="pa-0 mt-sm-4">
+    <v-card-text height="100%" class="pa-2 mt-sm-4">
       <div v-if="session" class="d-flex">
         <DateView :date="session.date" />
         <v-divider
@@ -19,6 +19,7 @@
           </div>
         </FeathersVuexGet>
       </div>
+      <div class="mt-5">{{ session.feedback ? 'Feedback: ' + session.feedback : 'No coach feedback provided' }}</div>
     </v-card-text>
   </v-card>
 </template>

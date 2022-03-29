@@ -42,6 +42,21 @@
         >
           <AttendingCoaches v-model="selectedUser" :session="session" :registeredCoaches="coaches" @setSelectedUser="setUserInfo" />
         </FeathersVuexFind>
+        <v-card flat class="mx-4 my-6">
+          <v-card-title class="pb-0">Feedback</v-card-title>
+          <FeathersVuexInputWrapper :item="session" prop="feedback">
+            <template #default="{ current, prop, createClone, handler }">
+              <v-textarea 
+                v-model="current[prop]"
+                filled
+                rounded
+                auto-grow
+                no-resize
+                @focus="createClone"
+                @blur="e => handler(e, save)"></v-textarea>
+            </template>
+          </FeathersVuexInputWrapper>
+        </v-card>
       </div>
     </FeathersVuexGet>
   </v-sheet>
@@ -96,6 +111,10 @@ export default {
       this.selectedUser = null;
       this.selectedStudent = student;
       this.drawer = true;
+    },
+    async save({ clone, data }) {
+      const user = clone.commit()
+      return user.patch({ data })
     }
   },
   watch: {
