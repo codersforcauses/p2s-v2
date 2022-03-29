@@ -33,19 +33,18 @@
     <v-card-actions class="py-1">
       <v-btn text rounded color="primary" :to="{ name: 'view-users' }">View All</v-btn>
 
-      <v-btn text rounded color="primary" @click="inviteDialog = true">Add New</v-btn>
-      <invite v-model="inviteDialog" />
+      <v-btn text rounded color="primary" @click="inviteDialog = true">Invite User</v-btn>
+      <UserDialog v-model="inviteDialog" />
     </v-card-actions>
   </v-card>
 </template>
 
 <script>
+import UserDialog from '../UserDialog'
 
 export default {
   components: {
-    invite: () => ({
-      component: import('../UserInvite.vue'),
-    }),
+    UserDialog
   },
   data() {
     return {

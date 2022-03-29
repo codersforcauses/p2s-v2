@@ -1,5 +1,5 @@
 <template>
-  <v-card flat tile height="100%" class="py-sm-12">
+  <v-card flat tile class="py-sm-12">
     <v-card-text height="100%" class="pa-0">
       <div class="ml-4 mt-sm-4 d-flex">
         <v-sheet
@@ -42,7 +42,6 @@
             <v-list-item-title>Name: {{getEmergencyInfo.name}}</v-list-item-title>
             <v-list-item-subtitle>Num: {{getEmergencyInfo.num}}</v-list-item-subtitle>
           </v-list-item-content> -->
-          <pre>{{JSON.stringify(session, null, 2)}}</pre>
         </v-list-item>
         <v-card-text v-if="!sessions.length">No Sessions Found</v-card-text>
       </v-card>
@@ -58,7 +57,7 @@
         </v-list-item>
         <v-card-text>No contact provided</v-card-text>
       </v-card>  
-      <pre>{{JSON.stringify(user, null, 2)}}</pre>
+      <!-- <pre>{{JSON.stringify(user, null, 2)}}</pre> -->
     </v-card-text>
   </v-card>
 </template>
