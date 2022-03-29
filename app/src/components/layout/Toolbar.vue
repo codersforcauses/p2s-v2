@@ -65,9 +65,6 @@ export default {
       return this.$route.name.split("-").join(" ")
     }
   },
-  mounted() {
-    console.log(this.$route)
-  },
   methods: {
     async logout() {
       await this.$store.dispatch('auth/logout');

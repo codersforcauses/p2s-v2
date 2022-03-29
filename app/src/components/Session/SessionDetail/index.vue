@@ -86,7 +86,6 @@ export default {
       this.drawer = true;
     },
     setUserInfo(user) {
-      console.log(user)
       this.selectedReport = null
       this.selectedStudent = null;
       this.selectedUser = user;

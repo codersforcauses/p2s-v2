@@ -116,7 +116,6 @@ export default {
         return this.filterYear
       },
       set(year) {
-        console.log(year)
         this.$emit('updateYear', year);
       },
     },
