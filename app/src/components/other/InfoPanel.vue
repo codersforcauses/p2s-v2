@@ -11,26 +11,28 @@
       disable-route-watcher
       class="py-3 px-0"
     >
-      <v-btn icon class="float-right ma-0 mt-16 mr-3" style="z-index:10;" @click="open = false">
-        <v-icon>mdi-close</v-icon>
-      </v-btn>
-      <slot />
+      <div class="nav-panel">
+        <CloseButton @close="open = false"/>
+        <slot />
+      </div>
     </v-navigation-drawer>
     <v-bottom-sheet v-else v-model="open" scrollable>
-      <v-sheet
-        class="pa-4 rounded-t-xl">
-        <v-btn icon class="float-right ma-2" style="z-index:10;" @click="open = false">
-          <v-icon>mdi-close</v-icon>
-        </v-btn>
+      <v-sheet class="pa-4 rounded-t-xl nav-panel">
+        <CloseButton @close="open = false"/>
         <slot />
       </v-sheet>
     </v-bottom-sheet>
 </template>
 
 <script>
+import CloseButton from './CloseButton.vue'
+
 export default {
   name: "info-panel",
   title: "Info Panel",
+  components: {
+    CloseButton
+  },
   props: {
     selectedStudent: Object,
     value: Boolean
@@ -47,3 +49,13 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+  .nav-panel {
+    position: relative;
+  }
+
+  .btn-ontop {
+    z-index:10; position: absolute; right: 0;
+  }
+</style>
