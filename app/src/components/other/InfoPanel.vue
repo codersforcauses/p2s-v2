@@ -17,8 +17,8 @@
       </div>
     </v-navigation-drawer>
     <v-bottom-sheet v-else v-model="open" scrollable>
-      <v-sheet class="pa-4 rounded-t-xl nav-panel">
-        <CloseButton @close="open = false"/>
+      <v-sheet height="2000px" class="rounded-t-xl nav-panel">
+        <CloseButton style="margin-top: 10px !important;" @close="open = false"/>
         <slot />
       </v-sheet>
     </v-bottom-sheet>

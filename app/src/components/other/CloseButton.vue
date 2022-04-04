@@ -12,6 +12,9 @@ export default {
 
 <style scoped>
   .btn-ontop {
-    z-index:10; position: absolute; right: 0;
+    z-index: 20 !important;
+    position: absolute;
+    right: 0;
+    top: 0;
   }
 </style>
