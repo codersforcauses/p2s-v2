@@ -442,7 +442,7 @@
             </v-row>
           </v-card-actions>
         </v-card>
-            </v-form>
+        </v-form>
       </template>
     </FeathersVuexFormWrapper>
   </v-dialog>
@@ -495,6 +495,9 @@ export default {
       },
     }
   },
+  mounted() {
+    this.date = dayjs(this.item.date).format('YYYY-MM-DD')
+  },
   computed: {
     internalDate: {
       get() {
@@ -516,20 +519,19 @@ export default {
     },
     item() {
       const { Student } = this.$FeathersVuex.api;
-
-      return this.studentId
-        ? Student.getFromStore(this.studentId)
-        : new Student(
-          {
-            language: {
-              englishCompetent: true
-            },
-            medical: {},
-            contact: {
-              home: {},
-              emergency: {}
-            }
-          });
+      const emptyStudent = {
+        language: {},
+        medical: {},
+        contact: {
+          home: {},
+          emergency: {}
+        }
+      }
+      if (this.studentId) {
+        const studentData = Student.getFromStore(this.studentId)
+        return new Student({ ...emptyStudent, ...studentData })
+      }
+      return new Student(emptyStudent)
     },
   },
   methods: {

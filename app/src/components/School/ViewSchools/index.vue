@@ -9,11 +9,11 @@
       <div>
         <SchoolFilter   :queryInfo="info" :limit="listLimit" :skip="listSkip" @setSkip="setSkip"></SchoolFilter>
         <SchoolList v-if="!isPending" v-model="selectedSchool" :schools="schools" :isPending="isPending" @selected="handleSelected" />
-        <info-panel v-model="drawer">
+        <InfoPanel v-model="drawer">
           <SchoolInfo v-if="selectedSchool" :school="selectedSchool" />
-          <v-btn class="ml-5" rounded outlined color="primary" @click="editSchoolDialog = true"><v-icon color="primary">mdi-plus</v-icon>Edit School</v-btn>
+          <v-btn class="ml-5" rounded outlined color="primary" @click="editSchoolDialog = true"><v-icon color="primary">mdi-pencil</v-icon>Edit School</v-btn>
           <SchoolDialog v-if="selectedSchool" v-model="editSchoolDialog" :schoolId="selectedSchool._id" />
-        </info-panel>
+        </InfoPanel>
       </div>
     </FeathersVuexFind>
   </v-sheet>

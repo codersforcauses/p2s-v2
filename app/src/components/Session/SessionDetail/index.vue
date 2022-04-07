@@ -70,7 +70,7 @@ import ReportInfo from './ReportInfo.vue';
 import SessionInfoHeader from './SessionInfoHeader.vue';
 import AttendingCoaches from './AttendingCoaches';
 import UserInfo from './UserInfo.vue';
-import StudentInfo from './StudentInfo.vue';
+import StudentInfo from '../../Student/ViewStudents/StudentInfo.vue';
 
 export default {
   name: 'session-detail',

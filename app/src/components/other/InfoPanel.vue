@@ -9,7 +9,7 @@
       right
       disable-resize-watcher
       disable-route-watcher
-      class="py-3 px-0"
+      class="py-3 pb-15 px-0"
     >
       <div class="nav-panel">
         <CloseButton @close="open = false"/>
