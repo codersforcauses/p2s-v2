@@ -6,24 +6,26 @@
           <v-tab class="text-capitalize text-body-2">Next Session</v-tab>
           <v-tab class="text-capitalize text-body-2">Last Session</v-tab>
         </v-tabs>
-        <div v-if="session" class="d-flex justify-space-around align-center">
-          <DateView :date="session.date" />
-          <v-divider
-          inset vertical
-          class="mx-3"
-          />
-          <FeathersVuexGet 
-            v-slot="{ item: school }"
-            service="schools"
-            :id="session.school"  
-          >
-            <div class="d-flex flex-column justify-space-between">
-              <div class="text-subtitle-1">{{ formatTime(session) }} - {{ school ? school.name : 'loading' }}</div>
-              <div>{{ session.type }}</div>
-              <div>{{ coachText(session) }}</div>
-            </div>
-          </FeathersVuexGet>
-        </div>
+        <v-container v-if="session">
+          <v-row class="mx-3">
+            <DateView :date="session.date" />
+            <v-divider
+            inset vertical
+            class="mx-5"
+            />
+            <FeathersVuexGet 
+              v-slot="{ item: school }"
+              service="schools"
+              :id="session.school"  
+            >
+              <div class="d-flex flex-column justify-space-between">
+                <div class="text-subtitle-1">{{ formatTime(session) }} - {{ school ? school.name : 'loading' }}</div>
+                <div>{{ session.type }}</div>
+                <div>{{ coachText(session) }}</div>
+              </div>
+            </FeathersVuexGet>
+          </v-row>
+        </v-container>
         <div v-else class="text-h6 mb-10 px-4">
           No Session Found
         </div>

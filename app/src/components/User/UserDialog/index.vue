@@ -241,8 +241,12 @@ export default {
     },
     item() {
       const { User } = this.$FeathersVuex.api
-
-      return this.userId ? User.getFromStore(this.userId) : new User({ admin: {}, coach: {}})
+      const emptyUser = { admin: {}, coach: {}}
+      if (this.userId) {
+        const userData = User.getFromStore(this.userId)
+        return new User({ ...emptyUser, ...userData })
+      }
+      return new User(emptyUser)
     },
   },
   methods: {
