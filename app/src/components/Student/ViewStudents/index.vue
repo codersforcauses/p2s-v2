@@ -17,9 +17,11 @@
           :limit="listLimit"
           :queryInfo="info"/>
         <StudentList v-model="selectedStudent" @selected="setStudent" :students="students" :isPending="isPending" @close="closeDrawer" />
-        <info-panel v-model="drawer">
-          <student-info v-if="selectedStudent" :student="selectedStudent" @close="closeDrawer"></student-info>
-        </info-panel>
+        <InfoPanel v-model="drawer">
+          <StudentInfo v-if="selectedStudent" :student="selectedStudent" @close="closeDrawer"></StudentInfo>
+          <v-btn class="ml-8" rounded outlined color="primary" @click="editStudentDialog = true"><v-icon color="primary">mdi-pencil</v-icon>Edit Student</v-btn>
+          <StudentDialog v-if="selectedStudent" v-model="editStudentDialog" :studentId="selectedStudent._id" />
+        </InfoPanel>
       </div>
     </FeathersVuexFind>
   </v-sheet>
@@ -30,6 +32,7 @@ import StudentList from './StudentList';
 import StudentInfo from './StudentInfo';
 import StudentFilter from './StudentFilter';
 import InfoPanel from '../../other/InfoPanel.vue';
+import StudentDialog from '../StudentDialog';
 
 export default {
   name: 'view-students',
@@ -39,6 +42,7 @@ export default {
     StudentInfo,
     StudentFilter,
     InfoPanel,
+    StudentDialog
   },
   data() {
     return {
@@ -48,6 +52,7 @@ export default {
       listSkip: 0,
       selectedSchool: '',
       selectedYear: null,
+      editStudentDialog: false
     };
   },
   computed: {
