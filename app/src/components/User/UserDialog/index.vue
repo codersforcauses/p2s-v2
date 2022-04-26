@@ -96,6 +96,20 @@
                       @updateVerified="clone.qualifications.policeClearance.verified = $event"
                       @updateExpiry="clone.qualifications.policeClearance.expiry = $event"
                     />
+                    <Clearance
+                      title="Medical Clearance"
+                      :verified="clone.qualifications.medClearance.verified"
+                      :expiry="clone.qualifications.medClearance.expiry"
+                      @updateVerified="clone.qualifications.medClearance.verified = $event"
+                      @updateExpiry="clone.qualifications.medClearance.expiry = $event"
+                    />
+                    <Clearance
+                      title="Working With Children Check"
+                      :verified="clone.qualifications.WWC.verified"
+                      :expiry="clone.qualifications.WWC.expiry"
+                      @updateVerified="clone.qualifications.WWC.verified = $event"
+                      @updateExpiry="clone.qualifications.WWC.expiry = $event"
+                    />
                   </v-expansion-panel-content>
                 </v-expansion-panel>
               </v-expansion-panels>

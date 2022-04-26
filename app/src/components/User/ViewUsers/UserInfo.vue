@@ -153,31 +153,27 @@
           <v-card-title class="text-h6">Qualifications</v-card-title>
         </v-col>
       </v-row>
-      <template v-if="user.qualifications">
-        <v-row>
-          <v-card-title class="subtitle-1">Police Clearance</v-card-title>
-        </v-row>
-        <v-row v-if="Object.keys(user.qualifications.policeClearance).length > 0">
-          <v-col sm="6" cols="12">
-            <v-card-text v-if="user.qualifications.policeClearance.verified">
-              <v-icon color="primary">mdi-eye-check</v-icon>Verified
-            </v-card-text>
-            <v-card-text v-else>
-              <v-icon color="primary">mdi-eye-remove</v-icon>Not Verified
-            </v-card-text>
-          </v-col>
-          <v-col sm="6" cols="12">
-            <v-card-text v-if="user.qualifications.policeClearance.expiry">
-              <v-icon color="primary">mdi-calendar-refresh</v-icon>
-              {{ Date() | formatExpiry }}
-            </v-card-text>
-            <v-card-text v-else>
-              <v-icon color="primary">mdi-calendar-question</v-icon>
-              Expiry Unknown
-            </v-card-text>
-          </v-col>
-        </v-row>
-        <v-row v-else>
+    </v-container>
+    <template v-if="user.qualifications">
+      <Clearance
+        title="Police Clearance"
+        :verified="this.user.qualifications.policeClearance.verified"
+        :expiry="this.user.qualifications.policeClearance.expiry"
+      />
+      <Clearance
+        title="Medical Clearance" 
+        :verified="this.user.qualifications.medClearance.verified"
+        :expiry="this.user.qualifications.medClearance.expiry"
+      />
+      <Clearance
+        title="Working With Children Check" 
+        :verified="this.user.qualifications.WWC.verified"
+        :expiry="this.user.qualifications.WWC.expiry"
+      />
+    </template>
+    <template v-else>
+      <v-container>
+        <v-row >
           <v-col sm="6" cols="12">
             <v-card-text>
               <v-icon color="primary">mdi-close</v-icon>
@@ -185,16 +181,8 @@
             </v-card-text>
           </v-col>
         </v-row>
-      </template>
-      <v-row v-else>
-        <v-col>
-          <v-card-text class="subtitle-2 grey--text">
-            No Qualifications
-          </v-card-text>
-        </v-col>
-      </v-row>
-
-    </v-container>
+      </v-container>
+    </template>
 
     <v-container>
       <v-expansion-panels flat>
@@ -214,9 +202,10 @@
 <script>
 import dayjs from 'dayjs';
 import DateView from './DateView.vue';
+import Clearance from './Clearance.vue';
 
 export default {
-  components: { DateView },
+  components: { DateView, Clearance },
   props: {
     user: Object,
   },
@@ -257,12 +246,6 @@ export default {
       };
     },
   },
-  filters: {
-    formatExpiry: (value) => {
-      if (!value) return ''
-      return dayjs(value).format('DD/MM/YY');
-    }
-  }
 };
 </script>
 
