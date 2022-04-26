@@ -1,136 +1,274 @@
 <template>
-  <v-card flat tile class="py-sm-12">
-    <v-card-text height="100%" class="pa-0">
-      <div class="ml-4 mt-sm-4 d-flex">
-        <v-sheet
-          v-if="$vuetify.breakpoint.smAndUp"
+  <v-card v-if="user" flat tile height="100%" class="py-sm-12">
+    <v-card outlined class="pt-8 pb-3 d-flex flex-column align-center text-center rounded-b-xl">
+      <!-- <v-sheet
           outlined
           rounded
           elevation="0"
-          class="d-flex align-center grey--text text-h3 px-2"
+          width="70px"
+          height="70px"
+          class="d-flex justify-center align-center grey--text text-h4 mb-3"
           :class="$vuetify.theme.dark ? 'text--lighten-1' : 'text--darken-1'"
         >
           {{getInitials}}
-        </v-sheet>
-        <v-list-item three-line class="px-2 px-sm-4">
-          <v-list-item-content class="py-0">
-            <v-list-item-title class="text-h6">{{ user.name }}</v-list-item-title>
-            <v-list-item-subtitle>
-              <a :href="'mailto:' + user.email">{{user.email}}</a>
-            </v-list-item-subtitle>
-            <v-list-item-subtitle >
-              <a :href="'tel:' + user.mobile">{{user.mobile}}</a>
-            </v-list-item-subtitle>
-            <div>
-              <v-icon v-if="user.coach.is" title="Coach" color="primary">mdi-account-heart</v-icon>
-              <v-icon v-if="user.admin.is" title="Administrator" color="primary">mdi-shield-account</v-icon>
-            </div>
-          </v-list-item-content>
-        </v-list-item>
+        </v-sheet> -->
+      <v-card-title class="text-h5 pt-0 pb-2" style="word-break: keep-all">{{
+        user.name
+      }}</v-card-title>
+      <div class="d-flex" style="gap: 10px">
+        <v-card-text v-if="user.coach.is" class="text-h7 d-flex flex-column">
+          <v-icon title="Coach" color="primary">mdi-account-heart</v-icon> Coach
+        </v-card-text>
+        <v-card-text class="text-h7 d-flex flex-column">
+          <v-icon title="Administrator" color="primary">mdi-shield-account</v-icon> Admin
+        </v-card-text>
       </div>
+      <v-card-text class="subtitle-1 pa-0">
+        <v-icon color="primary">mdi-at</v-icon>
+        <a :href="'mailto:' + user.email">{{ user.email }}</a>
+      </v-card-text>
+      <v-card-text v-if="user.mobile" class="subtitle-1 pa-0">
+        <v-icon color="primary">mdi-cellphone</v-icon>
+        <a :href="'tel:' + user.mobile">{{ user.mobile }}</a>
+      </v-card-text>
+    </v-card>
 
-      <FeathersVuexFind
-        v-slot="{ items: sessions }"
-        service="sessions"
-        :params="{ query }"
-        watch="params"
-      >
-      <v-card v-if="user.coach.is" outlined rounded="lg" flat class="mx-4 my-6">
-        <v-card-text class="pb-0">Sessions</v-card-text>
-        <v-list-item v-for="session in sessions" :key="session._id" two-line >
-          <!-- <v-list-item-content>
-            <v-list-item-title>Name: {{getEmergencyInfo.name}}</v-list-item-title>
-            <v-list-item-subtitle>Num: {{getEmergencyInfo.num}}</v-list-item-subtitle>
-          </v-list-item-content> -->
-        </v-list-item>
-        <v-card-text v-if="!sessions.length">No Sessions Found</v-card-text>
-      </v-card>
-      </FeathersVuexFind>
+    <v-container>
+      <v-row>
+        <v-col cols="12">
+          <v-card-title class="text-h6">Personal</v-card-title>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col v-if="formattedDOB" sm="6" cols="12">
+          <v-card-text>
+            <v-icon color="primary">mdi-cake-variant</v-icon>
+            {{ formattedDOB }}
+          </v-card-text>
+        </v-col>
+        <v-col v-if="user.gender" sm="6" cols="12">
+          <v-card-text>
+            <v-icon color="primary">mdi-human-non-binary</v-icon>
+            {{ user.gender }}
+          </v-card-text>
+        </v-col>
+        <v-col v-if="user.culture" sm="6" cols="12">
+          <v-card-text class="subtitle-2">
+            <v-icon color="primary">mdi-earth</v-icon>
+            {{ user.culture }}
+          </v-card-text>
+        </v-col>
+        <v-col v-if="formattedAddress" cols="12">
+          <v-card-text>
+            <v-icon color="primary">mdi-map-marker</v-icon>
+            {{ formattedAddress }}
+          </v-card-text>
+        </v-col>
+        <v-col>
+          <v-card-text v-if="!hasPersonalInfo" class="subtitle-2 grey--text">
+            No Information
+          </v-card-text>
+        </v-col>
+      </v-row>
+    </v-container>
 
-      <v-card  outlined rounded="lg" flat class="mx-4 my-6">
-        <v-card-text class="pb-0">Emergency Contact</v-card-text>
-        <v-list-item v-if="user.emergencyContact" two-line>
-          <v-list-item-content>
-            <v-list-item-title>Name: {{getEmergencyInfo.name}}</v-list-item-title>
-            <v-list-item-subtitle>Num: {{getEmergencyInfo.num}}</v-list-item-subtitle>
-          </v-list-item-content>
-        </v-list-item>
-        <v-card-text>No contact provided</v-card-text>
-      </v-card>  
-      <!-- <pre>{{JSON.stringify(user, null, 2)}}</pre> -->
-    </v-card-text>
+    <FeathersVuexFind
+      v-slot="{ items: sessions }"
+      service="sessions"
+      :params="{ query: sessionQuery }"
+      watch="params"
+    >
+      <v-container>
+        <v-row>
+          <v-col cols="12">
+            <v-card-title class="text-h6">Sessions</v-card-title>
+          </v-col>
+          <v-col>
+            <v-card-text v-if="!sessions || sessions.length === 0" class="subtitle-2 grey--text">
+              No Sessions Assigned
+            </v-card-text>
+          </v-col>
+        </v-row>
+          <v-list rounded dense>
+            <v-list-item-group color="primary">
+              <v-list-item
+                two-line
+                v-for="(session, i) in sessions"
+                :key="i"
+                class="d-flex"
+                :to="{ path: `/session/${session._id}` }"
+              >
+                <v-list-item-icon>
+                  <DateView :date="session.date" />
+                </v-list-item-icon>
+                <v-list-item-content>
+                  <FeathersVuexGet v-slot="{ item: school }" service="schools" :id="session.school">
+                    <v-list-item-title>{{ school ? school.name : 'loading' }}</v-list-item-title>
+                  </FeathersVuexGet>
+                  <v-list-item-subtitle
+                    >{{ session.type }}
+                    {{ session.location ? ` - ${session.location}` : '' }}</v-list-item-subtitle
+                  >
+                </v-list-item-content>
+              </v-list-item>
+            </v-list-item-group>
+          </v-list>
+      </v-container>
+    </FeathersVuexFind>
+
+    <v-container>
+      <v-row>
+        <v-col cols="12">
+          <v-card-title class="text-h6">Emergency Contact</v-card-title>
+        </v-col>
+      </v-row>
+      <v-row v-if="user.emergencyContact">
+        <v-col sm="6" cols="12">
+          <v-card-text>
+            <v-icon color="primary">mdi-account</v-icon>
+            {{ user.emergencyContact.name }}
+          </v-card-text>
+        </v-col>
+        <v-col sm="6" cols="12">
+          <v-card-text>
+            <v-icon color="primary">mdi-cellphone</v-icon>
+            <a :href="'tel:' + user.emergencyContact.phoneNumber">
+              {{ user.emergencyContact.phoneNumber }}
+            </a>
+          </v-card-text>
+        </v-col>
+      </v-row>
+      <v-row v-else>
+        <v-col>
+          <v-card-text class="subtitle-2 grey--text">
+            No Information
+          </v-card-text>
+        </v-col>
+      </v-row>
+    </v-container>
+
+    <v-container>
+      <v-row>
+        <v-col cols="12">
+          <v-card-title class="text-h6">Qualifications</v-card-title>
+        </v-col>
+      </v-row>
+    </v-container>
+    <template v-if="user.qualifications">
+      <Clearance
+        title="Police Clearance"
+        :verified="this.user.qualifications.policeClearance.verified"
+        :expiry="this.user.qualifications.policeClearance.expiry"
+      />
+      <Clearance
+        title="Medical Clearance" 
+        :verified="this.user.qualifications.medClearance.verified"
+        :expiry="this.user.qualifications.medClearance.expiry"
+      />
+      <Clearance
+        title="Working With Children Check" 
+        :verified="this.user.qualifications.WWC.verified"
+        :expiry="this.user.qualifications.WWC.expiry"
+      />
+    </template>
+    <template v-else>
+      <v-container>
+        <v-row >
+          <v-col sm="6" cols="12">
+            <v-card-text>
+              <v-icon color="primary">mdi-close</v-icon>
+              Not Qualified
+            </v-card-text>
+          </v-col>
+        </v-row>
+      </v-container>
+    </template>
+
+    <v-container>
+      <v-expansion-panels flat>
+        <v-expansion-panel>
+          <v-expansion-panel-header> Raw Info </v-expansion-panel-header>
+          <v-expansion-panel-content>
+            <v-card-subtitle class="subtitle-2 grey--text">
+              <pre>{{ JSON.stringify(user, null, 2) }}</pre>
+            </v-card-subtitle>
+          </v-expansion-panel-content>
+        </v-expansion-panel>
+      </v-expansion-panels>
+    </v-container>
   </v-card>
 </template>
 
 <script>
+import dayjs from 'dayjs';
+import DateView from './DateView.vue';
+import Clearance from './Clearance.vue';
+
 export default {
+  components: { DateView, Clearance },
   props: {
-    user: {
-      type: Object,
-      default: () => ({
-        name: '',
-        email: '',
-        mobile: '',
-        emergencyContact: {
-          name: '',
-          phoneNumber: '',
-        },
-        coach: {
-          is: false,
-        },
-        admin: {
-          is: false
-        }
-      })
-    }
+    user: Object,
   },
   computed: {
+    hasPersonalInfo() {
+      return (
+        !!this.formattedDOB || !!this.formattedAddress || !!this.user.gender || !!this.user.culture
+      );
+    },
+    formattedDOB() {
+      if (!this.user.DOB) return null;
+      return dayjs(this.user.DOB).format('DD MMMM YYYY');
+    },
+    formattedAddress() {
+      if (!this.user.address) return null;
+      return `${this.user.address.street}, ${this.user.address.suburb}, ${this.user.address.state}, ${this.user.address.postcode}`;
+    },
     getInitials() {
-      const nameArr = this.user.name.split(' ')
-        const firstNameChar = nameArr[0].charAt(0)
-      if(nameArr > 1) {
-        const lastNameChar = nameArr[1]?.charAt(0)
-        return firstNameChar + lastNameChar
+      const nameArr = this.user.name.split(' ');
+      const firstNameChar = nameArr[0].charAt(0);
+      if (nameArr > 1) {
+        const lastNameChar = nameArr[1]?.charAt(0);
+        return firstNameChar + lastNameChar;
       }
-      return firstNameChar
+      return firstNameChar;
     },
     getEmergencyInfo() {
-      const name = this.user?.emergencyContact?.name ?? 'Michael Moore'
-      const num = this.user?.emergencyContact?.phoneNumber ?? '+61 412345678'
-      return {name, num}
+      const name = this.user?.emergencyContact?.name ?? 'Michael Moore';
+      const num = this.user?.emergencyContact?.phoneNumber ?? '+61 412345678';
+      return { name, num };
     },
     isSmAndUp() {
       return this.$vuetify.breakpoint.smAndUp ? 128 : 96;
     },
-    query() {
+    sessionQuery() {
       return {
-        _id: this.user.id
-      }
+        coaches: this.user._id,
+      };
     },
   },
 };
 </script>
 
 <style scoped>
-.coach-docs {
-  margin: 1rem;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
-  grid-gap: 0.75rem;
-}
-.wwc {
-  grid-column: 1 / span 2;
+.v-card__text,
+.v-card__title,
+.v-card__subtitle {
+  padding: 0;
 }
 
-@media only screen and (min-width: 960px) {
-  .coach-docs {
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: 1fr;
-    grid-gap: 1rem;
-  }
-  .wwc {
-    grid-column: 1;
-  }
+.v-icon {
+  margin-right: 5px;
+}
+
+.col-12 {
+  padding: 5px 0;
+}
+
+.row {
+  padding: 4px;
+}
+
+.container {
+  padding: 20px 40px;
 }
 </style>

@@ -75,23 +75,22 @@ module.exports = function (app) {
           type: Boolean,
           default: false,
         },
-        qualifications: {
-          policeClearance: {
-            imageLink: {
-              image: Buffer,
-              expiry: Date
-            },
-          },
-          WWC: {
-            imageLink: {
-              image: Buffer,
-              expiry: Date
-            },
-          },
-          medClearance: {
-            image: Buffer,
-            expiry: Date
-          },
+      },
+      qualifications: {
+        policeClearance: {
+          image: Buffer,
+          verified: Boolean,
+          expiry: Date
+        },
+        WWC: {
+          image: Buffer,
+          verified: Boolean,
+          expiry: Date
+        },
+        medClearance: {
+          image: Buffer,
+          verified: Boolean,
+          expiry: Date
         },
       },
       admin: {
