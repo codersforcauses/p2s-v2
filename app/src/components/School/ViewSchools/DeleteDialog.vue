@@ -6,7 +6,7 @@
     transition="dialog-transition"
   >
     <v-card>
-      <v-card-title>Delete User - {{ user.name }}</v-card-title>
+      <v-card-title>Delete School - {{ school.name }}</v-card-title>
       <v-alert
         v-if="error"
         type="error"
@@ -26,7 +26,7 @@
           color="error"
           rounded
           elevation="0"
-          @click="deleteUser"
+          @click="deleteSchool"
         >
           Delete
         </v-btn>
@@ -38,11 +38,14 @@
 
 <script>
 import { mapActions } from 'vuex'
+import dateUtils from '../../../utils/date'
+
 
 export default {
+  mixins: [dateUtils],
   props: {
     value: Boolean,
-    user: Object
+    school: Object
   },
   data: () => ({
     error: ''
@@ -55,16 +58,19 @@ export default {
       set(val) {
         this.$emit('input', val)
       }
+    },
+    date() {
+      return this.school.date
     }
   },
   methods: {
-    ...mapActions('users', { delete: 'remove'}),
-    async deleteUser() {
+    ...mapActions('schools', { delete: 'remove'}),
+    async deleteSchool() {
       try {
-        await this.delete(this.user._id)
+        await this.delete(this.school._id)
         this.showDialog = false;
       } catch(err) {
-        this.error = 'Failed to delete user'
+        this.error = 'Failed to delete school'
         console.error(err.message)
       }
     }

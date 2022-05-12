@@ -12,10 +12,11 @@
         <InfoPanel v-model="drawer">
            <UserInfo v-if="selectedUser" :user="selectedUser" @close="closeDrawer" />
            <v-card-actions v-if="selectedUser">
-              <v-btn color="primary" text rounded @click="editUserDialog = true">Edit User</v-btn>
+              <v-btn color="primary" outlined rounded @click="editUserDialog = true"><v-icon>mdi-pencil</v-icon>Edit User</v-btn>
               <UserDialog v-model="editUserDialog" :userId="selectedUser._id" />
-              <v-btn color="primary" text rounded @click="deleteUserDialog = true">Delete User</v-btn>
-              <DeleteDialog v-model="deleteUserDialog" :userId="selectedUser._id" />
+              <v-spacer></v-spacer>
+              <v-btn color="error" class="mr-2" outlined rounded @click="deleteUserDialog = true"><v-icon>mdi-trash-can</v-icon>Delete User</v-btn>
+              <DeleteDialog v-model="deleteUserDialog" :user="selectedUser" />
           </v-card-actions>
         </InfoPanel>
       </div>
@@ -29,6 +30,7 @@ import { mapActions } from 'vuex'
 import UserInfo from './UserInfo';
 import UserFilter from './UserFilter';
 import UserList from './UserList';
+import DeleteDialog from "./DeleteDialog";
 import UserDialog from '../UserDialog'
 import InfoPanel from "../../other/InfoPanel.vue";
 
@@ -41,12 +43,14 @@ export default {
     UserList,
     UserDialog,
     InfoPanel,
+    DeleteDialog,
   },
   data() {
     return {
       selectedUser: null,
       drawer: false,
       editUserDialog: false,
+      deleteUserDialog: false,
       listLimit: 20,
       listSkip: 0
     };

@@ -6,7 +6,8 @@
     transition="dialog-transition"
   >
     <v-card>
-      <v-card-title>Delete User - {{ user.name }}</v-card-title>
+      <v-card-title>Delete Session - {{ session.location }}</v-card-title>
+      <v-card-subtitle>{{ dayNum }}{{ dayOrdinal }} {{ monthName }}, {{ dateYear !== currentYear ? dateYear : ''}}</v-card-subtitle>
       <v-alert
         v-if="error"
         type="error"
@@ -26,7 +27,7 @@
           color="error"
           rounded
           elevation="0"
-          @click="deleteUser"
+          @click="deleteSession"
         >
           Delete
         </v-btn>
@@ -38,11 +39,14 @@
 
 <script>
 import { mapActions } from 'vuex'
+import dateUtils from '../../../utils/date'
+
 
 export default {
+  mixins: [dateUtils],
   props: {
     value: Boolean,
-    user: Object
+    session: Object
   },
   data: () => ({
     error: ''
@@ -55,16 +59,19 @@ export default {
       set(val) {
         this.$emit('input', val)
       }
+    },
+    date() {
+      return this.session.date
     }
   },
   methods: {
-    ...mapActions('users', { delete: 'remove'}),
-    async deleteUser() {
+    ...mapActions('sessions', { delete: 'remove'}),
+    async deleteSession() {
       try {
-        await this.delete(this.user._id)
+        await this.delete(this.session._id)
         this.showDialog = false;
       } catch(err) {
-        this.error = 'Failed to delete user'
+        this.error = 'Failed to delete session'
         console.error(err.message)
       }
     }

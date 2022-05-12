@@ -6,7 +6,7 @@
     transition="dialog-transition"
   >
     <v-card>
-      <v-card-title>Delete User - {{ user.name }}</v-card-title>
+      <v-card-title>Delete Student - {{ student.name }}</v-card-title>
       <v-alert
         v-if="error"
         type="error"
@@ -26,7 +26,7 @@
           color="error"
           rounded
           elevation="0"
-          @click="deleteUser"
+          @click="deleteStudent"
         >
           Delete
         </v-btn>
@@ -42,7 +42,7 @@ import { mapActions } from 'vuex'
 export default {
   props: {
     value: Boolean,
-    user: Object
+    student: Object
   },
   data: () => ({
     error: ''
@@ -58,20 +58,16 @@ export default {
     }
   },
   methods: {
-    ...mapActions('users', { delete: 'remove'}),
-    async deleteUser() {
+    ...mapActions('students', { delete: 'remove'}),
+    async deleteStudent() {
       try {
-        await this.delete(this.user._id)
+        await this.delete(this.student._id)
         this.showDialog = false;
       } catch(err) {
-        this.error = 'Failed to delete user'
+        this.error = 'Failed to delete student'
         console.error(err.message)
       }
     }
   }
 }
 </script>
-
-<style>
-
-</style>
