@@ -49,6 +49,11 @@ app.configure(authentication);
 // Set up our services (see `services/index.js`)
 app.configure(services);
 
+// Health check
+app.get('/health', (req, res) => {
+  res.status(200).send('Ok');
+});
+
 // Configure a middleware for 404s and the error handler
 app.use(express.notFound());
 app.use(express.errorHandler({ logger }));
