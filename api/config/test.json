@@ -1,0 +1,12 @@
+{
+  "host": "localhost",
+  "port": 3030,
+  "client": "http://localhost:8080",
+  "mongodb": "mongodb://localhost:27017/p2s-test",
+  "authentication": {
+    "secret": "testsecret",
+    "jwtOptions": {
+      "audience": "http://localhost"
+    }
+  }
+}
