@@ -19,8 +19,13 @@
         <StudentList v-model="selectedStudent" @selected="setStudent" :students="students" :isPending="isPending" @close="closeDrawer" />
         <InfoPanel v-model="drawer">
           <StudentInfo v-if="selectedStudent" :student="selectedStudent" @close="closeDrawer"></StudentInfo>
-          <v-btn class="ml-8" rounded outlined color="primary" @click="editStudentDialog = true"><v-icon color="primary">mdi-pencil</v-icon>Edit Student</v-btn>
-          <StudentDialog v-if="selectedStudent" v-model="editStudentDialog" :studentId="selectedStudent._id" />
+          <v-card-actions v-if="selectedStudent">
+            <v-btn rounded outlined color="primary" @click="editStudentDialog = true"><v-icon color="primary">mdi-pencil</v-icon>Edit Student</v-btn>
+            <StudentDialog v-if="selectedStudent" v-model="editStudentDialog" :studentId="selectedStudent._id" />
+            <v-spacer></v-spacer>
+            <v-btn color="error" class="mr-2" rounded outlined @click="deleteStudentDialog = true"><v-icon>mdi-trash-can</v-icon>Delete Student</v-btn>
+            <DeleteDialog v-model="deleteStudentDialog" :student="selectedStudent" />
+          </v-card-actions>
         </InfoPanel>
       </div>
     </FeathersVuexFind>
@@ -31,6 +36,7 @@
 import StudentList from './StudentList';
 import StudentInfo from './StudentInfo';
 import StudentFilter from './StudentFilter';
+import DeleteDialog from './DeleteDialog';
 import InfoPanel from '../../other/InfoPanel.vue';
 import StudentDialog from '../StudentDialog';
 
@@ -42,7 +48,8 @@ export default {
     StudentInfo,
     StudentFilter,
     InfoPanel,
-    StudentDialog
+    StudentDialog,
+    DeleteDialog
   },
   data() {
     return {
@@ -52,7 +59,8 @@ export default {
       listSkip: 0,
       selectedSchool: '',
       selectedYear: null,
-      editStudentDialog: false
+      editStudentDialog: false,
+      deleteStudentDialog: false
     };
   },
   computed: {
@@ -82,7 +90,11 @@ export default {
   },
   watch: {
     selectedStudent() {
-      if(!this.selectedStudent) this.drawer = false
+      if(!this.selectedStudent) {
+        this.editStudentDialog = false
+        this.deleteStudentDialog = false
+        this.drawer = false
+      }
     },
     selectedYear() {
       this.listSkip = 0;

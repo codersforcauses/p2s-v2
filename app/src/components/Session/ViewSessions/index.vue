@@ -12,9 +12,11 @@
         <info-panel v-model="drawer">
           <SessionInfo v-if="selectedSession" :session="selectedSession" @close="closeDrawer" />
           <v-card-actions v-if="selectedSession">
-            <v-btn color="primary" text rounded :to="{ path: `/session/${selectedSession._id}`}">View Session</v-btn>
-            <v-btn color="primary" text rounded @click="editSessionDialog = true">Edit Session</v-btn>
+            <v-btn color="primary" outlined rounded @click="editSessionDialog = true"><v-icon>mdi-pencil</v-icon>Edit Session</v-btn>
             <SessionDialog v-model="editSessionDialog" :sessionId="selectedSession._id" />
+            <v-spacer></v-spacer>
+            <v-btn color="error" class="mr-2" outlined rounded @click="deleteSessionDialog = true"><v-icon>mdi-trash-can</v-icon>Delete Session</v-btn>
+            <DeleteDialog v-model="deleteSessionDialog" :session="selectedSession" />
           </v-card-actions>
           <div v-else class="text-h6 pl-4">
             No Session Selected
@@ -28,6 +30,7 @@
 <script>
 import SessionFilter from './SessionFilter';
 import SessionList from './SessionList';
+import DeleteDialog from './DeleteDialog';
 import SessionInfo from '../SessionInfo';
 import SessionDialog from '../SessionDialog';
 import InfoPanel from "../../other/InfoPanel.vue";
@@ -40,7 +43,8 @@ export default {
     SessionFilter,
     SessionList,
     InfoPanel,
-    SessionDialog
+    SessionDialog,
+    DeleteDialog
   },
   data() {
     return {
@@ -49,6 +53,7 @@ export default {
       listLimit: 10,
       listSkip: 0,
       editSessionDialog: false,
+      deleteSessionDialog: false,
       selectedTab: 0
     };
   },
@@ -83,7 +88,11 @@ export default {
   },
   watch: {
     selectedSession() {
-      if(!this.selectedSession) this.drawer = false
+      if(!this.selectedSession) {
+        this.deleteSessionDialog = false
+        this.editSessionDialog = false
+        this.drawer = false
+      }
     },
     selectedTab() {
       this.listSkip = 0;

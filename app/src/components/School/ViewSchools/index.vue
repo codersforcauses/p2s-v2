@@ -11,8 +11,13 @@
         <SchoolList v-if="!isPending" v-model="selectedSchool" :schools="schools" :isPending="isPending" @selected="handleSelected" />
         <InfoPanel v-model="drawer">
           <SchoolInfo v-if="selectedSchool" :school="selectedSchool" />
-          <v-btn class="ml-5" rounded outlined color="primary" @click="editSchoolDialog = true"><v-icon color="primary">mdi-pencil</v-icon>Edit School</v-btn>
-          <SchoolDialog v-if="selectedSchool" v-model="editSchoolDialog" :schoolId="selectedSchool._id" />
+          <v-card-actions v-if="selectedSchool">
+            <v-btn class="ml-5" rounded outlined color="primary" @click="editSchoolDialog = true"><v-icon color="primary">mdi-pencil</v-icon>Edit School</v-btn>
+            <SchoolDialog v-if="selectedSchool" v-model="editSchoolDialog" :schoolId="selectedSchool._id" />
+            <v-spacer></v-spacer>
+            <v-btn color="error" class="mr-2" outlined rounded @click="deleteSchoolDialog = true"><v-icon>mdi-trash-can</v-icon>Delete School</v-btn>
+            <DeleteDialog v-model="deleteSchoolDialog" :school="selectedSchool" />
+          </v-card-actions>
         </InfoPanel>
       </div>
     </FeathersVuexFind>
@@ -25,6 +30,7 @@ import { mapActions } from 'vuex'
 import SchoolInfo from './SchoolInfo';
 import InfoPanel from "../../other/InfoPanel.vue";
 import SchoolList from './SchoolList.vue';
+import DeleteDialog from "./DeleteDialog";
 import SchoolFilter from './SchoolFilter.vue';
 import SchoolDialog from '../SchoolDialog';
 
@@ -37,14 +43,16 @@ export default {
     InfoPanel,
     SchoolList,
     SchoolFilter,
-    SchoolDialog
+    SchoolDialog,
+    DeleteDialog
   },
   data: () => ({
     selectedSchool: null,
     drawer: false,
     listLimit: 20,
     listSkip: 0,
-    editSchoolDialog: false
+    editSchoolDialog: false,
+    deleteSchoolDialog: false
   }),
   async mounted() {
     if(this.$route.params.id) {
@@ -81,7 +89,11 @@ export default {
   },
   watch: {
     selectedSchool() {
-      if(!this.selectedSchool) this.drawer = false
+      if(!this.selectedSchool){
+        this.editSchoolDialog = false
+        this.deleteSchoolDialog = false
+        this.drawer = false
+      }
     },
     drawer() {
       if(!this.drawer) {
