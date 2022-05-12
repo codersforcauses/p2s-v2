@@ -14,6 +14,8 @@
            <v-card-actions v-if="selectedUser">
               <v-btn color="primary" text rounded @click="editUserDialog = true">Edit User</v-btn>
               <UserDialog v-model="editUserDialog" :userId="selectedUser._id" />
+              <v-btn color="primary" text rounded @click="deleteUserDialog = true">Delete User</v-btn>
+              <DeleteDialog v-model="deleteUserDialog" :userId="selectedUser._id" />
           </v-card-actions>
         </InfoPanel>
       </div>
