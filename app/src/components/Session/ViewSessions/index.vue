@@ -7,7 +7,7 @@
       watch="params"
     >
       <div>
-        <SessionFilter :skip="listSkip" @setSkip="setSkip" :limit="listLimit" @setTab="setTab" :queryInfo="info"/>
+        <SessionFilter @setTab="setTab" :queryInfo="info"/>
         <SessionList  v-model="selectedSession" @selected="setSession" :sessions="sessions" :isPending="isPending" @close="closeDrawer" />
         <info-panel v-model="drawer">
           <SessionInfo v-if="selectedSession" :session="selectedSession" @close="closeDrawer" />
@@ -50,8 +50,6 @@ export default {
     return {
       selectedSession: null,
       drawer: false,
-      listLimit: 10,
-      listSkip: 0,
       editSessionDialog: false,
       deleteSessionDialog: false,
       selectedTab: 0
@@ -60,8 +58,6 @@ export default {
   computed: {
     query() {
       return {
-        $limit: this.listLimit,
-        $skip: this.listSkip,
         $sort: {
           date: 1,
         },
@@ -74,9 +70,6 @@ export default {
   methods: {
     closeDrawer() {
       this.drawer = false
-    },
-    setSkip(skip) {
-      this.listSkip = skip
     },
     setSession(session) {
       this.selectedSession = session;
@@ -93,9 +86,6 @@ export default {
         this.editSessionDialog = false
         this.drawer = false
       }
-    },
-    selectedTab() {
-      this.listSkip = 0;
     },
     drawer() {
       if(!this.drawer) {

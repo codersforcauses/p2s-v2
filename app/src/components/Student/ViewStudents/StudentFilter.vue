@@ -71,15 +71,6 @@
         </v-col>
       </v-row>
     </FeathersVuexFind>
-    <div class="mb-2 mr-1 ml-auto d-flex align-center justify-space-between" style="width: 10rem;">
-      <v-btn icon color="primary" :disabled="pageSkip === 0" @click="pageSkip -= limit">
-        <v-icon>mdi-chevron-left</v-icon>
-      </v-btn>
-      <span>Page {{skip/limit+1}}</span>
-      <v-btn icon color="primary" :disabled="pageSkip + limit >= queryInfo.total" @click="pageSkip += limit">
-        <v-icon>mdi-chevron-right</v-icon>
-      </v-btn>
-    </div>
   </v-toolbar>
 </template>
 
@@ -88,9 +79,6 @@ export default {
   props: {
     filterSchool: String,
     filterYear: Number,
-    skip: Number,
-    limit: Number,
-    queryInfo: Object
   },
   data: () => ({
     years: [
@@ -121,14 +109,6 @@ export default {
     },
     dark() {
       return this.$vuetify.theme.dark;
-    },
-    pageSkip: {
-      get() {
-        return this.skip
-      },
-      set(val) {
-        this.$emit('setSkip', val)
-      }
     },
   }
 }

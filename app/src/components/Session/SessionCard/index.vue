@@ -74,7 +74,6 @@ export default {
       const currentDate = dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]')
       const query = this.selectedTab === 0 ?
       {
-        $limit: 1,
         date: {
           $gte: currentDate
         },
@@ -83,7 +82,6 @@ export default {
         }
       } :
        {
-        $limit: 1,
         date: {
           $lt: currentDate
         },
