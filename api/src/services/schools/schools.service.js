@@ -6,7 +6,6 @@ const hooks = require('./schools.hooks');
 module.exports = function (app) {
   const options = {
     Model: createModel(app),
-    paginate: app.get('paginate'),
     whitelist: ['$regex', '$options']
   };
 
