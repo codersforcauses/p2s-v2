@@ -1,7 +1,7 @@
 <template>
-  <v-skeleton-loader type="list-item-three-line@10" :loading="isPending">
+  <v-skeleton-loader type="list-item-three-line@10" :loading="loading">
     <v-list three-line subheader>
-      <v-list-item-group v-model="selectedStudent" color="primary">
+      <v-list-item-group v-if="students.length > 0" v-model="selectedStudent" color="primary">
         <template v-for="student in students">
           <v-list-item :key="student._id" :value="student">
             <v-list-item-content>
@@ -18,6 +18,9 @@
           </v-list-item>
         </template>
       </v-list-item-group>
+      <v-list-item v-else>
+        No Students
+      </v-list-item>
     </v-list>
   </v-skeleton-loader>
 </template>
@@ -30,7 +33,7 @@ export default {
   props: {
     value: Object,
     students: Array,
-    isPending: Boolean,
+    loading: Boolean
   },
   computed: {
     selectedStudent: {
