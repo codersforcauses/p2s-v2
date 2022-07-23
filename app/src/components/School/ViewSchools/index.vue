@@ -1,13 +1,12 @@
 <template>
   <v-sheet rounded="xl" class="py-3">
     <FeathersVuexFind
-      v-slot="{ items: schools, isFindPending: isPending, queryInfo: info }"
+      v-slot="{ items: schools, isFindPending: isPending }"
       service="schools"
       :params="{ query }"
       watch="params"
     >
       <div>
-        <SchoolFilter   :queryInfo="info" :limit="listLimit" :skip="listSkip" @setSkip="setSkip"></SchoolFilter>
         <SchoolList v-if="!isPending" v-model="selectedSchool" :schools="schools" :isPending="isPending" @selected="handleSelected" />
         <InfoPanel v-model="drawer">
           <SchoolInfo v-if="selectedSchool" :school="selectedSchool" />
@@ -31,7 +30,6 @@ import SchoolInfo from './SchoolInfo';
 import InfoPanel from "../../other/InfoPanel.vue";
 import SchoolList from './SchoolList.vue';
 import DeleteDialog from "./DeleteDialog";
-import SchoolFilter from './SchoolFilter.vue';
 import SchoolDialog from '../SchoolDialog';
 
 
@@ -42,15 +40,12 @@ export default {
     SchoolInfo,
     InfoPanel,
     SchoolList,
-    SchoolFilter,
     SchoolDialog,
     DeleteDialog
   },
   data: () => ({
     selectedSchool: null,
     drawer: false,
-    listLimit: 20,
-    listSkip: 0,
     editSchoolDialog: false,
     deleteSchoolDialog: false
   }),
@@ -63,8 +58,6 @@ export default {
   computed: {
     query() {
       return {
-        $limit: this.listLimit,
-        $skip: this.listSkip,
         $sort: {
           name: 1,
         }
@@ -79,9 +72,6 @@ export default {
     handleSelected(val) {
       this.selectedSchool = val
       this.drawer = true
-    },
-    setSkip(skip) {
-      this.listSkip = skip
     },
     setYear(year) {
       this.yearSelect = year

@@ -127,10 +127,10 @@ function findAndCreate(app, serviceName, object, params) {
     service
       .find(params)
       .then(result => {
-        if (result.data.length === 0) {
+        if (result.length === 0) {
           service.create(object, params).then(resolve);
         } else {
-          resolve(result.data[0]);
+          resolve(result[0]);
         }
       })
       .catch(err => logger.error(err));
@@ -169,7 +169,7 @@ module.exports = async function(app) {
       },
     })
     .then(result => {
-      if (result.data.length === 0) {
+      if (result.length === 0) {
         return app.service('users').create({
           ...superTestAdmin,
           name: 'Test Admin',
@@ -186,7 +186,7 @@ module.exports = async function(app) {
           isVerified: true,
         });
       }
-      return app.service('users').patch(result.data[0]._id, {
+      return app.service('users').patch(result[0]._id, {
         'admin.is': true,
         'coach.is': true,
       });

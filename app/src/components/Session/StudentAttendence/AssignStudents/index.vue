@@ -77,7 +77,6 @@ export default {
         },
         ...(this.selectedYear && { schoolYear: this.selectedYear }),
         ...(this.selectedSchool && { school: this.selectedSchool }),
-        $limit: 1000,
       };
     },
   },

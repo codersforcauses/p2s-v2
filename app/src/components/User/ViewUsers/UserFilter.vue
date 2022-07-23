@@ -1,31 +1,29 @@
 <template>
-  <div :style="{ width: $vuetify.breakpoint.smAndUp ? '50vw' : '100vw'}">
-    <div class="mb-2 mr-1 ml-auto d-flex align-center justify-space-between" style="width: 10rem;">
-      <v-btn icon color="primary" :disabled="pageSkip === 0" @click="pageSkip -= limit">
-        <v-icon>mdi-chevron-left</v-icon>
-      </v-btn>
-      <span>Page {{pageSkip/limit+1}}</span>
-      <v-btn icon color="primary" :disabled="pageSkip + limit >= queryInfo.total" @click="pageSkip += limit">
-        <v-icon>mdi-chevron-right</v-icon>
-      </v-btn>
-    </div>
-  </div>
+   <v-text-field
+    label="Search"
+    v-model.trim="search"
+    solo-inverted
+    flat
+    persistent-hint
+    validate-on-blur
+    rounded
+    class="mb-2 mt-1 rounded-l-xl rounded-r-0"
+    color="primary"
+  />
 </template>
 
 <script>
 export default {
   props: {
-    skip: Number,
-    limit: Number,
-    queryInfo: Object
+    text: String,
   },
   computed: {
-    pageSkip: {
+    search: {
       get() {
-        return this.skip
+        return this.text
       },
       set(val) {
-        this.$emit('setSkip', val)
+        this.$emit('setSearch', val)
       }
     },
   }

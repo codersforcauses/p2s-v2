@@ -1,5 +1,5 @@
 <template>
-  <FeathersVuexFind v-slot="{ items: schools, isFindPending: isPending }" service="schools" :params="{ query }" watch="params">
+  <FeathersVuexFind v-slot="{ items: schools, isFindPending: isPending }" service="schools" :params="{ query: {} }" watch="params">
     <v-autocomplete
       v-model.trim="school"
       :loading="isPending"
@@ -56,14 +56,6 @@ export default {
       set(value) {
         this.$emit('input', value);
       },
-    },
-    query() {
-      return  {
-        name: {
-          $regex: `.*${this.search}.*`,
-          $options: 'i'
-        }
-      } 
     },
     dark(){
       return this.$vuetify.theme.dark

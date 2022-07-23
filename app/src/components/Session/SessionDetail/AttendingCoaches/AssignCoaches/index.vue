@@ -71,7 +71,6 @@ export default {
           name: 1,
         },
         "coach.is": true,
-        $limit: 1000,
       };
     },
   },

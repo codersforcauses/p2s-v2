@@ -1,5 +1,5 @@
 <template>
-  <v-skeleton-loader type="list-item-three-line@10" :loading="isPending">
+  <v-skeleton-loader type="list-item-three-line@10" :loading="loading">
     <v-list three-line subheader>
       <v-list-item-group v-model="selectedUser" color="primary">
         <template v-for="user in users">
@@ -22,7 +22,7 @@ export default {
   props: {
     value: Object,
     users: Array,
-    isPending: Boolean,
+    loading: Boolean,
   },
   computed: {
     selectedUser: {

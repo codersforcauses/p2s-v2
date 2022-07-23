@@ -2,12 +2,12 @@
   <v-card flat rounded="xl">
     <v-card-subtitle>Current students</v-card-subtitle>
     <div class="d-flex pl-4">
-      <FeathersVuexCount v-slot="{ total: numStudents }" service="students" :params="{ query: {} }">
+      <FeathersVuexFind v-slot="{ items: students }" service="students" :params="{ query: {} }">
         <div>
-          <div class="text-h2 primary--text text-center">{{ numStudents }}</div>
-          <div class="text-body-1 text-center">{{ studentText(numStudents) }}</div>
+          <div class="text-h2 primary--text text-center">{{ students.length }}</div>
+          <div class="text-body-1 text-center">{{ studentText(students.length) }}</div>
         </div>
-      </FeathersVuexCount>
+      </FeathersVuexFind>
     </div>
     <v-card-title primary-title class="primary--text text-h6 pb-0">Manage Students</v-card-title>
 

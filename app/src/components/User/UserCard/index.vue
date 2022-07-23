@@ -3,11 +3,11 @@
     <v-card-subtitle>Current Users</v-card-subtitle>
     <div class="d-flex pl-4">
       <div>
-        <FeathersVuexCount v-slot="{ total: numCoaches }" service="users" :params="{ query: {
+        <FeathersVuexFind v-slot="{ items: coaches }" service="users" :params="{ query: {
           'coach.is': true
         } }">
-          <div class="text-h2 primary--text text-center">{{ numCoaches }}</div>
-        </FeathersVuexCount>
+          <div class="text-h2 primary--text text-center">{{ coaches.length || 0 }}</div>
+        </FeathersVuexFind>
         <div class="text-body-1 text-center">Coaches</div>
       </div>
       <v-divider
@@ -15,11 +15,11 @@
         class="pl-7"
       ></v-divider>
       <div class="d-flex-row pl-7">
-        <FeathersVuexCount v-slot="{ total: numAdmins }" service="users" :params="{ query: {
+        <FeathersVuexFind v-slot="{ items: admins }" service="users" :params="{ query: {
           'admin.is': true
         } }">
-          <div class="text-h2 primary--text text-center">{{ numAdmins }}</div>
-        </FeathersVuexCount>
+          <div class="text-h2 primary--text text-center">{{ admins.length || 0 }}</div>
+        </FeathersVuexFind>
         <div class="text-body-1 text-center">Admins</div>
       </div>
     </div>

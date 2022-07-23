@@ -20,9 +20,9 @@
       <v-list-item three-line class="px-2 px-sm-4">
         <v-list-item-content class="py-0">
           <v-list-item-title>Students Enrolled in P2S</v-list-item-title>
-          <FeathersVuexCount v-slot="{ total: numStudents }" service="students" :params="params" watch="params">
-            <div class="text-h3 primary--text">{{ numStudents || 0 }}</div>
-          </FeathersVuexCount>
+          <FeathersVuexFind v-slot="{ items: students }" service="students" :params="params" watch="params">
+            <div class="text-h3 primary--text">{{ students.length || 0 }}</div>
+          </FeathersVuexFind>
         </v-list-item-content>
       </v-list-item>
     </v-card-text>
