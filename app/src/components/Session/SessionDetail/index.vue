@@ -1,8 +1,6 @@
 <template>
-  <v-sheet rounded="xl" class="py-3">
-    {{ this.$route.params.id }}
-    {{ this.sessions }}
-      <!-- <SessionInfoHeader :session="session" />
+  <v-sheet rounded="xl" class="py-3" v-if="session">
+      <SessionInfoHeader :session="session" />
       <v-card flat>
         <v-divider class="mt-8" />
         <StudentAttendence
@@ -31,7 +29,7 @@
       <AttendingCoaches
         v-model="selectedUser"
         :session="session"
-        :registeredCoaches="coaches"
+        :registeredCoaches="users"
         @setSelectedUser="setUserInfo"
       />
       <v-card flat class="mx-4 my-6">
@@ -60,7 +58,7 @@
           >
           <DeleteDialog v-model="deleteSessionDialog" :session="session" />
         </v-card-actions>
-      </v-card> -->
+      </v-card>
   </v-sheet>
 </template>
 
@@ -81,11 +79,10 @@ export default {
   name: 'session-detail',
   title: 'Session Detail',
   mixins: [
-    makeGetMixin({ service: 'session', id: this?.$route?.params?.id }),
-    makeFindMixin({ service: 'sessions' }),
-    // makeFindMixin({ service: 'students', watch: true }),
-    // makeFindMixin({ service: 'reports', watch: true }),
-    // makeFindMixin({ service: 'coaches', watch: true }),
+    makeGetMixin({ service: 'sessions' }),
+    makeFindMixin({ service: 'students', watch: true }),
+    makeFindMixin({ service: 'reports', watch: true }),
+    makeFindMixin({ service: 'users', watch: true }),
   ],
 
   components: {
@@ -108,11 +105,8 @@ export default {
     editSessionDialog: false,
   }),
   computed: {
-    sessionParams() {
-      return { query: { _id: this?.$route?.params?.id } };
-    },
-    sessionsParams() {
-      return { query: { _id: this?.$route?.params?.id } };
+    sessionId() {
+      return this?.$route?.params?.id;
     },
     studentsParams() {
       return { query: { _id: { $in: this?.session?.students } } };
@@ -120,8 +114,8 @@ export default {
     reportsParams() {
       return { query: { session: this?.session?._id } };
     },
-    coachesParams() {
-      return { query: { _id: { $in: this?.session?.coaches } } };
+    usersParams() {
+      return { query: { _id: { $in: this?.session?.coaches ?? [] } } };
     },
   },
   methods: {

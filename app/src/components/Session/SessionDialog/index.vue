@@ -148,7 +148,7 @@
 
               <v-col cols="12" tag="label" class="v-label pl-6">SCHOOL</v-col>
               <v-col cols="12">
-                <SchoolSearch v-model="clone.school" />
+                <SchoolSearch v-model="clone.school" :schools="schools" />
               </v-col>
 
               <v-col cols="12" tag="label" class="v-label pl-6">COACHES</v-col>
@@ -191,12 +191,15 @@
 <script>
 import dayjs from 'dayjs'
 import customParseFormat from 'dayjs/plugin/customParseFormat'
+import { makeFindMixin } from 'feathers-vuex'
+
 import SchoolSearch from '../../forms/schoolSearch.vue';
 import CoachSearch from '../../forms/coachSearch.vue';
 
 dayjs.extend(customParseFormat)
 
 export default {
+  mixins: [ makeFindMixin({ service: 'schools', watch: true })],
   components: { SchoolSearch, CoachSearch },
   name: 'create-session',
   props: {
@@ -243,6 +246,9 @@ export default {
 
       const targetSession = this.sessionId ? Session.getFromStore(this.sessionId) : new Session()
       return targetSession
+    },
+    schoolsParams() {
+      return { query: { $sort: { name: 1 } } }
     },
     internalDate: {
       get() {

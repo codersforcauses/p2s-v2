@@ -1,7 +1,6 @@
 <template>
   <v-autocomplete
     v-model.trim="school"
-    :loading="isPending"
     :items="schools"
     :search-input.sync="search"
     color="primary"
