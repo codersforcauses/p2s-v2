@@ -5,7 +5,7 @@
       :filterYear="selectedYear"
       @updateYear="selectedYear = $event"
       @updateSchool="selectedSchool = $event" />
-    <StudentList v-model="selectedStudent" @selected="setStudent" :students="students" :loading="loading" @close="closeDrawer" />
+    <StudentList v-model="selectedStudent" @selected="setStudent" :students="students" :loading="isFindStudentsPending" @close="closeDrawer" />
     <InfoPanel v-model="drawer">
       <StudentInfo v-if="selectedStudent" :student="selectedStudent" @close="closeDrawer"></StudentInfo>
       <v-card-actions v-if="selectedStudent">
@@ -20,6 +20,8 @@
 </template>
 
 <script>
+import { makeFindMixin } from 'feathers-vuex'
+
 import StudentList from './StudentList';
 import StudentInfo from './StudentInfo';
 import StudentFilter from './StudentFilter';
@@ -30,6 +32,9 @@ import StudentDialog from '../StudentDialog';
 export default {
   name: 'view-students',
   title: 'View Students',
+  mixins: [ 
+    makeFindMixin({ service: 'students', watch: true }),
+  ],
   components: {
     StudentList,
     StudentInfo,
@@ -47,33 +52,21 @@ export default {
       selectedYear: null,
       editStudentDialog: false,
       deleteStudentDialog: false,
-      loading: false
     };
   },
 
   computed: {
-    query() {
-      return {
-        $sort: {
-          name: 1,
-        },
-        ...( this.selectedYear && {schoolYear: this.selectedYear} ),
-        ...( this.selectedSchool && { school: this.selectedSchool }),
-      }
-    },
-    students() {
-      const { Student } = this.$FeathersVuex.api;
-      const { data } = Student.findInStore({ query: this.query });
-      return data;
-    },
-    schoolIds() {
-      return this.students.reduce((a, student) => {
-        if (student.school && !a.includes(student.school)) {
-          a.push(student.school);
+    studentsParams() {
+      return { 
+        query: {
+          $sort: {
+            name: 1,
+          },
+          ...( this.selectedYear && { schoolYear: this.selectedYear }),
+          ...( this.selectedSchool && { school: this.selectedSchool }),
         }
-        return a;
-      }, []);
-    },
+      }
+    }
   },
   methods: {
     closeDrawer() {
@@ -82,26 +75,6 @@ export default {
     setStudent(student) {
       this.selectedStudent = student;
       this.drawer = true;
-    },
-    async loadStudents() {
-      const { Student } = this.$FeathersVuex.api;
-      await this.$try(Student.find({
-        query: {
-          _id: { $nin: this.students.map(s => s._id) },
-          ...this.query
-        },
-      }));
-    },
-    async loadSchools() {
-      const { School } = this.$FeathersVuex.api;
-      const { data: existing } = School.findInStore({
-        query: { _id: { $in: this.schoolIds } },
-      });
-      const missingIds = this.schoolIds.filter((id) => !existing.some(s => s._id === id));
-      if (!missingIds.length) return;
-      await this.$try(School.find({
-        query: { _id: { $in: missingIds } },
-      }));
     },
   },
   watch: {
@@ -119,18 +92,6 @@ export default {
         }, 50)
       }
     },
-    query: {
-      handler() {
-        this.loadStudents();
-      },
-      immediate: true,
-    },
-    schoolIds: {
-      handler() {
-        this.loadSchools();
-      },
-      immediate: true,
-    },
-  },
+  }
 };
 </script>

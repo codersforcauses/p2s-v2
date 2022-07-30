@@ -1,5 +1,5 @@
 <template>
-  <FeathersVuexFind v-slot="{ items: coaches, isFindPending: isPending }" service="users" :params="{ query }" watch="params">
+  <FeathersVuexFind v-slot="{ items: coaches, isFindPending: isPending }" service="users" :params="coachParams" watch="params">
     <v-autocomplete
       v-model.trim="coach"
       :loading="isPending"
@@ -60,13 +60,9 @@ export default {
         this.$emit('input', value);
       },
     },
-    query() {
+    coachParams() {
       return  {
-        name: {
-          $regex: `.*${this.search}.*`,
-          $options: 'i'
-        },
-        "coach.is": true
+        query: { "coach.is": true }
       } 
     },
     dark(){

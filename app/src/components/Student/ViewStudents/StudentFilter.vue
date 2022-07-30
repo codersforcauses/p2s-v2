@@ -1,81 +1,43 @@
 <template>
   <v-toolbar flat>
-    <FeathersVuexFind
-      v-slot="{ items: schools, isFindPending: isPending }"
-      service="schools"
-      :params="{ query: {} }"
-    >
-      <v-row v-if="schools">
-        <v-col cols="8" class="pa-0">
-          <v-autocomplete
-            v-model="selectedSchool"
-            :loading="isPending"
-            :items="schools"
-            :search-input.sync="search"
-            color="primary"
-            rounded
-            flat
-            cache-items
-            clearable
-            hide-selected
-            hide-details
-            dense
-            style="padding-right: 1px;"
-            class="rounded-r-0"
-            item-text="name"
-            item-value="_id"
-            label="Search for a school"
-            solo-inverted
-            :menu-props="{
-              offsetY: true,
-              light: dark,
-              dark: !dark,
-              transition: 'slide-y-transition',
-              rounded: 'xl',
-              contentClass: 'elevation-0',
-            }"
-          >
-            <template #no-data>
-              <v-list-item>
-                <v-list-item-title>
-                  Search Schools
-                </v-list-item-title>
-              </v-list-item>
-            </template>
-          </v-autocomplete>
-        </v-col>
-        <v-col cols="4" class="pa-0">
-          <v-select
-            v-model="selectedYear"
-            :items="years"
-            item-text="text"
-            item-value="value"
-            :menu-props="{
-              offsetY: true,
-              light: dark,
-              dark: !dark,
-              transition: 'slide-y-transition',
-              rounded: 'xl',
-              contentClass: 'elevation-0',
-            }"
-            label="Year"
-            solo-inverted
-            clearable
-            flat
-            hide-details
-            rounded
-            filled
-            dense
-            class="rounded-l-0"
-          ></v-select>
-        </v-col>
-      </v-row>
-    </FeathersVuexFind>
+    <v-row>
+      <v-col cols="8" class="pa-0">
+        <SchoolSearch v-model="selectedSchool" menuClasses="rounded-r-0" />
+      </v-col>
+      <v-col cols="4" class="pa-0">
+        <v-select
+          v-model="selectedYear"
+          :items="years"
+          item-text="text"
+          item-value="value"
+          :menu-props="{
+            offsetY: true,
+            light: dark,
+            dark: !dark,
+            transition: 'slide-y-transition',
+            rounded: 'xl',
+            contentClass: 'elevation-0',
+          }"
+          label="Year"
+          solo-inverted
+          clearable
+          flat
+          hide-details
+          rounded
+          filled
+          dense
+          class="rounded-l-0"
+        ></v-select>
+      </v-col>
+    </v-row>
   </v-toolbar>
 </template>
 
 <script>
+import SchoolSearch from '../../forms/schoolSearch.vue';
+
 export default {
+  components: { SchoolSearch },
   props: {
     filterSchool: String,
     filterYear: Number,
