@@ -1,33 +1,26 @@
 <template>
   <v-sheet rounded="xl" class="py-3">
-    <FeathersVuexFind
-      v-slot="{ items: sessions, isFindPending: isPending, queryInfo: info }"
-      service="sessions"
-      :params="{ query }"
-      watch="params"
-    >
-      <div>
-        <SessionFilter @setTab="setTab" :queryInfo="info"/>
-        <SessionList  v-model="selectedSession" @selected="setSession" :sessions="sessions" :isPending="isPending" @close="closeDrawer" />
-        <info-panel v-model="drawer">
-          <SessionInfo v-if="selectedSession" :session="selectedSession" @close="closeDrawer" />
-          <v-card-actions v-if="selectedSession">
-            <v-btn color="primary" outlined rounded @click="editSessionDialog = true"><v-icon>mdi-pencil</v-icon>Edit Session</v-btn>
-            <SessionDialog v-model="editSessionDialog" :sessionId="selectedSession._id" />
-            <v-spacer></v-spacer>
-            <v-btn color="error" class="mr-2" outlined rounded @click="deleteSessionDialog = true"><v-icon>mdi-trash-can</v-icon>Delete Session</v-btn>
-            <DeleteDialog v-model="deleteSessionDialog" :session="selectedSession" />
-          </v-card-actions>
-          <div v-else class="text-h6 pl-4">
-            No Session Selected
-          </div>
-        </info-panel>
+    <SessionFilter @setTab="setTab" />
+    <SessionList  v-model="selectedSession" @selected="setSession" :sessions="sessions" :isPending="isFindSessionsPending" @close="closeDrawer" />
+    <info-panel v-model="drawer">
+      <SessionInfo v-if="selectedSession" :session="selectedSession" @close="closeDrawer" />
+      <v-card-actions v-if="selectedSession">
+        <v-btn color="primary" outlined rounded @click="editSessionDialog = true"><v-icon>mdi-pencil</v-icon>Edit Session</v-btn>
+        <SessionDialog v-model="editSessionDialog" :sessionId="selectedSession._id" />
+        <v-spacer></v-spacer>
+        <v-btn color="error" class="mr-2" outlined rounded @click="deleteSessionDialog = true"><v-icon>mdi-trash-can</v-icon>Delete Session</v-btn>
+        <DeleteDialog v-model="deleteSessionDialog" :session="selectedSession" />
+      </v-card-actions>
+      <div v-else class="text-h6 pl-4">
+        No Session Selected
       </div>
-    </FeathersVuexFind>
+    </info-panel>
   </v-sheet>
 </template>
 
 <script>
+import { makeFindMixin } from 'feathers-vuex'
+
 import SessionFilter from './SessionFilter';
 import SessionList from './SessionList';
 import DeleteDialog from './DeleteDialog';
@@ -38,6 +31,7 @@ import InfoPanel from "../../other/InfoPanel.vue";
 export default {
   name: 'view-sessions',
   title: 'View Sessions',
+  mixins: [ makeFindMixin({ service: 'sessions', watch: true })],
   components: {
     SessionInfo,
     SessionFilter,
@@ -56,16 +50,16 @@ export default {
     };
   },
   computed: {
-    query() {
-      return {
+    sessionsParams() {
+      return { query: {
         $sort: {
-          date: 1,
+          date: this.selectedTab === 0 ? 1 : -1,
         },
         date: {
           [this.selectedTab === 0 ? '$gte' : '$lt']: new Date().toISOString()
         }
-      }
-    },
+      }}
+    }
   },
   methods: {
     closeDrawer() {

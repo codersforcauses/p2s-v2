@@ -10,7 +10,6 @@
 <script>
 export default {
   props: {
-    queryInfo: Object,
     tab: Number
   },
   computed: {

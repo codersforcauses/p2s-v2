@@ -71,50 +71,40 @@
         </v-col>
       </v-row>
     </v-container>
-
-    <FeathersVuexFind
-      v-slot="{ items: sessions }"
-      service="sessions"
-      :params="{ query: sessionQuery }"
-      watch="params"
-    >
-      <v-container>
-        <v-row>
-          <v-col cols="12">
-            <v-card-title class="text-h6">Sessions</v-card-title>
-          </v-col>
-          <v-col>
-            <v-card-text v-if="!sessions || sessions.length === 0" class="subtitle-2 grey--text">
-              No Sessions Assigned
-            </v-card-text>
-          </v-col>
-        </v-row>
-          <v-list rounded dense>
-            <v-list-item-group color="primary">
-              <v-list-item
-                two-line
-                v-for="(session, i) in sessions"
-                :key="i"
-                class="d-flex"
-                :to="{ path: `/session/${session._id}` }"
-              >
-                <v-list-item-icon>
-                  <DateView :date="session.date" />
-                </v-list-item-icon>
-                <v-list-item-content>
-                  <FeathersVuexGet v-slot="{ item: school }" service="schools" :id="session.school">
-                    <v-list-item-title>{{ school ? school.name : 'loading' }}</v-list-item-title>
-                  </FeathersVuexGet>
-                  <v-list-item-subtitle
-                    >{{ session.type }}
-                    {{ session.location ? ` - ${session.location}` : '' }}</v-list-item-subtitle
-                  >
-                </v-list-item-content>
-              </v-list-item>
-            </v-list-item-group>
-          </v-list>
-      </v-container>
-    </FeathersVuexFind>
+    <v-container>
+      <v-row>
+        <v-col cols="12">
+          <v-card-title class="text-h6">Sessions</v-card-title>
+        </v-col>
+        <v-col>
+          <v-card-text v-if="!sessions || sessions.length === 0" class="subtitle-2 grey--text">
+            No Sessions Assigned
+          </v-card-text>
+        </v-col>
+      </v-row>
+        <v-list rounded dense>
+          <v-list-item-group color="primary">
+            <v-list-item
+              two-line
+              v-for="(session, i) in sessions"
+              :key="i"
+              class="d-flex"
+              :to="{ path: `/session/${session._id}` }"
+            >
+              <v-list-item-icon>
+                <DateView :date="session.date" />
+              </v-list-item-icon>
+              <v-list-item-content>
+                <v-list-item-title>{{ isFindSchoolsPending ? 'loading' : getSchool(session.school).name }}</v-list-item-title>
+                <v-list-item-subtitle
+                  >{{ session.type }}
+                  {{ session.location ? ` - ${session.location}` : '' }}</v-list-item-subtitle
+                >
+              </v-list-item-content>
+            </v-list-item>
+          </v-list-item-group>
+        </v-list>
+    </v-container>
 
     <v-container>
       <v-row>
@@ -200,16 +190,32 @@
 </template>
 
 <script>
+import { makeFindMixin } from 'feathers-vuex'
+
 import dayjs from 'dayjs';
 import DateView from './DateView.vue';
 import Clearance from './Clearance.vue';
 
 export default {
   components: { DateView, Clearance },
+  mixins: [ 
+    makeFindMixin({ service: 'sessions', watch: true }),
+    makeFindMixin({ service: 'schools', watch: true }),
+  ],
   props: {
     user: Object,
   },
   computed: {
+    schoolsParams() {
+      return { query: {
+        _id: { $in: this.sessions.map(sesh => sesh.school )}
+      }}
+    },
+    sessionsParams() {
+      return { query: {
+        coaches: this.user._id,
+      }}
+    },
     hasPersonalInfo() {
       return (
         !!this.formattedDOB || !!this.formattedAddress || !!this.user.gender || !!this.user.culture
@@ -240,35 +246,13 @@ export default {
     isSmAndUp() {
       return this.$vuetify.breakpoint.smAndUp ? 128 : 96;
     },
-    sessionQuery() {
-      return {
-        coaches: this.user._id,
-      };
-    },
   },
+  methods: {
+    getSchool(id) {
+      return this.schools.find(school => school._id === id) ?? {}
+    }
+  }
 };
 </script>
 
-<style scoped>
-.v-card__text,
-.v-card__title,
-.v-card__subtitle {
-  padding: 0;
-}
 
-.v-icon {
-  margin-right: 5px;
-}
-
-.col-12 {
-  padding: 5px 0;
-}
-
-.row {
-  padding: 4px;
-}
-
-.container {
-  padding: 20px 40px;
-}
-</style>

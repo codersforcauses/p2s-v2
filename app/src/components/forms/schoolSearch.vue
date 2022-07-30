@@ -1,5 +1,5 @@
 <template>
-  <FeathersVuexFind v-slot="{ items: schools, isFindPending: isPending }" service="schools" :params="{ query: {} }" watch="params">
+  <FeathersVuexFind v-slot="{ items: schools, isFindPending: isPending }" service="schools" :params="schoolParams" watch="params">
     <v-autocomplete
       v-model.trim="school"
       :loading="isPending"
@@ -8,7 +8,6 @@
       color="primary"
       rounded
       flat
-      cache-items
       clearable
       hide-selected
       style="padding-right: 1px;"
@@ -49,6 +48,11 @@ export default {
     search: ''
   }),
   computed: {
+    schoolParams() {
+      return {
+        query: { $sort: { name: 1 } }
+      }
+    },
     school: {
       get() {
         return this.value;
@@ -70,7 +74,3 @@ export default {
   }
 }
 </script>
-
-<style>
-
-</style>

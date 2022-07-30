@@ -1,30 +1,21 @@
 <template>
   <v-sheet rounded="xl" class="py-3">
-    <FeathersVuexFind
-      v-slot="{ items: schools, isFindPending: isPending }"
-      service="schools"
-      :params="{ query }"
-      watch="params"
-    >
-      <div>
-        <SchoolList v-if="!isPending" v-model="selectedSchool" :schools="schools" :isPending="isPending" @selected="handleSelected" />
-        <InfoPanel v-model="drawer">
-          <SchoolInfo v-if="selectedSchool" :school="selectedSchool" />
-          <v-card-actions v-if="selectedSchool">
-            <v-btn class="ml-5" rounded outlined color="primary" @click="editSchoolDialog = true"><v-icon color="primary">mdi-pencil</v-icon>Edit School</v-btn>
-            <SchoolDialog v-if="selectedSchool" v-model="editSchoolDialog" :schoolId="selectedSchool._id" />
-            <v-spacer></v-spacer>
-            <v-btn color="error" class="mr-2" outlined rounded @click="deleteSchoolDialog = true"><v-icon>mdi-trash-can</v-icon>Delete School</v-btn>
-            <DeleteDialog v-model="deleteSchoolDialog" :school="selectedSchool" />
-          </v-card-actions>
-        </InfoPanel>
-      </div>
-    </FeathersVuexFind>
-  </v-sheet>
+    <SchoolList v-if="schools" v-model="selectedSchool" :schools="schools" @selected="handleSelected" />
+    <InfoPanel v-model="drawer">
+      <SchoolInfo v-if="selectedSchool" :school="selectedSchool" />
+      <v-card-actions v-if="selectedSchool">
+        <v-btn class="ml-5" rounded outlined color="primary" @click="editSchoolDialog = true"><v-icon color="primary">mdi-pencil</v-icon>Edit School</v-btn>
+        <SchoolDialog v-if="selectedSchool" v-model="editSchoolDialog" :schoolId="selectedSchool._id" />
+        <v-spacer></v-spacer>
+        <v-btn color="error" class="mr-2" outlined rounded @click="deleteSchoolDialog = true"><v-icon>mdi-trash-can</v-icon>Delete School</v-btn>
+        <DeleteDialog v-model="deleteSchoolDialog" :school="selectedSchool" />
+      </v-card-actions>
+    </InfoPanel>
+</v-sheet>
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { makeFindMixin } from 'feathers-vuex'
 
 import SchoolInfo from './SchoolInfo';
 import InfoPanel from "../../other/InfoPanel.vue";
@@ -36,6 +27,7 @@ import SchoolDialog from '../SchoolDialog';
 export default {
   name: 'view-schools',
   title: 'View Schools',
+  mixins: [ makeFindMixin({ service: 'schools', watch: true })],
   components: {
     SchoolInfo,
     InfoPanel,
@@ -51,22 +43,22 @@ export default {
   }),
   async mounted() {
     if(this.$route.params.id) {
-      this.selectedSchool = await this.getSchool(this.$route.params.id)
       this.drawer = true
     }
   },
   computed: {
-    query() {
+    schoolsParams() {
       return {
-        $sort: {
-          name: 1,
-        }
+        query: {
+          $sort: {
+            name: 1,
+          },
+        },
       }
-    },
+    }
   },
   methods: {
-    ...mapActions('schools', { getSchool: 'get' }),
-    closeDrawer() {
+     closeDrawer() {
       this.drawer = false
     },
     handleSelected(val) {
