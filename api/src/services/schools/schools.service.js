@@ -1,18 +1,13 @@
-// Initializes the `schools` service on path `/schools`
-const { Schools } = require('./schools.class');
-const createModel = require('../../models/schools.model');
+const knexService = require('feathers-knex');
+const model = require('./schools.model');
 const hooks = require('./schools.hooks');
 
 module.exports = function (app) {
-  const options = {
-    Model: createModel(app),
-    whitelist: ['$regex', '$options']
-  };
+  app.use('/schools', knexService({
+    Model: model,
+    name: 'schools'
+  }));
 
-  // Initialize our service with any options it requires
-  app.use('/schools', new Schools(options, app));
-
-  // Get our initialized service so that we can register hooks
   const service = app.service('schools');
 
   service.hooks(hooks);

@@ -1,7 +1,11 @@
-// schools-model.js - A mongoose model
-//
-// See http://mongoosejs.com/docs/models.html
-// for more of what you can do here.
+const db = require('../../db');
+
+db.schema.createTable('messages', (table) => {
+  table.increments('id');
+  table.string('name');
+  table.string('name');
+});
+
 module.exports = function (app) {
   const modelName = 'schools';
   const mongooseClient = app.get('mongooseClient');
