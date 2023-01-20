@@ -92,6 +92,10 @@ module.exports = function (app) {
           verified: Boolean,
           expiry: Date
         },
+        vaccination: {
+          verified: Boolean,
+          expiry: Date
+        },
       },
       admin: {
         is: {

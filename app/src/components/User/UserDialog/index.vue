@@ -6,147 +6,153 @@
     content-class="rounded-xl"
     transition="dialog-transition"
   >
-    <v-card flat rounded="xl">
-      <v-toolbar flat>
-        <v-toolbar-title class="text-h6">{{ userId ? 'Edit' : 'Invite' }} User</v-toolbar-title>
-        <v-spacer />
-        <v-btn icon @click="$emit('input')">
-          <v-icon>mdi-close</v-icon>
-        </v-btn>
-      </v-toolbar>
-
     <FeathersVuexFormWrapper :item="item">
       <template v-slot="{ clone, save }">
         <v-form v-model="valid" @submit.prevent="e => handleSubmit(e, save)">
-          <v-container class="px-8">
-            <v-row v-if="!userId" no-gutters>
-              <v-col cols="12" tag="label" class="v-label pl-6">Name</v-col>
-              <v-col cols="12" class="pr-3 pt-1">
-                <v-text-field
-                  v-model.trim="clone.name"
-                  label="Name"
-                  class="mb-2 mt-1"
-                  solo-inverted
-                  flat
-                  rounded
-                  type="text"
-                  color="primary"
-                  :disabled="loading"
-                  :rules="[validation.required]"
-                />
-              </v-col>
-            </v-row>
-            <v-row v-if="!userId" no-gutters>
-              <v-col cols="12" tag="label" class="v-label pl-6">Email</v-col>
-              <v-col cols="12">
-                <v-text-field
-                  v-model.trim="clone.email"
-                  label="email@p2srugbyworks.com"
-                  type="email"
-                  solo-inverted
-                  flat
-                  persistent-hint
-                  validate-on-blur
-                  rounded
-                  class="mb-2 mt-1"
-                  color="primary"
-                  :disabled="loading"
-                  :rules="[validation.required, validation.email]"
-                />
-              </v-col>
-            </v-row>
-            <v-row no-gutters>
-              <v-col cols="12" tag="label">Role</v-col>
-              <v-col cols="6">
-                <v-checkbox
-                  v-model="permissions"
-                  value="admin"
-                  label="Administrator"
-                  color="primary"
-                  class="ma-0 pa-0"
-                  hide-details
-                  @change="clone.admin.is = admin"
-                />
-              </v-col>
+          <v-card flat rounded="xl">
+            <v-toolbar flat>
+              <v-toolbar-title class="text-h6">{{ userId ? 'Edit' : 'Invite' }} User</v-toolbar-title>
+              <v-spacer />
+              <v-btn icon @click="$emit('input')">
+                <v-icon>mdi-close</v-icon>
+              </v-btn>
+            </v-toolbar>
+
+            <v-card-text>
+              <v-container class="px-8">
+                <v-row v-if="!userId" no-gutters>
+                  <v-col cols="12" tag="label" class="v-label pl-6">Name</v-col>
+                  <v-col cols="12" class="pr-3 pt-1">
+                    <v-text-field
+                      v-model.trim="clone.name"
+                      label="Name"
+                      class="mb-2 mt-1"
+                      solo-inverted
+                      flat
+                      rounded
+                      type="text"
+                      color="primary"
+                      :disabled="loading"
+                      :rules="[validation.required]"
+                    />
+                  </v-col>
+                </v-row>
+                <v-row v-if="!userId" no-gutters>
+                  <v-col cols="12" tag="label" class="v-label pl-6">Email</v-col>
+                  <v-col cols="12">
+                    <v-text-field
+                      v-model.trim="clone.email"
+                      label="email@p2srugbyworks.com"
+                      type="email"
+                      solo-inverted
+                      flat
+                      persistent-hint
+                      validate-on-blur
+                      rounded
+                      class="mb-2 mt-1"
+                      color="primary"
+                      :disabled="loading"
+                      :rules="[validation.required, validation.email]"
+                    />
+                  </v-col>
+                </v-row>
+                <v-row no-gutters>
+                  <v-col cols="12" tag="label">Role</v-col>
+                  <v-col cols="6">
+                    <v-checkbox
+                      v-model="permissions"
+                      value="admin"
+                      label="Administrator"
+                      color="primary"
+                      class="ma-0 pa-0"
+                      hide-details
+                      @change="clone.admin.is = admin"
+                    />
+                  </v-col>
               
-              <v-col cols="6">
-                <v-checkbox
-                  v-model="permissions"
-                  value="coach"
-                  label="Coach"
-                  class="ma-0 pa-0"
-                  color="primary"
-                  hide-details
-                  @change="clone.coach.is = coach"
-                />
-              </v-col>
-              <p v-if="!!permError" class="error--text text-caption pl-3">{{ permError }}</p>
-              <p v-else-if="!userId" class="grey--text text-caption pl-3">This can be changed later by an administrator.</p>
-            </v-row>
-              <v-row no-gutters>
-
-              <v-expansion-panels flat hover class="my-2">
-                <v-expansion-panel>
-                  <v-expansion-panel-header class="pa-0">Qualifications</v-expansion-panel-header>
-                  <v-expansion-panel-content>
-                    <Clearance
-                      title="Police Clearance"
-                      :verified="clone.qualifications.policeClearance.verified"
-                      :expiry="clone.qualifications.policeClearance.expiry"
-                      @updateVerified="clone.qualifications.policeClearance.verified = $event"
-                      @updateExpiry="clone.qualifications.policeClearance.expiry = $event"
+                  <v-col cols="6">
+                    <v-checkbox
+                      v-model="permissions"
+                      value="coach"
+                      label="Coach"
+                      class="ma-0 pa-0"
+                      color="primary"
+                      hide-details
+                      @change="clone.coach.is = coach"
                     />
-                    <Clearance
-                      title="Medical Clearance"
-                      :verified="clone.qualifications.medClearance.verified"
-                      :expiry="clone.qualifications.medClearance.expiry"
-                      @updateVerified="clone.qualifications.medClearance.verified = $event"
-                      @updateExpiry="clone.qualifications.medClearance.expiry = $event"
-                    />
-                    <Clearance
-                      title="Working With Children Check"
-                      :verified="clone.qualifications.WWC.verified"
-                      :expiry="clone.qualifications.WWC.expiry"
-                      @updateVerified="clone.qualifications.WWC.verified = $event"
-                      @updateExpiry="clone.qualifications.WWC.expiry = $event"
-                    />
-                  </v-expansion-panel-content>
-                </v-expansion-panel>
-              </v-expansion-panels>
-            </v-row>
-
-            <v-row align="center">
-              <v-col cols="9" class="pt-6 pr-10">
-                <v-alert
-                  dismissible
-                  dense
-                  rounded="pill"
-                  v-model="alert"
-                  type="error"
-                  name="alert"
-                  class="ma-0"
-                  transition="slide-y-transition"
-                >{{ error }}</v-alert>
-              </v-col>
-
-              <v-col cols="3" class="mt-3">
-                <v-btn
-                  depressed
-                  rounded
-                  class="black--text ma-0"
-                  style="float: right"
-                  color="primary"
-                  :disabled="!valid || loading || !!permError"
-                  :loading="loading"
-                  type="submit"
-                >{{ userId ? 'Update' : 'Invite' }} User</v-btn>
-              </v-col>
-            </v-row>
-          </v-container>
+                  </v-col>
+                  <p v-if="!!permError" class="error--text text-caption pl-3">{{ permError }}</p>
+                  <p v-else-if="!userId" class="grey--text text-caption pl-3">This can be changed later by an administrator.</p>
+                </v-row>
+                  <v-row no-gutters>
+                  <v-expansion-panels flat hover class="my-2">
+                    <v-expansion-panel>
+                      <v-expansion-panel-header class="pa-0">Qualifications</v-expansion-panel-header>
+                      <v-expansion-panel-content>
+                        <Clearance
+                          title="Police Clearance"
+                          :verified="clone.qualifications.policeClearance.verified"
+                          :expiry="clone.qualifications.policeClearance.expiry"
+                          @updateVerified="clone.qualifications.policeClearance.verified = $event"
+                          @updateExpiry="clone.qualifications.policeClearance.expiry = $event"
+                        />
+                        <Clearance
+                          title="Medical Clearance"
+                          :verified="clone.qualifications.medClearance.verified"
+                          :expiry="clone.qualifications.medClearance.expiry"
+                          @updateVerified="clone.qualifications.medClearance.verified = $event"
+                          @updateExpiry="clone.qualifications.medClearance.expiry = $event"
+                        />
+                        <Clearance
+                          title="Working With Children Check"
+                          :verified="clone.qualifications.WWC.verified"
+                          :expiry="clone.qualifications.WWC.expiry"
+                          @updateVerified="clone.qualifications.WWC.verified = $event"
+                          @updateExpiry="clone.qualifications.WWC.expiry = $event"
+                        />
+                        <Clearance
+                          title="Vaccination Status"
+                          :verified="clone.qualifications.vaccination.verified"
+                          :expiry="clone.qualifications.vaccination.expiry"
+                          @updateVerified="clone.qualifications.vaccination.verified = $event"
+                          @updateExpiry="clone.qualifications.vaccination.expiry = $event"
+                        />
+                      </v-expansion-panel-content>
+                    </v-expansion-panel>
+                  </v-expansion-panels>
+                </v-row>
+                <v-row align="center">
+                  <v-col cols="9" class="pt-6 pr-10">
+                    <v-alert
+                      dismissible
+                      dense
+                      rounded="pill"
+                      v-model="alert"
+                      type="error"
+                      name="alert"
+                      class="ma-0"
+                      transition="slide-y-transition"
+                    >{{ error }}</v-alert>
+                  </v-col>
+                  <v-col cols="3" class="mt-3">
+                    <v-btn
+                      depressed
+                      rounded
+                      class="black--text ma-0"
+                      style="float: right"
+                      color="primary"
+                      :disabled="!valid || loading || !!permError"
+                      :loading="loading"
+                      type="submit"
+                    >{{ userId ? 'Update' : 'Invite' }} User</v-btn>
+                  </v-col>
+                </v-row>
+              </v-container>
+            </v-card-text>
+          </v-card>
         </v-form>
       </template>
     </FeathersVuexFormWrapper>
-    </v-card>
   </v-dialog>
 </template>
 
@@ -213,7 +219,8 @@ export default {
         qualifications: {
           policeClearance: {},
           WWC: {},
-          medClearance: {}
+          medClearance: {},
+          vaccination: {}
         }}
       if (this.userId) {
         const userData = User.getFromStore(this.userId)
@@ -236,8 +243,7 @@ export default {
       this.$emit('input')
     },
     handleErrorResponse(err) {
-      console.log(err)
-      this.error = 'Could not update user'
+      this.error = err.message ? err.message : 'Could not update user'
       this.alert = true
     }
   },

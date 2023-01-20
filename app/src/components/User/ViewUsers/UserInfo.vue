@@ -19,7 +19,7 @@
         <v-card-text v-if="user.coach.is" class="text-h7 d-flex flex-column">
           <v-icon title="Coach" color="primary">mdi-account-heart</v-icon> Coach
         </v-card-text>
-        <v-card-text class="text-h7 d-flex flex-column">
+        <v-card-text v-if="user.admin.is" class="text-h7 d-flex flex-column">
           <v-icon title="Administrator" color="primary">mdi-shield-account</v-icon> Admin
         </v-card-text>
       </div>
