@@ -59,7 +59,7 @@
                       persistent-hint
                       @change="clone.DOB = internalDate"
                       @blur="internalDate = dateFormatted"
-                      :rules="[validation.required, validation.validDate, validation.past]"
+                      :rules="[validation.required, validation.validDate, validation.past, validation.tooYoung]"
                       lazy-validation
                     >
                       <template v-slot:append>
@@ -110,7 +110,7 @@
                     </v-radio-group>
                   </v-row>
 
-                  <v-expansion-panels flat class="mb-2">
+                  <v-expansion-panels flat class="mb-2" multiple v-model="openPanels">
                     <v-expansion-panel>
                       <v-expansion-panel-header> CULTURE </v-expansion-panel-header>
                       <v-expansion-panel-content>
@@ -173,9 +173,7 @@
                         </v-row>
                       </v-expansion-panel-content>
                     </v-expansion-panel>
-                  </v-expansion-panels>
 
-                  <v-expansion-panels flat class="mb-2">
                     <v-expansion-panel>
                       <v-expansion-panel-header> MEDICAL </v-expansion-panel-header>
                       <v-expansion-panel-content>
@@ -237,9 +235,7 @@
                         </v-row>
                       </v-expansion-panel-content>
                     </v-expansion-panel>
-                  </v-expansion-panels>
 
-                  <v-expansion-panels flat class="mb-2">
                     <v-expansion-panel>
                       <v-expansion-panel-header> CONTACT </v-expansion-panel-header>
                       <v-expansion-panel-content>
@@ -261,19 +257,6 @@
                           </v-col>
                           <v-col cols="6" class="pt-0 pl-0">
                             <v-text-field
-                              label="Phone Number"
-                              v-model.trim="clone.contact.home.homeNumber"
-                              solo-inverted
-                              flat
-                              persistent-hint
-                              rounded
-                              hint="Home phone number"
-                              class="mb-2 mt-1"
-                              color="primary"
-                            />
-                          </v-col>
-                          <v-col cols="6" class="pt-0 pl-0">
-                            <v-text-field
                               label="Mobile"
                               v-model.trim="clone.contact.home.mobileNumber"
                               solo-inverted
@@ -284,6 +267,19 @@
                               class="mb-2 mt-1"
                               color="primary"
                               :rules="[validation.required]"
+                            />
+                          </v-col>
+                          <v-col cols="6" class="pt-0 pl-0">
+                            <v-text-field
+                              label="Phone Number"
+                              v-model.trim="clone.contact.home.homeNumber"
+                              solo-inverted
+                              flat
+                              persistent-hint
+                              rounded
+                              hint="Home phone number"
+                              class="mb-2 mt-1"
+                              color="primary"
                             />
                           </v-col>
                           <v-col cols="6" class="pt-0 pl-0">
@@ -303,18 +299,17 @@
                         </v-row>
 
                         <v-row cols="12" class="ml-0">
-                          <!-- TODO Add required back to name and number -->
-                          <v-col cols="6" tag="label" class="v-label pl-6 pb-0 pt-5"
+                          <v-col cols="12" tag="label" class="v-label pl-6 pb-0 pt-5"
                             >EMERGENCY</v-col
                           >
-                          <v-col cols="6" class="pb-0"
-                            ><v-checkbox
+                          <!-- <v-col cols="6" class="pb-0">
+                            <v-checkbox
                               label="Use Same Contact"
                               class="ma-0"
                               v-model="contactSame"
                               :value="true"
-                            ></v-checkbox
-                          ></v-col>
+                            ></v-checkbox>
+                            </v-col> -->
                           <v-col cols="6" class="pt-0 pl-0">
                             <v-text-field
                               label="Name"
@@ -327,7 +322,8 @@
                               hint="Emergency contact name (required)"
                               class="mb-2 mt-1"
                               color="primary"
-                              :disabled="loading || contactSame"
+                              :disabled="loading"
+                              :rules="[validation.required]"
                             />
                           </v-col>
                           <v-col cols="6" class="pt-0 pl-0">
@@ -342,7 +338,8 @@
                               hint="Emergency phone number (required)"
                               class="mb-2 mt-1"
                               color="primary"
-                              :disabled="loading || contactSame"
+                              :disabled="loading"
+                              :rules="[validation.required]"
                             />
                           </v-col>
                         </v-row>
@@ -395,26 +392,9 @@
                       />
                     </v-col>
                   </v-row>
-
-                  <v-col cols="12" class="my-4" v-show="alert">
-                    <v-alert
-                      dismissible
-                      rounded="pill"
-                      v-model="alert"
-                      type="error"
-                      name="alert"
-                      class="ma-0"
-                      transition="slide-y-transition"
-                      >{{ error }}</v-alert
-                    >
-                  </v-col>
                 </v-row>
-              </v-container>
-          </v-card-text>
-          <v-divider></v-divider>
-          <v-card-actions>
             <v-row class="pb-4" no-gutters>
-              <v-col cols="6">
+              <v-col cols="8">
                 <v-alert
                   rounded="pill"
                   v-model="alert"
@@ -422,25 +402,27 @@
                   name="alert"
                   class="ma-0"
                   transition="slide-y-transition"
+                  dense
                 >
                   {{ error }}
                 </v-alert>
               </v-col>
-              <v-col cols="6">
+              <v-col cols="4">
                 <v-btn
                   depressed
                   rounded
                   class="ma-0"
                   style="float: right"
                   color="primary"
-                  :disabled="!valid || loading"
+                  :disabled="loading"
                   :loading="loading"
                   type="submit"
                   >{{ studentId ? 'Update' : 'Add' }} Student</v-btn
                 >
               </v-col>
             </v-row>
-          </v-card-actions>
+            </v-container>
+          </v-card-text>
         </v-card>
         </v-form>
       </template>
@@ -476,6 +458,7 @@ export default {
       loading: false,
       alert: false,
       error: '',
+      openPanels: [0, 1, 2],
       valid: false,
       validation: {
         required: (value) => !!value || 'This field is required',
@@ -490,13 +473,16 @@ export default {
         past: (value) =>
           dayjs(value, 'DD/MM/YYYY').isBefore(dayjs()) ||
           'Date must be in the past',
+        tooYoung: (value) =>
+          dayjs(value, 'DD/MM/YYYY').isBefore(dayjs().subtract(1, 'year')) ||
+          'Child is too young',
         validDate: (value) =>
           dayjs(value, 'DD/MM/YYYY').isValid() || 'Invalid date',
       },
     }
   },
   mounted() {
-    this.date = dayjs(this.item.date).format('YYYY-MM-DD')
+    this.date = dayjs(this.item.date).subtract(12, 'years').format('YYYY-MM-DD')
   },
   computed: {
     internalDate: {
@@ -536,7 +522,11 @@ export default {
   },
   methods: {
     handleSubmit(student, callback) {
-      callback(student).then((savedStudent) => this.handleSaveReponse(savedStudent));
+      this.alert = false
+      this.$refs.form.validate()
+      if(this.valid) {
+        callback(student).then((savedStudent) => this.handleSaveReponse(savedStudent)).catch(err => this.handleErrorReponse(err));
+      }
     },
     handleSaveReponse() {
       if (!this.studentId) {
@@ -545,8 +535,17 @@ export default {
       }
       this.$emit('input');
     },
+    handleErrorReponse(err) {
+      if(err.name === 'BadRequest') {
+        this.error = 'Failed to validate student data'
+      } else {
+        this.error = 'Request failed'
+      }
+      this.alert = true
+    },
   },
   watch: {
+
     date(val) {
       const parsed = dayjs(val, 'YYYY-MM-DD')
       if (parsed.isValid()) this.dateFormatted = parsed.format('DD/MM/YYYY')

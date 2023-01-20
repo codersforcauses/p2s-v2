@@ -7,21 +7,18 @@
       </v-sheet>
     </v-main>
     <!-- <fab /> -->
-    <bottomnav />
   </div>
 </template>
 
 <script>
 import toolbar from '../components/layout/Toolbar.vue';
 // import fab from '../components/layout/FAB';
-import bottomnav from '../components/layout/BottomNav';
 
 export default {
   name: 'dashboard',
   components: {
     // fab,
     toolbar,
-    bottomnav,
   },
   computed: {
     sheet() {

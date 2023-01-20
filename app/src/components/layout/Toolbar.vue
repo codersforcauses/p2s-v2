@@ -1,12 +1,12 @@
 <template>
   <v-app-bar flat app height="64">
-    <v-btn icon v-show="isMobile" @click="$router.push(`/${user.admin.is ? 'admin' : 'coach' }`)">
+    <v-btn icon v-show="isMobile" @click="$router.push('/')">
       <v-icon>mdi-home</v-icon>
     </v-btn>
 
     <v-divider inset vertical class="mr-3" v-show="isMobile" />
 
-    <v-btn v-if="$route.name !== 'admin dashboard' && $route.name !== 'coach dashboard'" class="mt-2 mr-2" icon large @click="$router.push(`/${user.admin.is ? 'admin' : 'coach' }`)">
+    <v-btn v-if="$route.name !== 'dashboard'" class="mt-2 mr-2" icon large @click="$router.push('/')">
       <v-icon color="primary">
         mdi-home
       </v-icon>

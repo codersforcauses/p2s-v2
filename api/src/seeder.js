@@ -139,10 +139,6 @@ function findAndCreate(app, serviceName, object, params) {
 
 module.exports = async function(app) {
   console.time('Time taken');
-  logger.info('Starting harvest cycle');
-  logger.info('Plowing fields');
-  logger.info('Growing schools');
-
   const schoolPromises = [];
 
   for (let i = 0; i < totalSchools; i += 1) {
@@ -156,9 +152,8 @@ module.exports = async function(app) {
       })
     );
   }
-  const schoolsResult = Promise.all(schoolPromises);
-
-  logger.info('Growing users');
+  const schoolsResult = await Promise.all(schoolPromises);
+  logger.info('Seeded schools');
 
   // Create super admin
   app
@@ -224,35 +219,29 @@ module.exports = async function(app) {
     );
   }
 
-  const allSchoolPromises = schoolsResult
-    .then(async schools => {
-      logger.info('Growing students');
+  await Promise.all([coachPromises, adminPromises]);
+  logger.info('Seeded users');
 
-      const studentPromises = [];
+  const studentPromises = [];
+  schoolsResult.forEach(school => {
+    for (let i = 0; i < studentsPerSchool; i += 1) {
+      const student = createStudentObject(school._id);
 
-      schools.forEach(school => {
-        for (let i = 0; i < studentsPerSchool; i += 1) {
-          const student = createStudentObject(school._id);
+      studentPromises.push(
+        findAndCreate(app, 'students', student, {
+          query: {
+            name: student.name,
+            gender: student.gender,
+            school: student.school,
+            $select: ['_id', 'name'],
+          },
+        })
+      );
+    }
+  });
 
-          studentPromises.push(
-            findAndCreate(app, 'students', student, {
-              query: {
-                name: student.name,
-                gender: student.gender,
-                school: student.school,
-                $select: ['_id', 'name'],
-              },
-            })
-          );
-        }
-      });
+  await Promise.all(studentPromises);
+  logger.info('Seeded students');
 
-      return Promise.all(studentPromises);
-    })
-    .catch(err => console.log(err));
-
-  await Promise.all([adminPromises, coachPromises, allSchoolPromises]);
-
-  logger.info('Harvest complete!');
   console.timeEnd('Time taken');
 };

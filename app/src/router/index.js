@@ -2,9 +2,6 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Store from '../store/index';
 
-import AdminRoutes from './admin';
-import CoachRoutes from './coach';
-
 Vue.use(VueRouter);
 
 const routes = [
@@ -39,32 +36,14 @@ const routes = [
     name: 'dashboard',
     component: () => import(/* webpackChunkName: "dashboard" */ '../views/Dashboard.vue'),
     meta: { requiresAuth: true },
-    beforeEnter(to, _, next) {
-      if (to.fullPath === '/') {
-        const user = Store.getters['auth/user'];
-        if (user?.admin?.is) {
-          next({ path: '/admin' });
-        } else if (user?.coach?.is) {
-          next({ path: '/coach' });
-        } else {
-          next({ name: 'error' });
-        }
-      } else {
-        next();
-      }
-    },
     children: [
       {
-        path: 'admin',
-        component: () => import(/* webpackChunkName: "admin" */ '../components/layout/Admin.vue'),
-        meta: { permission: 'admin' },
-        children: AdminRoutes,
-      },
-      {
-        path: 'coach',
-        component: () => import(/* webpackChunkName: "coach" */ '../components/layout/Coach.vue'),
-        meta: { permission: 'coach' },
-        children: CoachRoutes,
+        path: '/',
+        name: 'dashboard',
+        component: () =>
+          import(
+            /* webpackChunkName: "dashboard" */ '../components/Cards'
+          ),
       },
       {
         path: '/sessions',
