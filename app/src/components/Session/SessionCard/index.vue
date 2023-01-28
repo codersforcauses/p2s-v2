@@ -33,13 +33,13 @@
     <v-card-title primary-title class="primary--text text-h6 pb-0">Manage Sessions</v-card-title>
     <v-card-text>
       View all the sessions on file
-      <br /><span v-if="isAdminView">Create a new session to be used in lessons or programs</span>
+      <br /><span v-if="adminUser">Create a new session to be used in lessons or programs</span>
     </v-card-text>
 
     <v-card-actions class="py-1">
       <v-btn text rounded color="primary" :to="{ name: 'view-sessions' }">View All</v-btn>
-      <v-btn v-if="isAdminView" text rounded color="primary" @click="sessionDialog = true">Create New</v-btn>
-      <SessionDialog v-if="isAdminView" v-model="sessionDialog" />
+      <v-btn v-if="adminUser" text rounded color="primary" @click="sessionDialog = true">Create New</v-btn>
+      <SessionDialog v-if="adminUser" v-model="sessionDialog" />
     </v-card-actions>
   </v-card>
 </template>
@@ -47,17 +47,17 @@
 <script>
 import { makeFindMixin } from 'feathers-vuex'
 
-import { mapState } from 'vuex';
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 
 import SessionDialog from '../SessionDialog'
 import DateView from '../DateView.vue'
+import userRoleMixin from '../../../utils/userRole.mixin';
 
 dayjs.extend(utc)
 
 export default {
-  mixins: [ makeFindMixin({ service: 'sessions', watch: true })],
+  mixins: [ makeFindMixin({ service: 'sessions', watch: true }), userRoleMixin],
   components: {
     SessionDialog,
     DateView
@@ -98,10 +98,6 @@ export default {
         }
       }
       return query
-    },
-    ...mapState('auth', { user: 'user' }),
-    isAdminView() {
-      return this.user?.admin?.is;
     },
   },
   methods: {
