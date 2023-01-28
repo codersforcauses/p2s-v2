@@ -7,7 +7,7 @@
     persistent-hint
     validate-on-blur
     rounded
-    class="mb-2 mt-1 rounded-l-xl rounded-r-0"
+    class="mb-2 mt-1 rounded-xl"
     color="primary"
   />
 </template>

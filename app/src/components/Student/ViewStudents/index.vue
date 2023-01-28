@@ -1,11 +1,7 @@
 <template>
   <v-sheet rounded="xl" class="py-3">
-    <StudentFilter
-      :filterSchool="selectedSchool"
-      :filterYear="selectedYear"
-      @updateYear="selectedYear = $event"
-      @updateSchool="selectedSchool = $event" />
-    <StudentList v-model="selectedStudent" @selected="setStudent" :students="students" :loading="isFindStudentsPending" @close="closeDrawer" />
+    <BasicSearch @setSearch="setSearch" />
+    <StudentList v-model="selectedStudent" @selected="setStudent" :students="filteredStudents" :loading="isFindStudentsPending" @close="closeDrawer" />
     <InfoPanel v-model="drawer">
       <StudentInfo v-if="selectedStudent" :student="selectedStudent" @close="closeDrawer"></StudentInfo>
       <v-card-actions v-if="selectedStudent">
@@ -24,10 +20,10 @@ import { makeFindMixin } from 'feathers-vuex'
 
 import StudentList from './StudentList';
 import StudentInfo from './StudentInfo';
-import StudentFilter from './StudentFilter';
 import DeleteDialog from './DeleteDialog';
 import InfoPanel from '../../other/InfoPanel.vue';
 import StudentDialog from '../StudentDialog';
+import BasicSearch from '../../forms/BasicSearch.vue';
 
 export default {
   name: 'view-students',
@@ -38,10 +34,10 @@ export default {
   components: {
     StudentList,
     StudentInfo,
-    StudentFilter,
     InfoPanel,
     StudentDialog,
-    DeleteDialog
+    DeleteDialog,
+    BasicSearch
   },
 
   data() {
@@ -49,6 +45,7 @@ export default {
       selectedStudent: null,
       drawer: false,
       selectedSchool: '',
+      searchFilter: '',
       selectedYear: null,
       editStudentDialog: false,
       deleteStudentDialog: false,
@@ -56,6 +53,13 @@ export default {
   },
 
   computed: {
+    filteredStudents() {
+      return this.students.filter(i =>
+        this.searchFilter.split(' ').every(s =>
+          `${i.name} ${i.schoolYear}`
+          .toLowerCase().includes(s)
+        ));
+    },
     studentsParams() {
       return { 
         query: {
@@ -75,6 +79,9 @@ export default {
     setStudent(student) {
       this.selectedStudent = student;
       this.drawer = true;
+    },
+    setSearch(name) {
+      this.searchFilter = name
     },
   },
   watch: {

@@ -1,22 +1,25 @@
 <template>
-  <FeathersVuexFind v-slot="{ items: schools, isFindPending: isPending }" service="schools" :params="schoolParams" watch="params">
+  <FeathersVuexFind v-slot="{ items: users, isFindPending: isPending }" service="users" :params="searchParams" watch="params">
     <v-autocomplete
-      v-model.trim="school"
+      v-model.trim="user"
       :loading="isPending"
-      :items="schools"
+      :items="users"
       :search-input.sync="search"
       color="primary"
       rounded
-      dense
       flat
-      clearable
+      cache-items
+      chips
+      multiple
+      deletable-chips
+      small-chips
       hide-selected
       style="padding-right: 1px;"
       :class="menuClasses"
       :filter="searchFilter"
       item-text="name"
       item-value="_id"
-      label="Search for a school"
+      label="Search for a user"
       solo-inverted
       :menu-props="{
         offsetY: true,
@@ -30,7 +33,7 @@
       <template #no-data>
         <v-list-item>
           <v-list-item-title>
-            Search Schools
+            Search Users
           </v-list-item-title>
         </v-list-item>
       </template>
@@ -41,25 +44,25 @@
 <script>
 export default {
   props: {
-    value: String,
+    value: Array,
     menuClasses: String
   },
   data: () => ({
     search: ''
   }),
   computed: {
-    schoolParams() {
-      return {
-        query: { $sort: { name: 1 } }
-      }
-    },
-    school: {
+    user: {
       get() {
         return this.value;
       },
       set(value) {
         this.$emit('input', value);
       },
+    },
+    searchParams() {
+      return  {
+        query: { }
+      } 
     },
     dark(){
       return this.$vuetify.theme.dark
@@ -74,3 +77,7 @@ export default {
   }
 }
 </script>
+
+<style>
+
+</style>
