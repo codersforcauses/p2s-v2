@@ -1,12 +1,12 @@
 <template>
   <v-app-bar flat app height="64">
-    <v-divider inset vertical class="mr-3" v-show="isMobile" />
-
     <v-btn v-if="$route.name !== 'dashboard'" class="mt-2 mr-2" icon large @click="$router.push('/')">
       <v-icon color="primary">
         mdi-home
       </v-icon>
     </v-btn>
+
+    <v-divider inset vertical class="mr-3" v-show="isMobile" />
 
     <v-toolbar-title class="mt-2 ml-0 text-capitalize text-h5">{{ title }}</v-toolbar-title>
 
@@ -44,11 +44,8 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
-
 export default {
   computed: {
-    ...mapState('auth', { user: 'user' }),
     theme() {
       return this.$vuetify.theme.dark ? 'Light' : 'Dark';
     },

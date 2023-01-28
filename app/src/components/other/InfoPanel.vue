@@ -17,10 +17,15 @@
       </div>
     </v-navigation-drawer>
     <v-bottom-sheet v-else v-model="open" scrollable>
-      <v-sheet height="2000px" class="rounded-t-xl nav-panel">
+      <v-card class="rounded-t-xl nav-panel">
         <CloseButton style="margin-top: 10px !important;" @close="open = false"/>
-        <slot />
-      </v-sheet>
+        <v-card-text height="500px">
+          <slot name="content"></slot>
+        </v-card-text>
+        <v-card-actions >
+          <slot name="actions"></slot>
+        </v-card-actions>
+      </v-card>
     </v-bottom-sheet>
 </template>
 

@@ -474,7 +474,7 @@ export default {
           dayjs(value, 'DD/MM/YYYY').isBefore(dayjs()) ||
           'Date must be in the past',
         tooYoung: (value) =>
-          dayjs(value, 'DD/MM/YYYY').isBefore(dayjs().subtract(1, 'year')) ||
+          dayjs(value, 'DD/MM/YYYY').isBefore(dayjs().subtract(2, 'year')) ||
           'Child is too young',
         validDate: (value) =>
           dayjs(value, 'DD/MM/YYYY').isValid() || 'Invalid date',

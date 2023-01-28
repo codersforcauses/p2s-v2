@@ -25,11 +25,6 @@
     </div>
     <v-card-title primary-title class="primary--text text-h6 pb-0">Manage Users</v-card-title>
 
-    <v-card-text>
-      View all the users currently active
-      <br />Invite a new member to P2S
-    </v-card-text>
-
     <v-card-actions class="py-1">
       <v-btn text rounded color="primary" :to="{ name: 'view-users' }">View All</v-btn>
 

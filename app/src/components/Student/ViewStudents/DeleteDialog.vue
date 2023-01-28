@@ -1,7 +1,7 @@
 <template>
   <v-dialog
     v-model="showDialog"
-    max-width="320"
+    max-width="500"
     content-class="rounded-xl"
     transition="dialog-transition"
   >

@@ -1,5 +1,5 @@
 <template>
-  <!-- <v-skeleton-loader type="list-item-two-line@10" :loading="!"> -->
+  <v-skeleton-loader type="list-item-two-line@10" :loading="loading">
     <v-list two-line subheader>
       <v-list-item @click="createDialogOpen = true">
         <v-icon color="primary">mdi-plus</v-icon>
@@ -12,7 +12,7 @@
         </template>
       </v-list-item-group>
     </v-list>
-  <!-- </v-skeleton-loader> -->
+  </v-skeleton-loader>
 </template>
 
 <script>
@@ -29,6 +29,7 @@ export default {
   props: {
     value: Object,
     schools: Array,
+    loading: Boolean
   },
   data: () => ({
     createDialogOpen: false

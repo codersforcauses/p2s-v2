@@ -1,5 +1,5 @@
 <template>
-  <v-toolbar flat>
+  <v-container>
     <v-row>
       <v-col cols="8" class="pa-0">
         <SchoolSearch v-model="selectedSchool" menuClasses="rounded-r-0" />
@@ -30,7 +30,7 @@
         ></v-select>
       </v-col>
     </v-row>
-  </v-toolbar>
+  </v-container>
 </template>
 
 <script>

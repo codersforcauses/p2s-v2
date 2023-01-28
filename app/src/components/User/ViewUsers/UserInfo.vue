@@ -1,6 +1,6 @@
 <template>
   <v-card v-if="user" flat tile height="100%" class="py-sm-12">
-    <v-card outlined class="pt-8 pb-3 d-flex flex-column align-center text-center rounded-b-xl">
+    <v-card flat class="pt-8 pb-3 d-flex flex-column align-center text-center rounded-b-xl">
       <!-- <v-sheet
           outlined
           rounded
