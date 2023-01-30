@@ -1,6 +1,6 @@
 <template>
-  <v-skeleton-loader type="list-item-two-line@10" :loading="!coaches || coaches.length === 0">
-    <v-list two-line subheader flat>
+  <v-skeleton-loader type="list-item-two-line@10" :loading="!coaches">
+    <v-list v-if="coaches.length !== 0" two-line subheader flat>
       <v-list-item-group multiple color="primary">
         <template v-for="coach in coaches">
           <v-list-item :key="coach._id" @click="updateList(coach._id)" class="px-0 px-sm-3">
@@ -12,13 +12,14 @@
                   coach.name
                 }}</v-list-item-title>
                 <v-list-item-subtitle class="text--secondary">
-                  Coach
+                  {{ coachAddress(coach.address) }}
                 </v-list-item-subtitle>
               </v-list-item-content>
           </v-list-item>
         </template>
       </v-list-item-group>
     </v-list>
+    <p v-else>No coaches found</p>
   </v-skeleton-loader>
 </template>
 
@@ -35,6 +36,11 @@ export default {
     this.selected = [...this.session.coaches]
   },
   methods: {
+    coachAddress(address) {
+      if (address) {
+        return `${address.suburb}, ${address.state}`
+      }
+    },
     updateList(coachId) {
       const index = this.selected.findIndex(id => coachId === id)
       if(index >= 0) this.selected.splice(index, 1) 

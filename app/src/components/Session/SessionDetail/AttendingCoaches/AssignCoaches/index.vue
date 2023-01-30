@@ -16,19 +16,15 @@
           <v-icon>mdi-close</v-icon>
         </v-btn>
       </v-toolbar>
-      <CoachFilter
+      <v-toolbar flat>
+        <BasicSearch @setSearch="setSearch" />
+      </v-toolbar>
+      <!-- <CoachFilter
         :filterName="searchName"
         @updateName="searchName = $event"
-      />
+      /> -->
       <v-card-text>
-        <FeathersVuexFind
-          v-slot="{ items: coaches }"
-          service="users"
-          :params="{ query }"
-          watch="params"
-        >
-          <CoachList :session="session" :coaches="coaches" @update="$emit('update', $event)" />
-        </FeathersVuexFind>
+        <CoachList :session="session" :coaches="filteredUsers" @update="$emit('update', $event)" />
       </v-card-text>
 
       <v-card-actions class="ma-0 pa-0">
@@ -41,20 +37,25 @@
 </template>
 
 <script>
+import { makeFindMixin } from 'feathers-vuex'
+
 import CoachFilter from './CoachFilter.vue';
 import CoachList from './CoachList.vue';
+import BasicSearch from '../../../../forms/BasicSearch';
 
 export default {
+  mixins: [makeFindMixin({ service: 'users', watch: true })],
   components: { 
     CoachList,
-    CoachFilter
-   },
+    CoachFilter,
+    BasicSearch
+  },
   props: {
     value: Boolean,
     session: Object
   },
   data: () => ({
-    searchName: '',    
+    searchFilter: '',  
   }),
   computed: {
     showDialog: {
@@ -65,7 +66,14 @@ export default {
         this.$emit('input', value);
       },
     },
-    query() {
+    filteredUsers() {
+      return this.users.filter(user =>
+        this.searchFilter.split(' ').every(s =>
+          `${user.name} ${user.address}`
+          .toLowerCase().includes(s)
+        ));
+    },
+    usersParams() {
       return {
         $sort: {
           name: 1,
@@ -74,5 +82,10 @@ export default {
       };
     },
   },
+  methods: {
+    setSearch(name) {
+      this.searchFilter = name
+    },
+  }
 };
 </script>

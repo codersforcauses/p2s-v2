@@ -39,7 +39,6 @@
         </v-list-item>
         <v-card-text>No contact provided</v-card-text>
       </v-card>  
-      <pre>{{JSON.stringify(user, null, 2)}}</pre>
     </v-card-text>
   </v-card>
 </template>

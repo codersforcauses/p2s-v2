@@ -173,19 +173,6 @@
         </v-row>
       </v-container>
     </template>
-
-    <v-container>
-      <v-expansion-panels flat>
-        <v-expansion-panel>
-          <v-expansion-panel-header> Raw Info </v-expansion-panel-header>
-          <v-expansion-panel-content>
-            <v-card-subtitle class="subtitle-2 grey--text">
-              <pre>{{ JSON.stringify(user, null, 2) }}</pre>
-            </v-card-subtitle>
-          </v-expansion-panel-content>
-        </v-expansion-panel>
-      </v-expansion-panels>
-    </v-container>
   </v-card>
 </template>
 

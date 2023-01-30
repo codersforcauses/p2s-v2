@@ -55,8 +55,6 @@
         </v-list-item-content>
       </v-list-item>
     </v-card>
-    <pre>{{JSON.stringify(student, null, 2)}}</pre>
-
   </v-card>
 </template>
 

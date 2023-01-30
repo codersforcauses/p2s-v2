@@ -15,7 +15,7 @@
           <v-icon>mdi-close</v-icon>
         </v-btn>
       </v-toolbar>
-      <v-toolbar>
+      <v-toolbar flat>
         <BasicSearch @setSearch="setSearch" />
       </v-toolbar>
       <StudentFilter
