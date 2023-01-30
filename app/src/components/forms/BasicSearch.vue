@@ -4,10 +4,10 @@
     v-model.trim="search"
     solo-inverted
     flat
-    persistent-hint
+    hide-details
     validate-on-blur
     rounded
-    class="mb-2 mt-1 rounded-xl"
+    class="rounded-xl"
     color="primary"
   />
 </template>

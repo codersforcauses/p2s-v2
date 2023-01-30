@@ -15,11 +15,15 @@
           <v-icon>mdi-close</v-icon>
         </v-btn>
       </v-toolbar>
+      <v-toolbar>
+        <BasicSearch @setSearch="setSearch" />
+      </v-toolbar>
       <StudentFilter
         :filterSchool="selectedSchool"
         :filterYear="selectedYear"
         @updateYear="selectedYear = $event"
         @updateSchool="selectedSchool = $event"
+        @setSearch="setSearch"
       />
       <v-card-text>
         <FeathersVuexFind
@@ -44,11 +48,14 @@
 <script>
 import StudentFilter from './StudentFilter.vue';
 import StudentList from './StudentList.vue';
+import BasicSearch from '../../../forms/BasicSearch.vue';
+
 
 export default {
   components: { 
     StudentList,
-    StudentFilter
+    StudentFilter,
+    BasicSearch
    },
   props: {
     value: Boolean,
@@ -57,6 +64,7 @@ export default {
   data: () => ({
     selectedSchool: '',
     selectedYear: null,
+    searchFilter: '',
   }),
   mounted() {
     this.selectedSchool = this.session.school
@@ -70,6 +78,13 @@ export default {
         this.$emit('input', value);
       },
     },
+    filteredStudents() {
+      return this.students.filter(student =>
+        this.searchFilter.split(' ').every(s =>
+          `${student.name} ${student.schoolYear}`
+          .toLowerCase().includes(s)
+        ));
+    },
     query() {
       return {
         $sort: {
@@ -80,5 +95,10 @@ export default {
       };
     },
   },
+  methods: {
+    setSearch(name) {
+      this.searchFilter = name
+    },
+  }
 };
 </script>
