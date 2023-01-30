@@ -9,20 +9,27 @@
       right
       disable-resize-watcher
       disable-route-watcher
-      class="py-3 pb-15 px-0"
+      class="px-0"
     >
-      <div class="nav-panel">
+    <div>
         <CloseButton @close="open = false"/>
-        <slot />
+        <v-card flat class="rounded-t-xl">
+          <v-card-text height="100%">
+            <slot name="content"></slot>
+          </v-card-text>
+          <v-card-actions>
+            <slot name="actions"></slot>
+          </v-card-actions>
+        </v-card>
       </div>
     </v-navigation-drawer>
     <v-bottom-sheet v-else v-model="open" scrollable>
-      <v-card class="rounded-t-xl nav-panel">
+      <v-card style="position: relative;" class="rounded-t-xl nav-panel">
         <CloseButton style="margin-top: 10px !important;" @close="open = false"/>
         <v-card-text height="500px">
           <slot name="content"></slot>
         </v-card-text>
-        <v-card-actions >
+        <v-card-actions>
           <slot name="actions"></slot>
         </v-card-actions>
       </v-card>
@@ -54,13 +61,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-  .nav-panel {
-    position: relative;
-  }
-
-  .btn-ontop {
-    z-index:10; position: absolute; right: 0;
-  }
-</style>

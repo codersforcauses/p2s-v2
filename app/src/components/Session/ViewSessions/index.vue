@@ -1,20 +1,19 @@
 <template>
-  <v-sheet rounded="xl" class="py-3">
+  <v-sheet rounded="xl" class="overflow-hidden">
     <SessionFilter @setTab="setTab" />
     <SessionList  v-model="selectedSession" @selected="setSession" :sessions="sessions" :isPending="isFindSessionsPending" @close="closeDrawer" />
-    <info-panel v-model="drawer">
-      <SessionInfo v-if="selectedSession" :session="selectedSession" @close="closeDrawer" />
-      <v-card-actions v-if="selectedSession">
+    <InfoPanel v-model="drawer">
+      <template v-slot:content>
+        <SessionInfo v-if="selectedSession" :session="selectedSession" @close="closeDrawer" />
+      </template>
+      <template v-slot:actions v-if="selectedSession">
         <v-btn color="primary" outlined rounded @click="editSessionDialog = true"><v-icon>mdi-pencil</v-icon>Edit Session</v-btn>
         <SessionDialog v-model="editSessionDialog" :sessionId="selectedSession._id" />
         <v-spacer></v-spacer>
         <v-btn color="error" class="mr-2" outlined rounded @click="deleteSessionDialog = true"><v-icon>mdi-trash-can</v-icon>Delete Session</v-btn>
         <DeleteDialog v-model="deleteSessionDialog" :session="selectedSession" />
-      </v-card-actions>
-      <div v-else class="text-h6 pl-4">
-        No Session Selected
-      </div>
-    </info-panel>
+      </template>
+    </InfoPanel>
   </v-sheet>
 </template>
 
@@ -67,7 +66,9 @@ export default {
     },
     setSession(session) {
       this.selectedSession = session;
-      this.drawer = true;
+      if(session) {
+        this.drawer = true;
+      }
     },
     setTab(tab) {
       this.selectedTab = tab

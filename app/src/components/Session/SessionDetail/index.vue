@@ -16,15 +16,17 @@
           :style="drawer && !$vuetify.breakpoint.xs ? 'width: 48%;' : ''"
         />
 
-        <info-panel v-model="drawer">
-          <ReportInfo v-if="selectedReport" :report="selectedReport" @close="closeDrawer" />
-          <UserInfo v-else-if="selectedUser" :user="selectedUser" @close="closeDrawer" />
-          <StudentInfo
-            v-else-if="selectedStudent"
-            :student="selectedStudent"
-            @close="closeDrawer"
-          />
-        </info-panel>
+        <InfoPanel v-model="drawer">
+          <template v-slot:content>
+            <ReportInfo v-if="selectedReport" :report="selectedReport" @close="closeDrawer" />
+            <UserInfo v-else-if="selectedUser" :user="selectedUser" @close="closeDrawer" />
+            <StudentInfo
+              v-else-if="selectedStudent"
+              :student="selectedStudent"
+              @close="closeDrawer"
+            />
+          </template>
+        </InfoPanel>
       </v-card>
       <AttendingCoaches
         v-model="selectedUser"

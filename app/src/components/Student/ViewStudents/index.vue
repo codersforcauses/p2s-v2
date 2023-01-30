@@ -1,16 +1,18 @@
 <template>
-  <v-sheet rounded="xl" class="py-3">
+  <v-sheet rounded="xl" class="overflow-hidden">
     <BasicSearch @setSearch="setSearch" />
     <StudentList v-model="selectedStudent" @selected="setStudent" :students="filteredStudents" :loading="isFindStudentsPending" @close="closeDrawer" />
     <InfoPanel v-model="drawer">
-      <StudentInfo v-if="selectedStudent" :student="selectedStudent" @close="closeDrawer"></StudentInfo>
-      <v-card-actions v-if="selectedStudent">
+      <template v-slot:content>
+        <StudentInfo v-if="selectedStudent" :student="selectedStudent" @close="closeDrawer"></StudentInfo>
+      </template>
+      <template v-slot:actions v-if="selectedStudent">
         <v-btn rounded outlined color="primary" @click="editStudentDialog = true"><v-icon color="primary">mdi-pencil</v-icon>Edit Student</v-btn>
-        <StudentDialog v-if="selectedStudent" v-model="editStudentDialog" :studentId="selectedStudent._id" />
+        <StudentDialog v-model="editStudentDialog" :studentId="selectedStudent._id" />
         <v-spacer></v-spacer>
         <v-btn color="error" class="mr-2" rounded outlined @click="deleteStudentDialog = true"><v-icon>mdi-trash-can</v-icon>Delete Student</v-btn>
         <DeleteDialog v-model="deleteStudentDialog" :student="selectedStudent" />
-      </v-card-actions>
+      </template>
     </InfoPanel>
   </v-sheet>
 </template>
@@ -78,7 +80,9 @@ export default {
     },
     setStudent(student) {
       this.selectedStudent = student;
-      this.drawer = true;
+      if(student) {
+        this.drawer = true;
+      }
     },
     setSearch(name) {
       this.searchFilter = name
