@@ -32,7 +32,7 @@
           :params="{ query }"
           watch="params"
         >
-          <StudentList :session="session" :students="students" @update="$emit('update', $event)" />
+          <StudentList :session="session" :students="filteredStudents" @update="$emit('update', $event)" />
         </FeathersVuexFind>
       </v-card-text>
 
