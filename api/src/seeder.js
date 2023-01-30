@@ -123,7 +123,7 @@ function createStudentObject(schoolId) {
 function findAndCreate(app, serviceName, object, params) {
   const service = app.service(serviceName);
 
-  return new Promise(resolve => {
+  return new Promise((resolve, reject) => {
     service
       .find(params)
       .then(result => {
@@ -133,11 +133,12 @@ function findAndCreate(app, serviceName, object, params) {
           resolve(result[0]);
         }
       })
-      .catch(err => logger.error(err));
+      .catch(err => reject(`Failed to create ${serviceName}: ${err}`));
   });
 }
 
 module.exports = async function(app) {
+  logger.info('Starting database seeding...')
   console.time('Time taken');
   const schoolPromises = [];
 
@@ -152,6 +153,7 @@ module.exports = async function(app) {
       })
     );
   }
+
   const schoolsResult = await Promise.all(schoolPromises);
   logger.info('Seeded schools');
 
@@ -186,7 +188,7 @@ module.exports = async function(app) {
         'coach.is': true,
       });
     })
-    .catch(err => console.log(err));
+    .catch(err => logger.error(`Failed to create super admin: ${err}`));
 
   // Create admins
   const adminPromises = [];

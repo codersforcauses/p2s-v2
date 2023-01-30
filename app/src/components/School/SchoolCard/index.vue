@@ -1,29 +1,31 @@
 <template>
-  <v-card flat rounded="xl">
-    <region-image />
-
-    <v-card-title primary-title class="primary--text text-h6 pb-0">Manage Schools</v-card-title>
-    <v-card-text>
-      View all the schools on file
-      <br />Create a new school to be used in lessons or programs
-    </v-card-text>
-
-    <v-card-actions class="py-1">
+  <Card title="Schools">
+    <template v-slot:content>
+      <v-card-subtitle class="pa-0">Current Schools</v-card-subtitle>
+      <FeathersVuexFind v-slot="{ items: schools }" service="schools" :params="{ query: {} }">
+        <div class="text-h2 primary--text">{{ schools.length || 0 }}</div>
+      </FeathersVuexFind>
+    </template>
+    <template v-slot:actions>
       <v-btn text rounded color="primary" :to="{ name: 'view-schools' }">View All</v-btn>
-      <v-btn text rounded color="primary" @click="schoolDialog = true">Create New</v-btn>
+      <v-spacer></v-spacer>
+      <v-btn text rounded color="primary" @click="schoolDialog = true">
+        <v-icon left>
+          mdi-plus
+        </v-icon>
+        Create New</v-btn>
       <SchoolDialog v-model="schoolDialog" />
-      
-    </v-card-actions>
-  </v-card>
+    </template>
+  </Card>
 </template>
 
 <script>
-import RegionImage from './RegionImage'
+import Card from '../../layout/Card.vue'
 import SchoolDialog from '../SchoolDialog'
 
 export default {
   components: {
-    RegionImage,
+    Card,
     SchoolDialog
   },
   data() {

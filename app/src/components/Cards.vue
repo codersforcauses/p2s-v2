@@ -1,6 +1,6 @@
 <template>
   <div class="layout-grid">
-    <component v-for="card in visbleCards" :key="card[0]" :is="card[0]" />
+    <component v-for="card in visbleCards" :key="card.component" :is="card.component" />
   </div>
 </template>
 
@@ -12,17 +12,20 @@ export default {
   data() {
     return {
       cards: [
-        ['user-card', 'admin'],
-        ['session-card', 'coach'],
-        ['student-card', 'coach'],
-        ['school-card', 'admin'],
+        {component: 'user-card', permission: ['admin']},
+        {component: 'session-card', permission: ['admin', 'coach']},
+        {component: 'student-card', permission: ['admin', 'coach']},
+        {component: 'school-card', permission: ['admin']},
       ]
     };
   },
   computed: {
     ...mapState('auth', { user: 'user' }),
     visbleCards() {
-      return this.cards.filter(i => this.user.admin.is || (this.user.coach.is && i[1] === 'coach'))
+      const userPerms = []
+      if(this.user.admin.is) userPerms.push('admin')
+      if(this.user.coach.is) userPerms.push('coach')
+      return this.cards.filter(i => i.permission.some(p => userPerms.includes(p)))
     }
   },
   components: {

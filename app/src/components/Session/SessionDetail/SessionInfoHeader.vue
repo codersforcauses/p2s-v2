@@ -1,5 +1,5 @@
 <template>
-  <div class="d-flex justify-space-between align-center mx-4 mx-sm-10">
+  <div class="d-flex justify-space-around align-center mx-4 mx-sm-10">
     <DateView :date="session.date" />
     <v-divider class="mx-3" inset vertical />
     <TimeView :date="session.date" />

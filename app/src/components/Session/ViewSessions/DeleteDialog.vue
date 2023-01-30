@@ -70,6 +70,7 @@ export default {
       try {
         await this.delete(this.session._id)
         this.showDialog = false;
+        this.$router.push({ path: `/sessions` })
       } catch(err) {
         this.error = 'Failed to delete session'
         console.error(err.message)

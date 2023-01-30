@@ -1,20 +1,18 @@
 <template>
-  <v-sheet rounded="xl" class="py-3">
-    <StudentFilter
-      :filterSchool="selectedSchool"
-      :filterYear="selectedYear"
-      @updateYear="selectedYear = $event"
-      @updateSchool="selectedSchool = $event" />
-    <StudentList v-model="selectedStudent" @selected="setStudent" :students="students" :loading="isFindStudentsPending" @close="closeDrawer" />
+  <v-sheet rounded="xl" class="overflow-hidden">
+    <BasicSearch @setSearch="setSearch" />
+    <StudentList v-model="selectedStudent" @selected="setStudent" :students="filteredStudents" :loading="isFindStudentsPending" @close="closeDrawer" />
     <InfoPanel v-model="drawer">
-      <StudentInfo v-if="selectedStudent" :student="selectedStudent" @close="closeDrawer"></StudentInfo>
-      <v-card-actions v-if="selectedStudent">
+      <template v-slot:content>
+        <StudentInfo v-if="selectedStudent" :student="selectedStudent" @close="closeDrawer"></StudentInfo>
+      </template>
+      <template v-slot:actions v-if="selectedStudent">
         <v-btn rounded outlined color="primary" @click="editStudentDialog = true"><v-icon color="primary">mdi-pencil</v-icon>Edit Student</v-btn>
-        <StudentDialog v-if="selectedStudent" v-model="editStudentDialog" :studentId="selectedStudent._id" />
+        <StudentDialog v-model="editStudentDialog" :studentId="selectedStudent._id" />
         <v-spacer></v-spacer>
         <v-btn color="error" class="mr-2" rounded outlined @click="deleteStudentDialog = true"><v-icon>mdi-trash-can</v-icon>Delete Student</v-btn>
         <DeleteDialog v-model="deleteStudentDialog" :student="selectedStudent" />
-      </v-card-actions>
+      </template>
     </InfoPanel>
   </v-sheet>
 </template>
@@ -24,10 +22,10 @@ import { makeFindMixin } from 'feathers-vuex'
 
 import StudentList from './StudentList';
 import StudentInfo from './StudentInfo';
-import StudentFilter from './StudentFilter';
 import DeleteDialog from './DeleteDialog';
 import InfoPanel from '../../other/InfoPanel.vue';
 import StudentDialog from '../StudentDialog';
+import BasicSearch from '../../forms/BasicSearch.vue';
 
 export default {
   name: 'view-students',
@@ -38,10 +36,10 @@ export default {
   components: {
     StudentList,
     StudentInfo,
-    StudentFilter,
     InfoPanel,
     StudentDialog,
-    DeleteDialog
+    DeleteDialog,
+    BasicSearch
   },
 
   data() {
@@ -49,6 +47,7 @@ export default {
       selectedStudent: null,
       drawer: false,
       selectedSchool: '',
+      searchFilter: '',
       selectedYear: null,
       editStudentDialog: false,
       deleteStudentDialog: false,
@@ -56,6 +55,13 @@ export default {
   },
 
   computed: {
+    filteredStudents() {
+      return this.students.filter(i =>
+        this.searchFilter.split(' ').every(s =>
+          `${i.name} ${i.schoolYear}`
+          .toLowerCase().includes(s)
+        ));
+    },
     studentsParams() {
       return { 
         query: {
@@ -74,7 +80,12 @@ export default {
     },
     setStudent(student) {
       this.selectedStudent = student;
-      this.drawer = true;
+      if(student) {
+        this.drawer = true;
+      }
+    },
+    setSearch(name) {
+      this.searchFilter = name
     },
   },
   watch: {

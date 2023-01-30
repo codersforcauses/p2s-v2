@@ -7,7 +7,7 @@ const host = app.get('host');
 const server = app.listen(port);
 
 process.on('unhandledRejection', (reason, p) =>
-  logger.error('Unhandled Rejection at: Promise ', p, reason)
+  logger.error(`Unhandled Rejection at promise: ${reason}`)
 );
 
 if (process.env.NODE_ENV === 'development') {
@@ -15,7 +15,7 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 server.on('listening', () => {
-  logger.info('Starting in ' + process.env.NODE_ENV + ' mode.');
+  logger.info('Server listening in ' + process.env.NODE_ENV + ' mode');
   logger.info(
     'Application started on http://%s:%d',
     host,

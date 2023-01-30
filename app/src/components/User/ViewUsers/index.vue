@@ -1,41 +1,46 @@
 <template>
-  <v-sheet rounded="xl" class="py-3">
-    <UserFilter @setSearch="setSearch" />
-    <UserList v-model="selectedUser" @selected="setUser" :users="users" :loading="loading" @close="closeDrawer" />
+  <v-sheet rounded="xl" class="overflow-hidden">
+    <BasicSearch @setSearch="setSearch" />
+    <UserList v-model="selectedUser" @selected="setUser" :users="filteredUsers" :loading="loading" @close="closeDrawer" />
     <InfoPanel v-model="drawer">
+      <template v-slot:content>
         <UserInfo v-if="selectedUser" :user="selectedUser" @close="closeDrawer" />
-        <v-card-actions v-if="selectedUser">
-          <v-btn color="primary" outlined rounded @click="editUserDialog = true"><v-icon>mdi-pencil</v-icon>Edit User</v-btn>
-          <UserDialog v-model="editUserDialog" :userId="selectedUser._id" />
-          <v-spacer></v-spacer>
-          <v-btn color="error" class="mr-2" outlined rounded @click="deleteUserDialog = true"><v-icon>mdi-trash-can</v-icon>Delete User</v-btn>
-          <DeleteDialog v-model="deleteUserDialog" :user="selectedUser" />
-      </v-card-actions>
+      </template>
+      <template v-slot:actions v-if="selectedUser && adminUser">
+        <v-btn color="primary" outlined rounded @click="editUserDialog = true"><v-icon>mdi-pencil</v-icon>Edit User</v-btn>
+        <UserDialog v-model="editUserDialog" :userId="selectedUser._id" />
+        <v-spacer></v-spacer>
+        <v-btn color="error" class="mr-2" outlined rounded @click="deleteUserDialog = true"><v-icon>mdi-trash-can</v-icon>Delete User</v-btn>
+        <DeleteDialog v-model="deleteUserDialog" :user="selectedUser" />
+      </template>
     </InfoPanel>
   </v-sheet>
 </template>
 
 <script>
 import { mapActions } from 'vuex'
+import { makeFindMixin } from 'feathers-vuex'
 
 import UserInfo from './UserInfo';
-import UserFilter from './UserFilter';
 import UserList from './UserList';
 import DeleteDialog from "./DeleteDialog";
 import UserDialog from '../UserDialog'
 import InfoPanel from "../../other/InfoPanel.vue";
+import BasicSearch from '../../forms/BasicSearch.vue';
+import UserRoleMixin from '../../../utils/userRole.mixin'
 
 export default {
   name: 'view-users',
   title: 'View Users',
   components: {
     UserInfo,
-    UserFilter,
     UserList,
     UserDialog,
     InfoPanel,
     DeleteDialog,
+    BasicSearch,
   },
+  mixins: [makeFindMixin({ service: 'users', watch: true }), UserRoleMixin],
   data() {
     return {
       selectedUser: null,
@@ -53,17 +58,19 @@ export default {
     }
   },
   computed: {
-    query() {
+    usersParams() {
       return {
         $sort: {
           name: 1,
         },
       }
     },
-    users() {
-      const { User } = this.$FeathersVuex.api;
-      const { data } = User.findInStore({ query: this.query });
-      return data;
+    filteredUsers() {
+      return this.users.filter(i =>
+        this.searchFilter.split(' ').every(s =>
+          `${i.name} ${i.email} ${i.coach.is ? 'coach' : ''} ${i.admin.is ? 'admin' : ''}`
+          .toLowerCase().includes(s)
+        ));
     },
   },
   methods: {
@@ -85,7 +92,9 @@ export default {
     },
     setUser(user) {
       this.selectedUser = user;
-      this.drawer = true;
+      if(user) {
+        this.drawer = true;
+      }
     }
   },
   watch: {
