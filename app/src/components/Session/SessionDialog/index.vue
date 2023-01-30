@@ -5,6 +5,7 @@
     v-model="showDialog"
     content-class="rounded-xl"
     transition="dialog-transition"
+    :fullscreen="$vuetify.breakpoint.xsOnly"
   >
     <v-card flat rounded="xl">
       <v-toolbar flat>
