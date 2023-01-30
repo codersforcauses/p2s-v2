@@ -353,7 +353,7 @@
                       solo-inverted
                       flat
                       auto-grow
-                      persistent-hint
+                      hide-details
                       rounded
                       hint="Extra info/notes"
                       class="mb-2 mt-1"
@@ -374,7 +374,8 @@
                       v-model.trim="clone.schoolYear"
                       solo-inverted
                       flat
-                      persistent-hint
+                      hide-details
+                      dense
                       validate-on-blur
                       rounded
                       class="mb-2 rounded-l-0"

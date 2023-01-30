@@ -1,7 +1,7 @@
 <template>
   <v-card flat tile class="py-sm-12">
+    <v-btn outlined color="primary" class="my-3" rounded :to="{ path: `/session/${session._id}`}">View Session</v-btn>
     <v-card-text height="100%" class="pa-2">
-      <v-btn color="primary" class="my-3" elevation="0" rounded :to="{ path: `/session/${session._id}`}"><v-icon>mdi-eye</v-icon>View Session</v-btn>
       <div v-if="session" class="d-flex">
         <DateView :date="session.date" />
         <v-divider
