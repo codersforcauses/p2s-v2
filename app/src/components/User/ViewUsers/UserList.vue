@@ -1,12 +1,15 @@
 <template>
   <v-skeleton-loader type="list-item-three-line@10" :loading="loading">
+    <v-list-item @click="openInviteDialog">
+      <v-icon color="primary">mdi-plus</v-icon>
+      <v-list-item-subtitle class="ml-3 primary--text">Invite User</v-list-item-subtitle>
+      <UserDialog v-model="userDialog" />
+    </v-list-item>
     <v-list three-line subheader>
       <v-list-item-group v-model="selectedUser" color="primary">
-        <template v-for="user in users">
-          <v-list-item :key="user._id" :value="user">
-            <UserListDisplay :user="user" />
-          </v-list-item>
-        </template>
+        <v-list-item v-for="user in users" :key="user._id" :value="user">
+          <UserListDisplay :user="user" />
+        </v-list-item>
       </v-list-item-group>
     </v-list>
   </v-skeleton-loader>
@@ -14,9 +17,13 @@
 
 <script>
 import UserListDisplay from './UserListDisplay.vue'
+import UserDialog from '../UserDialog';
 
 export default {
-  components: { UserListDisplay },
+  components: {
+    UserListDisplay,
+    UserDialog
+  },
   name: "user-list",
   title: "User List",
   props: {
@@ -24,6 +31,9 @@ export default {
     users: Array,
     loading: Boolean,
   },
+  data: () => ({
+    userDialog: false
+  }),
   computed: {
     selectedUser: {
       get() {
@@ -34,5 +44,11 @@ export default {
       }
     }
   },
+  methods: {
+    openInviteDialog() {
+      this.selectedUser = null
+      this.userDialog = true
+    },
+  }
 }
 </script>
