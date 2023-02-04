@@ -78,7 +78,7 @@ const routes = [
           ),
       },
       {
-        path: '/students',
+        path: '/students/:id?',
         name: 'view-students',
         component: () =>
           import(

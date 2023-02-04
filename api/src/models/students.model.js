@@ -61,7 +61,6 @@ module.exports = function(app) {
       },
       consent: {
         type: Boolean,
-        required: true,
       },
       contact: {
         home: {

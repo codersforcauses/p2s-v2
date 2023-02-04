@@ -16,6 +16,7 @@
       <v-card-title class="text-h5 pt-0 pb-2" style="word-break: keep-all">{{
         student.name
       }}</v-card-title>
+      
       <FeathersVuexGet v-slot="{ item: school }" service="schools" :id="student.school">
         <v-card-text v-if="school" class="subtitle-1 pa-0">
           <router-link :to="{ path: '/schools/' + school._id }">
@@ -119,6 +120,19 @@
           </v-card-text>
         </v-col>
       </v-row>
+      <v-row>
+        <v-card-title class="text-h7">Consent Form</v-card-title>
+      </v-row>
+      <v-row>
+        <v-card-text v-if="student.consent">
+          <v-icon color="primary">mdi-file-document-check</v-icon>
+          Received
+        </v-card-text>
+        <v-card-text v-else>
+          <v-icon color="primary">mdi-file-document-remove</v-icon>
+          Not received
+        </v-card-text>
+      </v-row>
     </v-container>
 
     <v-container v-if="student.medical">
@@ -214,6 +228,7 @@
           </v-card-text>
         </v-col>
       </v-row>
+      
     </v-container>
   </v-card>
 </template>

@@ -18,6 +18,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 import { makeFindMixin } from 'feathers-vuex'
 
 import StudentList from './StudentList';
@@ -53,7 +54,12 @@ export default {
       deleteStudentDialog: false,
     };
   },
-
+  async mounted(){
+    if(this.$route.params.id) {
+      this.selectedStudent = await this.getStudent(this.$route.params.id)
+      this.drawer = true
+    }
+  },
   computed: {
     filteredStudents() {
       return this.students.filter(i =>
@@ -75,6 +81,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions('students', { getStudent: 'get' }),
     closeDrawer() {
       this.drawer = false
     },

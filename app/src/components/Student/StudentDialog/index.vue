@@ -47,52 +47,7 @@
 
                   <v-col cols="12" tag="label" class="v-label pl-6">DATE OF BIRTH</v-col>
                   <v-col cols="12">
-                    <v-text-field
-                      v-model="dateFormatted"
-                      label="Student Date of Birth"
-                      hint="DD/MM/YYYY"
-                      solo-inverted
-                      flat
-                      rounded
-                      color="primary"
-                      class="mb-2 mt-1"
-                      persistent-hint
-                      @change="clone.DOB = internalDate"
-                      @blur="internalDate = dateFormatted"
-                      :rules="[validation.required, validation.validDate, validation.past, validation.tooYoung]"
-                      lazy-validation
-                    >
-                      <template v-slot:append>
-                        <v-menu
-                          ref="menu"
-                          v-model="dateMenu"
-                          :close-on-content-click="false"
-                          transition="scale-transition"
-                          offset-y
-                          left
-                          origin="top right"
-                          min-width="auto"
-                        >
-                          <template v-slot:activator="{ on, attrs }">
-                            <v-btn color="primary" icon v-bind="attrs" v-on="on"
-                              ><v-icon>mdi-calendar</v-icon></v-btn
-                            >
-                          </template>
-                          <v-date-picker
-                            v-model="internalDate"
-                            :active-picker.sync="activePicker"
-                            :max="new Date()
-                                .toISOString()
-                                .substr(0, 10)
-                            "
-                            no-title
-                            min="1970-01-01"
-                            @input="dateMenu = false"
-                            color="primary"
-                          ></v-date-picker>
-                        </v-menu>
-                      </template>
-                    </v-text-field>
+                    <DOBPicker v-model="clone.DOB" />
                   </v-col>
 
                   <v-col cols="12" tag="label" class="v-label pl-6">GENDER</v-col>
@@ -432,16 +387,15 @@
 </template>
 
 <script>
-import dayjs from 'dayjs'
-import customParseFormat from 'dayjs/plugin/customParseFormat'
 import SchoolSearch from '../../forms/schoolSearch.vue';
+import DOBPicker from './DOBPicker.vue'
 
-dayjs.extend(customParseFormat)
 
 export default {
   name: 'StudentDialog',
   components: {
-    SchoolSearch
+    SchoolSearch,
+    DOBPicker
   },
   props: {
     value: Boolean,
@@ -452,10 +406,6 @@ export default {
       textFocus: false,
       medTextFocus: false,
       contactSame: true,
-      date: '2000-01-01',
-      dateFormatted: '',
-      activePicker: null,
-      dateMenu: false,
       loading: false,
       alert: false,
       error: '',
@@ -471,31 +421,10 @@ export default {
           const pattern = /^[0-9]+$/i;
           return pattern.test(value) || 'Number required';
         },
-        past: (value) =>
-          dayjs(value, 'DD/MM/YYYY').isBefore(dayjs()) ||
-          'Date must be in the past',
-        tooYoung: (value) =>
-          dayjs(value, 'DD/MM/YYYY').isBefore(dayjs().subtract(2, 'year')) ||
-          'Child is too young',
-        validDate: (value) =>
-          dayjs(value, 'DD/MM/YYYY').isValid() || 'Invalid date',
       },
     }
   },
-  mounted() {
-    this.date = dayjs(this.item.date).subtract(12, 'years').format('YYYY-MM-DD')
-  },
   computed: {
-    internalDate: {
-      get() {
-        const parsed = dayjs(this.date, 'YYYY-MM-DD')
-        return parsed.isValid() ? parsed.format('YYYY-MM-DD') : ''
-      },
-      set(val) {
-        const parsed = dayjs(val, ['DD/MM/YYYY', 'YYYY-MM-DD'])
-        this.date = parsed.isValid() ? parsed : null
-      }
-    },
     showDialog: {
       get() {
         return this.value;
@@ -527,17 +456,20 @@ export default {
       this.$refs.form.validate()
       if(this.valid) {
         callback(student).then((savedStudent) => this.handleSaveReponse(savedStudent)).catch(err => this.handleErrorReponse(err));
+      } else {
+        console.log(this.$refs.form)
       }
     },
-    handleSaveReponse() {
+    handleSaveReponse(savedStudent) {
       if (!this.studentId) {
-        // this.$router.push({ path: `/students/${savedStudent._id}` });
-        this.$router.push({ path: `/students` });
+        this.$router.push({ path: `/students/${savedStudent._id}` });
+        // this.$router.push({ path: `/students` });
       }
       this.$emit('input');
     },
     handleErrorReponse(err) {
       if(err.name === 'BadRequest') {
+        console.error(err)
         this.error = 'Failed to validate student data'
       } else {
         this.error = 'Request failed'
@@ -545,15 +477,5 @@ export default {
       this.alert = true
     },
   },
-  watch: {
-
-    date(val) {
-      const parsed = dayjs(val, 'YYYY-MM-DD')
-      if (parsed.isValid()) this.dateFormatted = parsed.format('DD/MM/YYYY')
-    },
-    dateMenu (val) {
-      if(val) setTimeout(() => {this.activePicker = 'YEAR'})
-    },
-  }
 };
 </script>

@@ -16,7 +16,7 @@
         </v-list-item>
       </v-list-item-group>
       <v-list-item v-else>
-        No Students
+        No Students Found
       </v-list-item>
     </v-list>
   </v-skeleton-loader>
