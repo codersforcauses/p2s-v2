@@ -19,10 +19,6 @@
       <v-toolbar flat>
         <BasicSearch @setSearch="setSearch" />
       </v-toolbar>
-      <!-- <CoachFilter
-        :filterName="searchName"
-        @updateName="searchName = $event"
-      /> -->
       <v-card-text>
         <CoachList :session="session" :coaches="filteredUsers" @update="$emit('update', $event)" />
       </v-card-text>
@@ -39,7 +35,6 @@
 <script>
 import { makeFindMixin } from 'feathers-vuex'
 
-import CoachFilter from './CoachFilter.vue';
 import CoachList from './CoachList.vue';
 import BasicSearch from '../../../../forms/BasicSearch';
 
@@ -47,7 +42,6 @@ export default {
   mixins: [makeFindMixin({ service: 'users', watch: true })],
   components: { 
     CoachList,
-    CoachFilter,
     BasicSearch
   },
   props: {

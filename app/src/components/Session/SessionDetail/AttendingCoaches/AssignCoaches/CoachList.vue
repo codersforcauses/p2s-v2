@@ -37,9 +37,7 @@ export default {
   },
   methods: {
     coachAddress(address) {
-      if (address) {
-        return `${address.suburb}, ${address.state}`
-      }
+        return address ? `${address.suburb}, ${address.state}` : ''
     },
     updateList(coachId) {
       const index = this.selected.findIndex(id => coachId === id)

@@ -26,14 +26,7 @@
         @setSearch="setSearch"
       />
       <v-card-text>
-        <FeathersVuexFind
-          v-slot="{ items: students }"
-          service="students"
-          :params="{ query }"
-          watch="params"
-        >
-          <StudentList :session="session" :students="filteredStudents" @update="$emit('update', $event)" />
-        </FeathersVuexFind>
+        <StudentList :session="session" :students="filteredStudents" @update="$emit('update', $event)" />
       </v-card-text>
 
       <v-card-actions class="ma-0 pa-0">
@@ -46,12 +39,15 @@
 </template>
 
 <script>
+import { makeFindMixin } from 'feathers-vuex'
+
 import StudentFilter from './StudentFilter.vue';
 import StudentList from './StudentList.vue';
 import BasicSearch from '../../../forms/BasicSearch.vue';
 
 
 export default {
+  mixins: [ makeFindMixin({ service: 'students', watch: true }) ],
   components: { 
     StudentList,
     StudentFilter,
@@ -85,13 +81,15 @@ export default {
           .toLowerCase().includes(s)
         ));
     },
-    query() {
+    studentsParams() {
       return {
-        $sort: {
-          name: 1,
-        },
-        ...(this.selectedYear && { schoolYear: this.selectedYear }),
-        ...(this.selectedSchool && { school: this.selectedSchool }),
+        query: {
+          $sort: {
+            name: 1,
+          },
+          ...(this.selectedYear && { schoolYear: this.selectedYear }),
+          ...(this.selectedSchool && { school: this.selectedSchool }),
+        }
       };
     },
   },
