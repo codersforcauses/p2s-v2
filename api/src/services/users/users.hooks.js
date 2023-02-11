@@ -13,7 +13,7 @@ const {
 } = require('feathers-hooks-common');
 const verifyHooks = require('feathers-authentication-management').hooks;
 const accountService = require('../authmanagement/notifier');
-const {hasVerifyToken, restrictVerifyQuery, restrictVerifyData } = require('./hooks/verifyToken');
+const {hasVerifyToken, restrictVerifyQuery } = require('./hooks/verifyToken');
 
 module.exports = {
   before: {
@@ -52,7 +52,7 @@ module.exports = {
       // Always must be the last hook
       protect('password'),
     ],
-    find: [iff(hasVerifyToken(), restrictVerifyData())],
+    find: [iff(hasVerifyToken(), verifyHooks.removeVerification())],
     get: [],
     create: [
       iff(

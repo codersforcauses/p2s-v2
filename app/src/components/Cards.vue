@@ -23,8 +23,8 @@ export default {
     ...mapState('auth', { user: 'user' }),
     visbleCards() {
       const userPerms = []
-      if(this.user.admin.is) userPerms.push('admin')
-      if(this.user.coach.is) userPerms.push('coach')
+      if(this.user?.admin.is) userPerms.push('admin')
+      if(this.user?.coach.is) userPerms.push('coach')
       return this.cards.filter(i => i.permission.some(p => userPerms.includes(p)))
     }
   },

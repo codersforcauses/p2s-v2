@@ -13,15 +13,9 @@
           >{{ error }}</v-alert
         >
         <h1 class="mb-10 text-h4">Register</h1>
-        <FeathersVuexFind
-          v-slot="{ items: [user] }"
-          service="users"
-          :params="{ query: { verifyToken: $route.query.verifyToken } }"
-          watch="params"
-        >
           <v-form
             ref="form"
-            v-if="user"
+            v-if="invitedUser"
             v-model="valid"
             @keyup.native.enter="valid && login($event)"
             style="min-width: 55%;"
@@ -38,7 +32,7 @@
               name="email"
               type="text"
               class="mb-2 mt-1"
-              :value="user.email"
+              :value="invitedUser.email"
               :disabled="true"
               :rules="[rules.required]"
             />
@@ -96,106 +90,127 @@
               <v-btn text small rounded name="login" :to="{path: '/login'}" color="#888">Already have an account</v-btn>
             </v-col>
           </v-form>
-          <v-alert v-else color="error">Couldn't load user invite</v-alert>
-        </FeathersVuexFind>
+          <div v-else>
+            <v-alert color="error">Could not load user invite</v-alert>
+            <v-btn text small rounded name="login" :to="{path: '/login'}" color="#888">Back to login</v-btn>
+          </div>
       </template>
     </component>
   </v-main>
 </template>
 
 <script>
-import { mapState } from 'vuex';
-import mobile from '../components/other/auth/Mobile.vue';
-import desktop from '../components/other/auth/Desktop.vue';
-import app from '../store/feathers-client'
+  import { mapState, mapActions } from 'vuex';
 
-const authManagement = app.service("authManagement");
+  import mobile from '../components/other/auth/Mobile.vue';
+  import desktop from '../components/other/auth/Desktop.vue';
+  import app from '../store/feathers-client'
 
-export default {
-  name: 'register-form',
-  title: 'Register',
-  data() {
-    return {
-      password: '',
-      passwordMatch: '',
-      valid: false,
-      show: false,
-      alert: false,
-      error: '',
-      rules: {
-        required: v => !!v || 'Password is required',
+  const authManagement = app.service("authManagement");
+
+  export default {
+    name: 'register-form',
+    title: 'Register',
+    data() {
+      return {
+        invitedUser: null,
+        password: '',
+        passwordMatch: '',
+        valid: false,
+        show: false,
+        alert: false,
+        error: '',
+        rules: {
+          required: v => !!v || 'Password is required',
+        },
+      };
+    },
+    computed: {
+      ...mapState('auth', { loading: 'isAuthenticatePending' }),
+      verifyToken() {
+        return this.$route?.query?.verifyToken
       },
-    };
-  },
-  computed: {
-    ...mapState('auth', { loading: 'isAuthenticatePending' }),
-    registerScreen() {
-      return this.$vuetify.breakpoint.smAndDown ? mobile : desktop;
+      registerScreen() {
+        return this.$vuetify.breakpoint.smAndDown ? mobile : desktop;
+      },
+      alertClass() {
+        return this.$vuetify.breakpoint.smAndDown ? 'alert_small' : 'alert_large';
+      },
+      transitionClass() {
+        return this.$vuetify.breakpoint.smAndDown
+          ? 'slide-y-reverse-transition'
+          : 'slide-y-transition';
+      },
+      comparePasswords() {
+        return (this.password === this.passwordMatch) || 'Passwords must match'
+      } 
     },
-    alertClass() {
-      return this.$vuetify.breakpoint.smAndDown ? 'alert_small' : 'alert_large';
+    mounted() {
+      this.findInvitedUser();
     },
-    transitionClass() {
-      return this.$vuetify.breakpoint.smAndDown
-        ? 'slide-y-reverse-transition'
-        : 'slide-y-transition';
-    },
-    comparePasswords() {
-      return (this.password === this.passwordMatch) || 'Passwords must match'
-    } 
-  },
-  methods: {
-    async register() {
-      this.$refs.form.validate()
-      if (this.valid) {
-        try {
-          await authManagement.create({
-              action: 'verifySignupSetPasswordLong',
-              value: {
-                token: this.$route.query.verifyToken,
-                password: this.password
-              }
-          })
-          await this.$store.dispatch('auth/authenticate', {
-            strategy: 'local',
-            email: this.$refs.email.value,
-            password: this.password
-          });
-          this.$router.push({ name: 'dashboard' });
-        } catch (error) {
-          this.alert = true;
-          switch(error.code) {
-            case 408:
-              this.error = "Failed to connect to server"
-              break
-            default:
-              this.error = error.message
+    methods: {
+      ...mapActions('users', { findUser: 'find'}),
+      async findInvitedUser() {
+        const [user] = await this.findUser({
+          query: {
+            verifyToken: this.verifyToken
+          }
+        })
+        if(user) {
+          this.invitedUser = user
+        }
+      },
+      async register() {
+        this.$refs.form.validate()
+        if (this.valid) {
+          try {
+            await authManagement.create({
+                action: 'verifySignupSetPasswordLong',
+                value: {
+                  token: this.$route.query.verifyToken,
+                  password: this.password
+                }
+            })
+            await this.$store.dispatch('auth/authenticate', {
+              strategy: 'local',
+              email: this.$refs.email.value,
+              password: this.password
+            });
+            this.$router.push({ name: 'dashboard' });
+          } catch (error) {
+            this.alert = true;
+            switch(error.code) {
+              case 408:
+                this.error = "Failed to connect to server"
+                break
+              default:
+                this.error = error.message
+            }
           }
         }
-      }
+      },
     },
-  },
-};
-</script>
+  };
+  </script>
 
-<style scoped>
-.alert_large {
-  border: 0;
-  border-radius: 999px;
-  top: 10vh;
-  left: 10vw;
-  right: 10vw;
-  margin: 3rem 0 0;
-  min-width: calc(100% - 20vw);
-  position: absolute;
-}
-.alert_small {
-  border: 0;
-  top: 0;
-  left: 0;
-  right: 0;
-  position: absolute;
-  margin: 0;
-  z-index: 10 !important;
-}
+  <style scoped>
+  .alert_large {
+    border: 0;
+    border-radius: 999px;
+    top: 10vh;
+    left: 10vw;
+    right: 10vw;
+    margin: 3rem 0 0;
+    min-width: calc(100% - 20vw);
+    position: absolute;
+  }
+  .alert_small {
+    border: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    position: absolute;
+    margin: 0;
+    z-index: 10 !important;
+  }
 </style>

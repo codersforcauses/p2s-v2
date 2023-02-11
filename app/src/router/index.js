@@ -26,8 +26,8 @@ const routes = [
     component: () => import(/* webpackChunkName: "login" */ '../views/Register.vue'),
     beforeEnter(to, from, next) {
       Store.dispatch('auth/authenticate')
-        .then(() => next({ name: 'dashboard' }))
-        .catch(() => next());
+      .then(() => next({ name: 'dashboard' }))
+      .catch(() => next());
       if(!to.query.verifyToken) next({ name: 'login' });
     },
   },

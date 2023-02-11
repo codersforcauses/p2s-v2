@@ -10,7 +10,7 @@ module.exports = (app) => {
       .service('mailer')
       .create(email)
       .then((result) => {
-        console.log('Sent email', result);
+        console.log('Sent email', email, result);
       })
       .catch(err => {
         console.log('Error sending email', err);
