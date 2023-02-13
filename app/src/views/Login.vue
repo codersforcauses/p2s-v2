@@ -128,16 +128,7 @@ export default {
           this.$router.push({ name: 'dashboard' }).catch((err) => console.log(`[nav] rerouting from ${err.to.path}`));
         } catch (error) {
           this.alert = true;
-          switch(error.code) {
-            case 401:
-              this.error = "Invalid Credentials"
-              break
-            case 408:
-              this.error = "Failed to connect to server"
-              break
-            default:
-              this.error = error.message
-          }
+          this.error = error.message ?? 'Failed to authenticate'
         }
       }
     },
