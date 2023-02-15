@@ -8,13 +8,6 @@ class User extends BaseModel {
   // Required for $FeathersVuex plugin to work after production transpile.
   static modelName = 'User';
 
-  // Define default properties here
-  static instanceDefaults() {
-    return {
-      email: '',
-      password: '',
-    };
-  }
 }
 const servicePath = 'users';
 const servicePlugin = makeServicePlugin({

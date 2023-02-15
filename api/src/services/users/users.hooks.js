@@ -13,6 +13,7 @@ const {
 } = require('feathers-hooks-common');
 const verifyHooks = require('feathers-authentication-management').hooks;
 const accountService = require('../authmanagement/notifier');
+const isOwner = require('./hooks/isOwner');
 const {hasVerifyToken, restrictVerifyQuery } = require('./hooks/verifyToken');
 
 module.exports = {
@@ -29,7 +30,7 @@ module.exports = {
       iff(
         isProvider('external'),
         preventChanges(
-          true,
+          false,
           'isVerified',
           'verifyToken',
           'verifyShortToken',
@@ -42,6 +43,14 @@ module.exports = {
         hashPassword('password'),
         authenticate('jwt')
       ),
+      iff(
+        isOwner(),
+        preventChanges(
+          false,
+          'coach',
+          'admin'
+        ),
+      )
     ],
     remove: [authenticate('jwt')],
   },

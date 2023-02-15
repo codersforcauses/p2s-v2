@@ -33,6 +33,7 @@
             v-model="user.email"
             :disabled="loading"
             :rules="[rules.required]"
+            autocomplete="uusername"
           />
 
           <label class="v-label ml-6 theme--dark">PASSWORD</label>
@@ -50,6 +51,7 @@
             :type="show ? 'text' : 'password'"
             :disabled="loading"
             @click:append="show = !show"
+            autocomplete="current-password"
           />
 
           <v-col class="text-center py-0">

@@ -52,6 +52,7 @@
               :type="show ? 'text' : 'password'"
               :disabled="loading"
               @click:append="show = !show"
+              autocomplete="new-password"
             />
 
             <label class="v-label ml-6 theme--dark">CONFIRM PASSWORD</label>
@@ -70,6 +71,7 @@
               :type="show ? 'text' : 'password'"
               :disabled="loading"
               @click:append="show = !show"
+              autocomplete="new-password"
             />
 
             <v-col class="text-center py-0">
@@ -176,7 +178,7 @@
               email: this.$refs.email.value,
               password: this.password
             });
-            this.$router.push({ name: 'dashboard' });
+            this.$router.push({ name: 'user-settings' });
           } catch (error) {
             this.alert = true;
             switch(error.code) {
