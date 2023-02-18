@@ -3,14 +3,14 @@ const errors = require('@feathersjs/errors');
 const config = require('config');
 
 module.exports = (app) => {
-  const getLink = (type, hash) => `${config.get('client')}/${type}?verifyToken=${hash}`;
+  const getLink = (type, queryType, hash) => `${config.get('client')}/${type}?${queryType}=${hash}`;
 
   const sendEmail = (email) => {
     return app
       .service('mailer')
       .create(email)
       .then((result) => {
-        console.log('Sent email', result);
+        console.log('Sent email', email, result);
       })
       .catch(err => {
         console.log('Error sending email', err);
@@ -24,6 +24,8 @@ module.exports = (app) => {
     html: htmlData,
   });
 
+  const getEmailAndToken = (email, token) => `${Buffer.from(email).toString('base64url')}___${token}`
+
   return {
     notifier: (type, user) => {
       try {
@@ -31,7 +33,7 @@ module.exports = (app) => {
         let email;
         switch (type) {
           case 'resendVerifySignup': //sending the user the verification email
-            tokenLink = getLink('register', user.verifyToken);
+            tokenLink = getLink('register', 'verifyToken', getEmailAndToken(user.email, user.verifyToken));
             email = getEmail(user, 'Verify Signup', tokenLink);
             return sendEmail(email);
 
@@ -44,12 +46,12 @@ module.exports = (app) => {
             return sendEmail(email);
 
           case 'sendResetPwd':
-            tokenLink = getLink('reset', user.resetToken);
+            tokenLink = getLink('reset', 'resetToken', getEmailAndToken(user.email, user.resetToken));
             email = getEmail(user, 'Reset Password', tokenLink);
             return sendEmail(email);
           
-            case 'verifySignupSetPassword':
-            email = getEmail(user, 'Account Verified', '<p>Your account has been verified.</p>');
+          case 'verifySignupSetPassword':
+            email = getEmail(user, 'Password reset', '<p>Your password has been reset.</p>');
             return sendEmail(email);
 
           case 'resetPwd':
@@ -61,16 +63,15 @@ module.exports = (app) => {
             return sendEmail(email);
 
           case 'passwordChange':
-            tokenLink = getLink('verifyChanges', user.verifyToken);
             email = getEmail(
               user,
-              'Your password was changed',
-              'Your password was changed'
+              'Password reset',
+              '<p>Your password has been reset.</p>'
             );
             return sendEmail(email);
 
           case 'identityChange':
-            tokenLink = getLink('verifyChanges', user.verifyToken);
+            tokenLink = getLink('verifyChanges', 'verifyToken', user.verifyToken);
             email = getEmail(
               user,
               'Your account was changed. Please verify the changes',

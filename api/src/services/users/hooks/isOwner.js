@@ -9,5 +9,5 @@ module.exports = () => context => {
     throw new GeneralError('isOwner should not be used in a create hook.');
   }
   const { user } = context.params;
-  return context.id === user._id.toString();
+  return context.id === user?._id.toString();
 };

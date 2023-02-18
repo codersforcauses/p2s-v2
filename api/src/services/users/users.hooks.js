@@ -6,21 +6,21 @@ const {
 const {
   disallow,
   iff,
-  iffElse,
   isProvider,
   preventChanges,
   some,
 } = require('feathers-hooks-common');
 const verifyHooks = require('feathers-authentication-management').hooks;
 const accountService = require('../authmanagement/notifier');
-const {hasVerifyToken, restrictVerifyQuery, restrictVerifyData } = require('./hooks/verifyToken');
+const isOwner = require('./hooks/isOwner');
 
 module.exports = {
   before: {
     all: [],
-    find: [ iffElse(hasVerifyToken(), restrictVerifyQuery(), authenticate('jwt'))],
+    find: [authenticate('jwt')],
     get: [authenticate('jwt')],
     create: [
+      authenticate('jwt'),
       hashPassword('password'),
       iff(isProvider('external'), verifyHooks.addVerification()),
     ],
@@ -29,7 +29,7 @@ module.exports = {
       iff(
         isProvider('external'),
         preventChanges(
-          true,
+          false,
           'isVerified',
           'verifyToken',
           'verifyShortToken',
@@ -41,7 +41,15 @@ module.exports = {
         ),
         hashPassword('password'),
         authenticate('jwt')
-      ),
+        ),
+        iff(
+          isOwner(),
+          preventChanges(
+            false,
+            'coach',
+            'admin'
+          ),
+        )
     ],
     remove: [authenticate('jwt')],
   },
@@ -52,7 +60,7 @@ module.exports = {
       // Always must be the last hook
       protect('password'),
     ],
-    find: [iff(hasVerifyToken(), restrictVerifyData())],
+    find: [],
     get: [],
     create: [
       iff(
@@ -66,7 +74,6 @@ module.exports = {
             context.result
           );
         },
-        verifyHooks.removeVerification()
       ),
     ],
     update: [],
