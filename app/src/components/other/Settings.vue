@@ -1,7 +1,7 @@
 <template>
   <div class="py-sm-5">
     <v-card flat rounded="xl" max-width="750" class="mx-auto">
-      <FeathersVuexFormWrapper :item="user" watch>
+      <FeathersVuexFormWrapper :item="item" watch>
         <template v-slot="{ clone, save, reset }">
           <v-form v-model="valid" :disabled="!editing" @keyup.native.enter="save">
             <v-container class="pa-5">
@@ -15,7 +15,7 @@
                     class="mb-2 mt-1 rounded-lg"
                     placeholder="Name"
                     color="primary"
-                    :rules="[validation.required, validation.name]"
+                    :rules="[validation.required]"
                     v-model.trim="clone.name"
                   />
                 </v-col>
@@ -123,6 +123,7 @@
                     class="mb-2 mt-1"
                     placeholder="Street"
                     color="primary"
+                    :rules="[validation.required]"
                     v-model.trim="clone.address.street"
                   />
                 </v-col>
@@ -136,6 +137,7 @@
                     class="mb-2 mt-1 rounded-lg"
                     placeholder="Suburb"
                     color="primary"
+                    :rules="[validation.required]"
                     v-model.trim="clone.address.suburb"
                   />
                 </v-col>
@@ -146,8 +148,9 @@
                     flat
                     type="text"
                     class="mb-2 mt-1 rounded-lg"
-                    placeholder="Password"
+                    placeholder="Postcode"
                     color="primary"
+                    :rules="[validation.required]"
                     v-model.trim="clone.address.postcode"
                   />
                 </v-col>
@@ -158,8 +161,9 @@
                     flat
                     type="text"
                     class="mb-2 mt-1 rounded-lg"
-                    placeholder="Password"
+                    placeholder="State"
                     color="primary"
+                    :rules="[validation.required]"
                     v-model.trim="clone.address.state"
                   />
                 </v-col>
@@ -240,7 +244,7 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
-import { FeathersVuexFormWrapper, models } from 'feathers-vuex';
+import { FeathersVuexFormWrapper } from 'feathers-vuex';
 
 export default {
   name: 'UserSettings',
@@ -262,10 +266,6 @@ export default {
       valid: true,
       validation: {
         required: value => !!value || 'This field is required',
-        name: value => {
-          const pattern = /^[a-z ,.'-]+$/i;
-          return pattern.test(value) || 'Name must only contain letters';
-        },
         email: value => {
           // eslint-disable-next-line no-useless-escape
           const pattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -281,6 +281,21 @@ export default {
     ...mapGetters('auth', { user: 'user' }),
     hasPassError() {
       return !!this.passError
+    },
+    item() {
+      const { User } = this.$FeathersVuex.api
+      const emptyUser = {
+        admin: {},
+        coach: {},
+        qualifications: {
+          policeClearance: {},
+          WWC: {},
+          medClearance: {},
+          vaccination: {}
+        },
+        address: {}
+      }
+      return new User({ ...emptyUser, ...this.user })
     },
   },
   methods: {
@@ -302,7 +317,7 @@ export default {
         this.passwordDialog = false
         this.setSuccess('Password updated')
       } catch (error) {
-        console.log(error)
+        console.error(error)
         this.passError = error.message
       }
     },

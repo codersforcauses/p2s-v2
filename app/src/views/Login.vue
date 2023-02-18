@@ -69,7 +69,7 @@
                 Login
               </v-btn>
             <v-spacer />
-            <v-btn text small rounded name="forgotPass" color="#888">Forgot Password?</v-btn>
+            <v-btn text small rounded name="forgotPass" :to="{ name: 'reset' }" color="#888">Forgot Password?</v-btn>
           </v-col>
         </v-form>
       </template>

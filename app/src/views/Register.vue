@@ -4,7 +4,7 @@
       <template #form>
         <v-alert
           dismissible
-          v-model="alert"
+          v-model="hasError"
           type="error"
           name="alert"
           :tile="$vuetify.breakpoint.smAndDown"
@@ -12,12 +12,22 @@
           :transition="transitionClass"
           >{{ error }}</v-alert
         >
+        <v-alert
+          dismissible
+          v-model="hasInfo"
+          type="success"
+          name="alert"
+          :tile="$vuetify.breakpoint.smAndDown"
+          :class="alertClass"
+          :transition="transitionClass"
+          >{{ info }}</v-alert
+        >
         <h1 class="mb-10 text-h4">Register</h1>
           <v-form
             ref="form"
-            v-if="invitedUser"
+            v-if="email"
             v-model="valid"
-            @keyup.native.enter="valid && login($event)"
+            @keyup.native.enter="valid && register($event)"
             style="min-width: 55%;"
           >
             <label class="v-label ml-6 theme--dark">EMAIL</label>
@@ -32,9 +42,8 @@
               name="email"
               type="text"
               class="mb-2 mt-1"
-              :value="invitedUser.email"
+              :value="email"
               :disabled="true"
-              :rules="[rules.required]"
             />
 
             <label class="v-label ml-6 theme--dark">PASSWORD</label>
@@ -102,7 +111,7 @@
 </template>
 
 <script>
-  import { mapState, mapActions } from 'vuex';
+  import { mapState } from 'vuex';
 
   import mobile from '../components/other/auth/Mobile.vue';
   import desktop from '../components/other/auth/Desktop.vue';
@@ -115,22 +124,53 @@
     title: 'Register',
     data() {
       return {
-        invitedUser: null,
         password: '',
         passwordMatch: '',
         valid: false,
         show: false,
-        alert: false,
         error: '',
+        info: '',
         rules: {
           required: v => !!v || 'Password is required',
         },
       };
     },
+    mounted() {
+      if(this.$route?.query?.verifyToken) {
+        const [ email ] = this.$route.query.verifyToken.split('___')
+        if(!email) {
+          this.error = 'Failed to verify token, please try again'
+          this.$router.replace({'query': null})
+        }
+      }
+    },
     computed: {
       ...mapState('auth', { loading: 'isAuthenticatePending' }),
+      email() {
+        if(!this.$route?.query?.verifyToken) return ''
+        const [ email ] = this.$route.query.verifyToken.split('___')
+        if(email) return window.atob(email);
+        return ''
+      },
+      hasError: {
+        get() {
+          return !!this.error
+        },
+        set(showError) {
+          if (!showError) this.error = ''
+        }
+      },
+      hasInfo: {
+        get() {
+          return !!this.info
+        },
+        set(showInfo) {
+          if (!showInfo) this.info = ''
+        }
+      },
       verifyToken() {
-        return this.$route?.query?.verifyToken
+        if (!this.$route?.query?.verifyToken) return ''
+        return this.$route.query.verifyToken.split('___')[1] ?? ''
       },
       registerScreen() {
         return this.$vuetify.breakpoint.smAndDown ? mobile : desktop;
@@ -147,21 +187,7 @@
         return (this.password === this.passwordMatch) || 'Passwords must match'
       } 
     },
-    mounted() {
-      this.findInvitedUser();
-    },
     methods: {
-      ...mapActions('users', { findUser: 'find'}),
-      async findInvitedUser() {
-        const [user] = await this.findUser({
-          query: {
-            verifyToken: this.verifyToken
-          }
-        })
-        if(user) {
-          this.invitedUser = user
-        }
-      },
       async register() {
         this.$refs.form.validate()
         if (this.valid) {
@@ -169,22 +195,23 @@
             await authManagement.create({
                 action: 'verifySignupSetPasswordLong',
                 value: {
-                  token: this.$route.query.verifyToken,
+                  token: this.verifyToken,
                   password: this.password
                 }
             })
+            this.info = 'Successfully registered'
             await this.$store.dispatch('auth/authenticate', {
               strategy: 'local',
-              email: this.$refs.email.value,
+              email: this.email,
               password: this.password
             });
             this.$router.push({ name: 'user-settings' });
           } catch (error) {
-            this.alert = true;
-            switch(error.code) {
-              case 408:
-                this.error = "Failed to connect to server"
-                break
+            console.error(error)
+            switch(error.message) {
+              case 'User not found.':
+                this.error = "User not found (may already be registered)"
+                break;
               default:
                 this.error = error.message
             }

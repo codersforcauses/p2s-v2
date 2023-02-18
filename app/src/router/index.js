@@ -32,6 +32,16 @@ const routes = [
     },
   },
   {
+    path: '/reset',
+    name: 'reset',
+    component: () => import(/* webpackChunkName: "login" */ '../views/Reset.vue'),
+    beforeEnter(to, from, next) {
+      Store.dispatch('auth/authenticate')
+      .then(() => next({ name: 'dashboard' }))
+      .catch(() => next());
+    },
+  },
+  {
     path: '/',
     name: 'dashboard',
     component: () => import(/* webpackChunkName: "dashboard" */ '../views/Dashboard.vue'),
