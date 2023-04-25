@@ -73,8 +73,7 @@
                   color="primary"
                   class="mb-2 mt-1 rounded-l-xl rounded-r-0"
                   persistent-hint
-                  @change="clone.date = dateTime ? dateTime.toISOString() : null"
-                  @blur="internalDate = dateFormatted"
+                  @blur="internalDate = dateFormatted; clone.date = dateTime ? dateTime.toISOString() : null"
                   :rules="[validation.required, validation.validDate]"
                   lazy-validation
                 >
@@ -146,7 +145,6 @@
                   </template>
                 </v-text-field>
               </v-col>
-
               <v-col cols="12" tag="label" class="v-label pl-6">SCHOOL</v-col>
               <v-col cols="12">
                 <SchoolSearch v-model="clone.school" />
@@ -253,7 +251,7 @@ export default {
       },
       set(val) {
         const parsed = dayjs(val, ['DD/MM/YYYY', 'YYYY-MM-DD'])
-        if(parsed.isValid()) this.dateTime = this.dateTime.day(parsed.day()).month(parsed.month()).year(parsed.year())
+        if(parsed.isValid()) this.dateTime = this.dateTime.date(parsed.date()).month(parsed.month()).year(parsed.year())
       }
     },
     internalTime: {
